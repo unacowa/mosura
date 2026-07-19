@@ -2211,7 +2211,7 @@ tag = "out-of-scope"
 reason = "remote relationships (複数コネクタ) は対象外"
 
 [cases."execute/models/select_many/permission_filter/simple"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m5"
 
 [cases."execute/models/select_many/predicate/is_null"]
@@ -2291,7 +2291,7 @@ tag = "pending"
 milestone = "m4"
 
 [cases."execute/models/select_many/simple_select/filter"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/models/select_many/simple_select/introspection/introspection"]
@@ -2307,7 +2307,7 @@ tag = "pending"
 milestone = "m2"
 
 [cases."execute/models/select_many/simple_select"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/models/select_many/type_permission/order_by"]
@@ -2331,15 +2331,15 @@ tag = "pending"
 milestone = "m4"
 
 [cases."execute/models/select_many/where/is_null/object_boolean_expression_type"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/models/select_many/where/multiple_fields"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/models/select_many/where/ndc_operators"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/models/select_many/where/nested_relationships"]
@@ -2459,7 +2459,7 @@ tag = "out-of-scope"
 reason = "remote relationships (複数コネクタ) は対象外"
 
 [cases."execute/models/select_many/where/shared_boolean_expression"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/models/select_many/where/simple"]
@@ -2475,7 +2475,7 @@ tag = "pending"
 milestone = "m4"
 
 [cases."execute/models/select_one/simple_select/filter"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/models/select_one/simple_select/introspection/introspection"]
@@ -2483,7 +2483,7 @@ tag = "pending"
 milestone = "m2"
 
 [cases."execute/models/select_one/simple_select"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/models/select_one/type_permission"]
@@ -2495,8 +2495,8 @@ tag = "pending"
 milestone = "m4"
 
 [cases."execute/plugins/pre_ndc_request/pass_through"]
-tag = "out-of-scope"
-reason = "plugin hook は対象外"
+tag = "in-scope"
+milestone = "m4"
 
 [cases."execute/plugins/pre_ndc_request/send_header"]
 tag = "out-of-scope"
@@ -2507,15 +2507,15 @@ tag = "out-of-scope"
 reason = "plugin hook は対象外"
 
 [cases."execute/plugins/pre_ndc_response/pass_through"]
-tag = "out-of-scope"
-reason = "plugin hook は対象外"
+tag = "in-scope"
+milestone = "m4"
 
 [cases."execute/plugins/pre_parse/pass_through"]
-tag = "out-of-scope"
-reason = "plugin hook は対象外"
+tag = "in-scope"
+milestone = "m4"
 
 [cases."execute/relationships/across_namespace"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/relationships/array/arguments"]
@@ -2535,7 +2535,7 @@ tag = "pending"
 milestone = "m4"
 
 [cases."execute/relationships/array"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/relationships/array/target_model_with_arguments"]
@@ -2575,7 +2575,7 @@ tag = "out-of-scope"
 reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
 
 [cases."execute/relationships/multi_mapping"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/relationships/nested/selection"]
@@ -2587,11 +2587,11 @@ tag = "pending"
 milestone = "m4"
 
 [cases."execute/relationships/no_relationship_capability"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/relationships/object"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/relationships/permissions/source_type_permission"]
@@ -2619,7 +2619,7 @@ tag = "pending"
 milestone = "m5"
 
 [cases."execute/relationships/same_relationship_name"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/relay/relay"]
@@ -2667,8 +2667,8 @@ tag = "out-of-scope"
 reason = "remote relationships (複数コネクタ) は対象外"
 
 [cases."execute/remote_relationships/array"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "in-scope"
+milestone = "m4"
 
 [cases."execute/remote_relationships/command/command_to_command"]
 tag = "out-of-scope"
@@ -2751,7 +2751,7 @@ tag = "out-of-scope"
 reason = "remote relationships (複数コネクタ) は対象外"
 
 [cases."execute/session_variables/json_disabled/integer_session_variable"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m5"
 
 [cases."execute/session_variables/json_enabled/array_session_variable"]
@@ -2759,7 +2759,7 @@ tag = "pending"
 milestone = "m5"
 
 [cases."execute/session_variables/json_enabled/integer_session_variable"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m5"
 
 [cases."execute/typename"]
