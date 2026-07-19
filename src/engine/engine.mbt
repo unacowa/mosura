@@ -28,10 +28,15 @@ pub fn error_response(message : String) -> Json {
 /// リクエスト JSON ({query, variables, operationName}) を処理する
 pub async fn execute_request(
   ctx : EngineContext,
-  ns : @schema.NamespaceCtx,
+  session : @session.Session,
   executor : &@exec.SqlExecutor,
   body : Json,
 ) -> Json {
+  let ns : @schema.NamespaceCtx = if session.is_admin() {
+    AllowAll
+  } else {
+    Role(session.role)
+  }
   // 1. リクエストの分解
   let query_text = match body {
     Json::Object(m) =>
@@ -83,7 +88,7 @@ pub async fn execute_request(
   }
 
   // 4. 実行計画
-  let plan = @ir.plan_operation(ctx.meta, op) catch {
+  let plan = @ir.plan_operation(ctx.meta, ctx.pg_meta, session, op) catch {
     e =>
       return error_response(
         match e {
@@ -120,6 +125,25 @@ pub async fn execute_request(
           _ => return error_response("introspection failed")
         }
         data[alias_] = result
+      }
+      RFMutation(alias_~, sql~, model~, kind~, selection~) => {
+        let rows_text = executor.execute_json(sql.sql, sql.params) catch {
+          e =>
+            return error_response(
+              match e {
+                @exec.ExecFailed(m) => "execution failed: \{m}"
+                _ => "execution failed: \{e}"
+              },
+            )
+        }
+        let rows_json = @json.parse(rows_text) catch {
+          _ => return error_response("invalid JSON from database")
+        }
+        let rows = match rows_json {
+          Json::Array(rs) => rs
+          _ => []
+        }
+        data[alias_] = shape_mutation(ctx.meta, model, kind, selection, rows)
       }
       RFQuery(alias_~, request~, shape~, selection~) => {
         let sql = @sqlgen.translate_query_request(ctx.pg_meta, request) catch {
@@ -264,4 +288,51 @@ fn shape_row(
     }
   }
   Json::object(out)
+}
+
+///|
+/// ミューテーション結果の整形
+fn shape_mutation(
+  meta : @metadata.Metadata,
+  model_name : String,
+  kind : @ir.MutationKind,
+  selection : @schema.NSelectionSet,
+  rows : Array[Json],
+) -> Json {
+  match kind {
+    MInsert => {
+      // mutation_response: affected_rows / returning / __typename
+      let out : Map[String, Json] = Map([])
+      for _, f in selection.fields {
+        let alias_ = f.nalias.0.as_str()
+        let fc = match (try? f.field_call()) {
+          Ok(fc) => fc
+          Err(_) => continue
+        }
+        match fc.info.generic {
+          AffectedRows => out[alias_] = Json::number(rows.length().to_double())
+          ReturningRows(_) => {
+            let shaped = rows.map(r => {
+              shape_row(meta, model_name, f.selection_set, r)
+            })
+            out[alias_] = Json::array(shaped)
+          }
+          Introspection => {
+            let ot_name = meta.object_types
+              .get(meta.models.get(model_name).unwrap().object_type)
+              .unwrap().graphql_type_name
+            out[alias_] = Json::string("\{ot_name}_mutation_response")
+          }
+          _ => ()
+        }
+      }
+      Json::object(out)
+    }
+    MUpdateByPk | MDeleteByPk =>
+      if rows.is_empty() {
+        Json::null()
+      } else {
+        shape_row(meta, model_name, selection, rows[0])
+      }
+  }
 }

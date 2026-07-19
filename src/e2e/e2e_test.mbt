@@ -169,7 +169,7 @@ async fn run_graphql(sfx : String, query : String, variables : Json?) -> String 
     }
     let result = @engine.execute_request(
       ctx,
-      @schema.NamespaceCtx::AllowAll,
+      @session.Session::admin(),
       executor,
       Json::object(body),
     )

@@ -3,6 +3,7 @@ import {
   "unacowa/mosura/schema",
   "unacowa/mosura/schemagen",
   "unacowa/mosura/metadata",
+  "unacowa/mosura/session",
   "unacowa/mosura/ir",
   "unacowa/mosura/ndc_postgres/sqlgen",
   "unacowa/mosura/ndc_postgres/exec",

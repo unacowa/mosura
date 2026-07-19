@@ -13,6 +13,17 @@ pub async fn run_server(
   server.run_forever(async fn(request, body_reader, conn) {
     match (request.meth, request.path) {
       (Post, "/graphql") => {
+        // セッション解決 (AuthConfig が無ければ admin)
+        let session = @session.resolve_session(ctx.meta.auth, request.headers) catch {
+          @session.Unauthorized(msg) => {
+            conn.send_response(401, "Unauthorized", extra_headers={
+              "Content-Type": "application/json",
+            })
+            conn.write_string(@engine.error_response(msg).stringify())
+            conn.end_response()
+            return
+          }
+        }
         let body_text = body_reader.read_all().text() catch {
             _ => {
               conn.send_response(400, "Bad Request")
@@ -33,12 +44,8 @@ pub async fn run_server(
             return
           }
         }
-        // M4 では admin 固定 (M5 でセッション解決を追加)
         let response = @engine.execute_request(
-          ctx,
-          @schema.NamespaceCtx::AllowAll,
-          executor,
-          body_json,
+          ctx, session, executor, body_json,
         )
         conn.send_response(200, "OK", extra_headers={
           "Content-Type": "application/json",

@@ -34,12 +34,27 @@ pub(all) enum RootField {
     shape~ : ResponseShape,
     selection~ : @schema.NSelectionSet
   )
+  /// ミューテーション (SQL 構築済み)
+  RFMutation(
+    alias_~ : String,
+    sql~ : @sqlgen.SQL,
+    model~ : String,
+    kind~ : MutationKind,
+    selection~ : @schema.NSelectionSet
+  )
   /// __typename
   RFTypename(alias_~ : String, type_name~ : String)
   /// __schema
   RFSchema(alias_~ : String, field~ : @schema.NField)
   /// __type(name:)
   RFType(alias_~ : String, field~ : @schema.NField, type_name~ : String)
+}
+
+///|
+pub(all) enum MutationKind {
+  MInsert
+  MUpdateByPk
+  MDeleteByPk
 }
 
 ///|
@@ -122,6 +137,8 @@ pub fn standard_scalar_types() -> Map[String, @sqlgen.PgScalarType] {
 /// オペレーション全体を実行計画へ
 pub fn plan_operation(
   meta : @metadata.Metadata,
+  pg_meta : @sqlgen.PgMetadata,
+  session : @session.Session,
   op : @schema.NOperation,
 ) -> Array[RootField] raise {
   let out : Array[RootField] = []
@@ -145,7 +162,7 @@ pub fn plan_operation(
       ModelSelect(model_name) => {
         let relationships : Map[String, @sqlgen.NdcRelationship] = Map([])
         let query = build_model_query(
-          meta, model_name, field, fc, relationships, false,
+          meta, session, model_name, field, fc, relationships, false,
         )
         out.push(
           RFQuery(
@@ -165,7 +182,7 @@ pub fn plan_operation(
       ModelSelectByPk(model_name) => {
         let relationships : Map[String, @sqlgen.NdcRelationship] = Map([])
         let query = build_model_query(
-          meta, model_name, field, fc, relationships, true,
+          meta, session, model_name, field, fc, relationships, true,
         )
         out.push(
           RFQuery(
@@ -182,7 +199,119 @@ pub fn plan_operation(
           ),
         )
       }
+      ModelInsert(model_name) => {
+        let model = meta.models.get(model_name).unwrap()
+        // 変更系ルートの __typename は mutation_root
+        ignore(model)
+        let objects_arg = fc.expected_argument(
+          @graphql.Name::new_unchecked("objects"),
+        )
+        let rows : Array[Array[(String, Json)]] = []
+        for item in objects_arg.value.as_list() {
+          let row : Array[(String, Json)] = []
+          for fname, fvalue in item.as_object_value() {
+            row.push((fname.as_str(), fvalue.value.as_json()))
+          }
+          rows.push(row)
+        }
+        if rows.is_empty() {
+          raise IrInternal("insert requires at least one object")
+        }
+        let returning = mutation_returning(field.selection_set)
+        let sql = @sqlgen.build_insert_sql(pg_meta, model_name, rows, returning)
+        out.push(
+          RFMutation(
+            alias_~,
+            sql~,
+            model=model_name,
+            kind=MInsert,
+            selection=field.selection_set,
+          ),
+        )
+      }
+      ModelUpdateByPk(model_name) => {
+        let pk : Array[(String, Json)] = []
+        let set_ : Array[(String, Json)] = []
+        for arg_name, arg in fc.arguments {
+          if arg_name.as_str() == "_set" {
+            for fname, fvalue in arg.value.as_object_value() {
+              set_.push((fname.as_str(), fvalue.value.as_json()))
+            }
+          } else {
+            pk.push((arg_name.as_str(), arg.value.as_json()))
+          }
+        }
+        if set_.is_empty() {
+          raise IrInternal("_set must not be empty")
+        }
+        let returning = selection_returning(field.selection_set)
+        let sql = @sqlgen.build_update_by_pk_sql(
+          pg_meta, model_name, pk, set_, returning,
+        )
+        out.push(
+          RFMutation(
+            alias_~,
+            sql~,
+            model=model_name,
+            kind=MUpdateByPk,
+            selection=field.selection_set,
+          ),
+        )
+      }
+      ModelDeleteByPk(model_name) => {
+        let pk : Array[(String, Json)] = []
+        for arg_name, arg in fc.arguments {
+          pk.push((arg_name.as_str(), arg.value.as_json()))
+        }
+        let returning = selection_returning(field.selection_set)
+        let sql = @sqlgen.build_delete_by_pk_sql(
+          pg_meta, model_name, pk, returning,
+        )
+        out.push(
+          RFMutation(
+            alias_~,
+            sql~,
+            model=model_name,
+            kind=MDeleteByPk,
+            selection=field.selection_set,
+          ),
+        )
+      }
       _ => raise UnsupportedField(alias_)
+    }
+  }
+  out
+}
+
+///|
+/// mutation_response の returning セレクションから RETURNING 句を作る
+/// (alias, NDC カラム名) の配列
+fn mutation_returning(
+  selection : @schema.NSelectionSet,
+) -> Array[(String, String)] raise {
+  for _, f in selection.fields {
+    let fc = f.field_call()
+    match fc.info.generic {
+      ReturningRows(_) => return selection_returning(f.selection_set)
+      _ => ()
+    }
+  }
+  // returning が選択されていなくても RETURNING は必要 (affected_rows 計上のため)
+  []
+}
+
+///|
+/// オブジェクトのセレクション (ModelField のみ) を RETURNING 対応に変換
+fn selection_returning(
+  selection : @schema.NSelectionSet,
+) -> Array[(String, String)] raise {
+  let out : Array[(String, String)] = []
+  for _, f in selection.fields {
+    let fc = f.field_call()
+    match fc.info.generic {
+      ModelField(field_name) => out.push((f.nalias.0.as_str(), field_name))
+      Introspection => ()
+      _ => raise UnsupportedField("relationships in mutation returning")
     }
   }
   out
@@ -192,6 +321,7 @@ pub fn plan_operation(
 /// モデル選択 / by_pk 共通のクエリ構築
 fn build_model_query(
   meta : @metadata.Metadata,
+  session : @session.Session,
   model_name : String,
   field : @schema.NField,
   fc : @schema.FieldCall,
@@ -200,6 +330,7 @@ fn build_model_query(
 ) -> @sqlgen.NdcQuery raise {
   let fields = build_selection_fields(
     meta,
+    session,
     model_name,
     field.selection_set,
     relationships,
@@ -238,13 +369,161 @@ fn build_model_query(
       }
     }
   }
+  let predicate = apply_permission_filter(meta, session, model_name, predicate)
   { fields: Some(fields), limit, offset, predicate, order_by }
+}
+
+///|
+/// ロールの行フィルタを predicate に AND する
+fn apply_permission_filter(
+  meta : @metadata.Metadata,
+  session : @session.Session,
+  model_name : String,
+  predicate : @sqlgen.NdcExpression?,
+) -> @sqlgen.NdcExpression? raise {
+  if session.is_admin() {
+    return predicate
+  }
+  let mp = match meta.model_permissions.get(model_name) {
+    Some(mp) => mp
+    // スキーマ可視性で弾かれているはずだが防御的にエラー
+    None => raise IrInternal("no permissions for model \{model_name}")
+  }
+  let mut permission : @metadata.ModelPermission? = None
+  for p in mp.permissions {
+    if p.role == session.role {
+      permission = Some(p)
+    }
+  }
+  let permission = match permission {
+    Some(p) => p
+    None =>
+      raise IrInternal(
+        "role \{session.role} has no permission on \{model_name}",
+      )
+  }
+  let filter_expr = match permission.filter {
+    None => None
+    Some(filter_json) => permission_filter_to_ndc(filter_json, session)
+  }
+  match (predicate, filter_expr) {
+    (None, None) => None
+    (Some(p), None) => Some(p)
+    (None, Some(f)) => Some(f)
+    (Some(p), Some(f)) => Some(EAnd([f, p]))
+  }
+}
+
+///|
+/// ModelPermissions の filter JSON → NdcExpression
+/// 形式: {fieldComparison: {field, operator, value: {sessionVariable|literal}}}
+///       {and: [...]}, {or: [...]}, {not: {...}}
+pub fn permission_filter_to_ndc(
+  filter : Json,
+  session : @session.Session,
+) -> @sqlgen.NdcExpression? raise {
+  match filter {
+    Json::Object(m) => {
+      match m.get("fieldComparison") {
+        Some(fc) => {
+          let field = match fc {
+            Json::Object(f) =>
+              match f.get("field") {
+                Some(Json::String(s)) => s
+                _ => raise IrInternal("fieldComparison.field must be a string")
+              }
+            _ => raise IrInternal("fieldComparison must be an object")
+          }
+          let operator = match fc {
+            Json::Object(f) =>
+              match f.get("operator") {
+                Some(Json::String(s)) => s
+                _ => "_eq"
+              }
+            _ => "_eq"
+          }
+          let value_json : Json = match fc {
+            Json::Object(f) =>
+              match f.get("value") {
+                Some(Json::Object(v)) =>
+                  match v.get("sessionVariable") {
+                    Some(Json::String(var_name)) =>
+                      match session.variables.get(var_name.to_lower()) {
+                        Some(value) => Json::string(value)
+                        None =>
+                          raise IrInternal(
+                            "session variable not provided: \{var_name}",
+                          )
+                      }
+                    _ =>
+                      match v.get("literal") {
+                        Some(lit) => lit
+                        None =>
+                          raise IrInternal(
+                            "fieldComparison.value must have sessionVariable or literal",
+                          )
+                      }
+                  }
+                _ => raise IrInternal("fieldComparison.value must be an object")
+              }
+            _ => Json::null()
+          }
+          return Some(
+            EBinary(
+              column={ name: field, path: [] },
+              operator~,
+              value=CVScalar(value_json),
+            ),
+          )
+        }
+        None => ()
+      }
+      match m.get("and") {
+        Some(Json::Array(items)) => {
+          let exprs : Array[@sqlgen.NdcExpression] = []
+          for item in items {
+            match permission_filter_to_ndc(item, session) {
+              Some(e) => exprs.push(e)
+              None => ()
+            }
+          }
+          return Some(EAnd(exprs))
+        }
+        _ => ()
+      }
+      match m.get("or") {
+        Some(Json::Array(items)) => {
+          let exprs : Array[@sqlgen.NdcExpression] = []
+          for item in items {
+            match permission_filter_to_ndc(item, session) {
+              Some(e) => exprs.push(e)
+              None => ()
+            }
+          }
+          return Some(EOr(exprs))
+        }
+        _ => ()
+      }
+      match m.get("not") {
+        Some(inner) =>
+          return match permission_filter_to_ndc(inner, session) {
+            Some(e) => Some(ENot(e))
+            None => None
+          }
+        None => ()
+      }
+      None
+    }
+    Json::Null => None
+    _ => raise IrInternal("invalid permission filter")
+  }
 }
 
 ///|
 /// セレクションセット → NDC fields (リレーションは再帰)
 fn build_selection_fields(
   meta : @metadata.Metadata,
+  session : @session.Session,
   model_name : String,
   selection_set : @schema.NSelectionSet,
   relationships : Map[String, @sqlgen.NdcRelationship],
@@ -288,6 +567,7 @@ fn build_selection_fields(
         }
         let sub_fields = build_selection_fields(
           meta,
+          session,
           rel.target_model,
           f.selection_set,
           relationships,
@@ -309,6 +589,12 @@ fn build_selection_fields(
           RelObject => limit = Some(1)
           RelArray => ()
         }
+        let predicate = apply_permission_filter(
+          meta,
+          session,
+          rel.target_model,
+          predicate,
+        )
         fields[alias_] = FRelationship(
           query={ fields: Some(sub_fields), limit, offset, predicate, order_by },
           relationship=ndc_rel_name,

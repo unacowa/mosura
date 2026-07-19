@@ -18,6 +18,16 @@ pub(all) enum Annotation {
   InputArg(InputArgKind)
   /// __typename 等の introspection フィールド
   Introspection
+  /// mutation_root: insert_<model>
+  ModelInsert(String)
+  /// mutation_root: update_<model>_by_pk
+  ModelUpdateByPk(String)
+  /// mutation_root: delete_<model>_by_pk
+  ModelDeleteByPk(String)
+  /// mutation_response.affected_rows
+  AffectedRows
+  /// mutation_response.returning
+  ReturningRows(String)
 } derive(Eq)
 
 ///|

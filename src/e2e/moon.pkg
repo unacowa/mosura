@@ -3,6 +3,7 @@ import {
   "unacowa/mosura/metadata",
   "unacowa/mosura/engine",
   "unacowa/mosura/schema",
+  "unacowa/mosura/session",
   "unacowa/mosura/ndc_postgres/exec/native",
   "moonbit-community/postgres/client",
   "moonbitlang/async",

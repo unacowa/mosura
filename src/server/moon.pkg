@@ -1,5 +1,6 @@
 import {
   "unacowa/mosura/schema",
+  "unacowa/mosura/session",
   "unacowa/mosura/engine",
   "unacowa/mosura/ndc_postgres/exec",
   "moonbitlang/async",

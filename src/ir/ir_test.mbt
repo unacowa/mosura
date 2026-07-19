@@ -82,8 +82,8 @@ fn graphql_to_sql(query : String) -> Array[(String, String)] raise {
     operation_name: None,
     variables: Map([]),
   })
-  let plan = plan_operation(meta, op)
   let pg_meta = to_pg_metadata(meta)
+  let plan = plan_operation(meta, pg_meta, @session.Session::admin(), op)
   let out : Array[(String, String)] = []
   for rf in plan {
     match rf {

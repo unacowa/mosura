@@ -2,6 +2,7 @@ import {
   "unacowa/mosura/graphql",
   "unacowa/mosura/schema",
   "unacowa/mosura/metadata",
+  "unacowa/mosura/session",
   "unacowa/mosura/ndc_postgres/sqlgen",
 }
 

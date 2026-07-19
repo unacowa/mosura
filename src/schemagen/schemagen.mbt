@@ -155,12 +155,15 @@ pub fn build_schema(meta : @metadata.Metadata) -> @schema.Schema raise {
       @schema.Namespaced[@schema.SField],
     ] = @sorted_map.SortedMap([])
     for f in ot.fields {
-      fields[name(f.name)] = mk_field(
-        f.name,
-        f.field_type,
-        ModelField(f.name),
-        @sorted_map.SortedMap([]),
-      )
+      let sfield : @schema.SField = {
+        name: name(f.name),
+        description: None,
+        info: ModelField(f.name),
+        field_type: f.field_type,
+        arguments: @sorted_map.SortedMap([]),
+        deprecation_status: NotDeprecated,
+      }
+      fields[name(f.name)] = field_visibility(meta, ot_name, f.name, sfield)
     }
     // リレーションシップフィールド
     match meta.relationships.get(ot_name) {
@@ -171,21 +174,33 @@ pub fn build_schema(meta : @metadata.Metadata) -> @schema.Schema raise {
             .get(target_model.object_type)
             .unwrap()
           let target_type_name = target_ot.graphql_type_name
+          let rel_roles = model_permission_roles(meta, rel.target_model)
           match rel.kind {
-            RelObject =>
-              fields[name(rel.name)] = mk_field(
-                rel.name,
-                named_type(target_type_name, true),
-                RelationshipField(rel.name),
-                @sorted_map.SortedMap([]),
+            RelObject => {
+              let data : @schema.SField = {
+                name: name(rel.name),
+                description: None,
+                info: RelationshipField(rel.name),
+                field_type: named_type(target_type_name, true),
+                arguments: @sorted_map.SortedMap([]),
+                deprecation_status: NotDeprecated,
+              }
+              fields[name(rel.name)] = @schema.conditional_namespaced(
+                data, rel_roles,
               )
+            }
             RelArray => {
               let args = model_select_arguments(target_ot.graphql_type_name)
-              fields[name(rel.name)] = mk_field(
-                rel.name,
-                list_of(named_type(target_type_name, false), false),
-                RelationshipField(rel.name),
-                args,
+              let data : @schema.SField = {
+                name: name(rel.name),
+                description: None,
+                info: RelationshipField(rel.name),
+                field_type: list_of(named_type(target_type_name, false), false),
+                arguments: args,
+                deprecation_status: NotDeprecated,
+              }
+              fields[name(rel.name)] = @schema.conditional_namespaced(
+                data, rel_roles,
               )
             }
           }
@@ -289,11 +304,17 @@ pub fn build_schema(meta : @metadata.Metadata) -> @schema.Schema raise {
     let ot = meta.object_types.get(model.object_type).unwrap()
     let gql_name = ot.graphql_type_name
     let args = model_select_arguments(gql_name)
-    root_fields[name(model_name)] = mk_field(
-      model_name,
-      list_of(named_type(gql_name, false), false),
-      ModelSelect(model_name),
-      args,
+    let roles = model_permission_roles(meta, model_name)
+    let select_data : @schema.SField = {
+      name: name(model_name),
+      description: None,
+      info: ModelSelect(model_name),
+      field_type: list_of(named_type(gql_name, false), false),
+      arguments: args,
+      deprecation_status: NotDeprecated,
+    }
+    root_fields[name(model_name)] = @schema.conditional_namespaced(
+      select_data, roles,
     )
     if !model.primary_key.is_empty() {
       let pk_args : @sorted_map.SortedMap[
@@ -310,11 +331,16 @@ pub fn build_schema(meta : @metadata.Metadata) -> @schema.Schema raise {
           InputArg(ArgPkColumn(pk)),
         )
       }
-      root_fields[name("\{model_name}_by_pk")] = mk_field(
-        "\{model_name}_by_pk",
-        named_type(gql_name, true),
-        ModelSelectByPk(model_name),
-        pk_args,
+      let by_pk_data : @schema.SField = {
+        name: name("\{model_name}_by_pk"),
+        description: None,
+        info: ModelSelectByPk(model_name),
+        field_type: named_type(gql_name, true),
+        arguments: pk_args,
+        deprecation_status: NotDeprecated,
+      }
+      root_fields[name("\{model_name}_by_pk")] = @schema.conditional_namespaced(
+        by_pk_data, roles,
       )
     }
   }
@@ -334,10 +360,12 @@ pub fn build_schema(meta : @metadata.Metadata) -> @schema.Schema raise {
       directives: [],
     }),
   )
+  // mutation_root (V2 風 CRUD、admin のみ)
+  let mutation_type = build_mutation_root(meta, register)
   {
     types,
     query_type: tname("query_root"),
-    mutation_type: None,
+    mutation_type,
     subscription_type: None,
     namespaces: [],
   }
@@ -376,4 +404,43 @@ fn model_select_arguments(
     InputArg(ArgOffset),
   )
   args
+}
+
+///|
+/// モデルに権限が定義されているロールの map (role → NamespacedInfo)
+fn model_permission_roles(
+  meta : @metadata.Metadata,
+  model_name : String,
+) -> Map[String, @schema.NamespacedInfo] {
+  let map : Map[String, @schema.NamespacedInfo] = Map([])
+  match meta.model_permissions.get(model_name) {
+    Some(mp) =>
+      for p in mp.permissions {
+        map[p.role] = ModelPermission(model_name)
+      }
+    None => ()
+  }
+  map
+}
+
+///|
+/// フィールドのロール別可視性 (TypePermissions)。エントリが無い型は全ロール可
+fn field_visibility(
+  meta : @metadata.Metadata,
+  type_name : String,
+  field_name : String,
+  data : @schema.SField,
+) -> @schema.Namespaced[@schema.SField] {
+  match meta.type_permissions.get(type_name) {
+    None => @schema.allow_all_namespaced(data)
+    Some(tp) => {
+      let map : Map[String, @schema.NamespacedInfo] = Map([])
+      for p in tp.permissions {
+        if p.allowed_fields.contains(field_name) {
+          map[p.role] = NoInfo
+        }
+      }
+      @schema.conditional_namespaced(data, map)
+    }
+  }
 }
