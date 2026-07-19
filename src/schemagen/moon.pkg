@@ -1,0 +1,10 @@
+import {
+  "unacowa/mosura/graphql",
+  "unacowa/mosura/schema",
+  "unacowa/mosura/metadata",
+  "moonbitlang/core/sorted_map",
+}
+
+import {
+  "moonbitlang/core/encoding/utf8",
+} for "test"

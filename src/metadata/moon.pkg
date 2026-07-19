@@ -1,1 +1,5 @@
-
+import {
+  "unacowa/mosura/graphql",
+  "moonbit-community/yaml",
+  "moonbitlang/core/encoding/utf8",
+}

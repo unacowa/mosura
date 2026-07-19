@@ -338,3 +338,49 @@ fn[T] Parser::parse_optional(
     _ => None
   }
 }
+
+///|
+pub fn ExpectedToken::display(self : ExpectedToken) -> String {
+  match self {
+    Keyword(keyword) => "Keyword(\{keyword.as_str()}"
+    Punctuation(p) => "Punctuation(\{p.as_str()}"
+    Name => "Name"
+    Number => "Number"
+    TString => "String"
+  }
+}
+
+///|
+pub fn LexerError::display(self : LexerError) -> String {
+  match self {
+    UnexpectedCharacter(c) => "unexpected character in the document: '\{c}'"
+    UnexpectedEndOfFile => "end of file reached when expecting further input"
+    InvalidString(_) => "invalid string literal found"
+    InvalidNumber(_) => "invalid number literal found"
+    InvalidGraphQlName(s) => "invalid graphql name: \{s}"
+  }
+}
+
+///|
+pub fn TokenFound::display(self : TokenFound) -> String {
+  match self {
+    EndOfFile => "end of file"
+    LexerError(e) => "lexer error: \{e.display()}"
+    Token(token) => "token: \{token.display()}"
+  }
+}
+
+///|
+/// Rust の Display 実装と同じ書式 (エラーレスポンス用)
+pub fn ParseError::display(self : ParseError) -> String {
+  match self {
+    TokenError(expected_tokens~, found~) => {
+      let mut acc = ""
+      for expected_token in expected_tokens {
+        acc = acc + expected_token.display() + ", "
+      }
+      "expected one of \{acc}, but encountered: \{found.display()}"
+    }
+    OtherError(msg) => msg
+  }
+}

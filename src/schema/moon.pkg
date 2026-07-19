@@ -1,1 +1,6 @@
-
+import {
+  "unacowa/mosura/graphql",
+  "moonbitlang/core/sorted_map",
+  "moonbitlang/core/string",
+  "moonbitlang/core/encoding/utf8",
+}
