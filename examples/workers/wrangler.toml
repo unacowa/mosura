@@ -1,0 +1,14 @@
+name = "mosura"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Hyperdrive バインディング (wrangler hyperdrive create で作成した ID を設定)
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = "<your-hyperdrive-id>"
+
+# metadata.yaml をテキストとして import できるようにする
+[[rules]]
+type = "Text"
+globs = ["**/*.yaml"]

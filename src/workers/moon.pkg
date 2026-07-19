@@ -1,0 +1,13 @@
+import {
+  "unacowa/mosura/metadata",
+  "unacowa/mosura/session",
+  "unacowa/mosura/engine",
+  "unacowa/mosura/ndc_postgres/sqlgen",
+  "moonbitlang/core/json",
+}
+
+options(
+  link: {
+    "js": { "exports": [ "mosura_plan", "mosura_shape" ], "format": "esm" },
+  },
+)

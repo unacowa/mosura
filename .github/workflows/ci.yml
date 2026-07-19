@@ -40,7 +40,7 @@ jobs:
 
       - name: Purity check — core packages must build on js/wasm-gc
         run: |
-          CORE="src/graphql src/metadata src/schema src/schemagen src/session src/ir src/ndc_postgres/sqlgen src/ndc_postgres/exec src/engine"
+          CORE="src/graphql src/metadata src/schema src/schemagen src/session src/ir src/ndc_postgres/sqlgen src/ndc_postgres/exec src/engine src/workers"
           moon check --target js $CORE --deny-warn
           moon check --target wasm-gc $CORE --deny-warn
 

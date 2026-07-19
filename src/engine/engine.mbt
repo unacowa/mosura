@@ -336,3 +336,198 @@ fn shape_mutation(
       }
   }
 }
+
+///|
+/// 実行フェーズに渡す計画。resolved は SQL 実行なしで確定した値 (introspection 等)
+pub(all) struct PlannedRequest {
+  /// SQL 実行が必要なルートフィールド (実行順)
+  queries : Array[PlannedQuery]
+  /// SQL 不要で確定済みの data エントリ
+  resolved : Map[String, Json]
+  /// data のキー順 (GraphQL はフィールド順を保持する)
+  order : Array[String]
+}
+
+///|
+pub(all) struct PlannedQuery {
+  alias_ : String
+  sql : String
+  params : Array[@sqlgen.Param]
+  root : @ir.RootField
+}
+
+///|
+/// リクエストを計画する (純粋・同期)。エラー時は Err(GraphQL エラーレスポンス)
+pub fn plan_request(
+  ctx : EngineContext,
+  session : @session.Session,
+  body : Json,
+) -> Result[PlannedRequest, Json] {
+  let ns : @schema.NamespaceCtx = if session.is_admin() {
+    AllowAll
+  } else {
+    Role(session.role)
+  }
+  let query_text = match body {
+    Json::Object(m) =>
+      match m.get("query") {
+        Some(Json::String(q)) => q
+        _ => return Err(error_response("missing 'query' in request body"))
+      }
+    _ => return Err(error_response("request body must be a JSON object"))
+  }
+  let variables : Map[String, Json] = Map([])
+  match body {
+    Json::Object(m) =>
+      match m.get("variables") {
+        Some(Json::Object(vm)) =>
+          for k, v in vm {
+            variables[k] = v
+          }
+        _ => ()
+      }
+    _ => ()
+  }
+  let operation_name : @graphql.Name? = match body {
+    Json::Object(m) =>
+      match m.get("operationName") {
+        Some(Json::String(n)) =>
+          if @graphql.is_valid_graphql_name(n) {
+            Some(@graphql.Name::new_unchecked(n))
+          } else {
+            None
+          }
+        _ => None
+      }
+    _ => None
+  }
+  let parser = @graphql.Parser::new(@utf8.encode(query_text))
+  let doc = parser.parse_executable_document() catch {
+    @graphql.ParseErr(p) => return Err(error_response(p.item.display()))
+  }
+  let op = @schema.normalize_request(ns, ctx.schema, {
+    query: doc,
+    operation_name,
+    variables,
+  }) catch {
+    e => return Err(error_response(e.display()))
+  }
+  let plan = @ir.plan_operation(ctx.meta, ctx.pg_meta, session, op) catch {
+    e =>
+      return Err(
+        error_response(
+          match e {
+            @ir.IrInternal(m) => "internal error: \{m}"
+            @ir.UnsupportedField(f) => "unsupported field: \{f}"
+            _ => "planning error"
+          },
+        ),
+      )
+  }
+  let queries : Array[PlannedQuery] = []
+  let resolved : Map[String, Json] = Map([])
+  let order : Array[String] = []
+  for rf in plan {
+    match rf {
+      RFTypename(alias_~, type_name~) => {
+        resolved[alias_] = Json::string(type_name)
+        order.push(alias_)
+      }
+      RFSchema(alias_~, field~) => {
+        let result = @schema.schema_type(ctx.schema, ns, field.selection_set) catch {
+          _ => return Err(error_response("introspection failed"))
+        }
+        resolved[alias_] = result
+        order.push(alias_)
+      }
+      RFType(alias_~, field~, type_name~) => {
+        if !@graphql.is_valid_graphql_name(type_name) {
+          resolved[alias_] = Json::null()
+          order.push(alias_)
+          continue
+        }
+        let tn = @graphql.TypeName(@graphql.Name::new_unchecked(type_name))
+        let result = @schema.type_lookup(
+          ctx.schema,
+          ns,
+          tn,
+          field.selection_set,
+        ) catch {
+          _ => return Err(error_response("introspection failed"))
+        }
+        resolved[alias_] = result
+        order.push(alias_)
+      }
+      RFQuery(alias_~, request~, ..) => {
+        let sql = @sqlgen.translate_query_request(ctx.pg_meta, request) catch {
+          e => return Err(error_response(e.display()))
+        }
+        queries.push({ alias_, sql: sql.sql, params: sql.params, root: rf })
+        order.push(alias_)
+      }
+      RFMutation(alias_~, sql~, ..) => {
+        queries.push({ alias_, sql: sql.sql, params: sql.params, root: rf })
+        order.push(alias_)
+      }
+    }
+  }
+  Ok({ queries, resolved, order })
+}
+
+///|
+/// 実行結果 (alias → DB が返した JSON) を最終レスポンスに整形する
+pub fn shape_results(
+  ctx : EngineContext,
+  planned : PlannedRequest,
+  results : Map[String, Json],
+) -> Json {
+  let data : Map[String, Json] = Map([])
+  for alias_ in planned.order {
+    match planned.resolved.get(alias_) {
+      Some(v) => {
+        data[alias_] = v
+        continue
+      }
+      None => ()
+    }
+    let mut pq : PlannedQuery? = None
+    for q in planned.queries {
+      if q.alias_ == alias_ {
+        pq = Some(q)
+      }
+    }
+    let pq = match pq {
+      Some(q) => q
+      None => continue
+    }
+    let result_json = match results.get(alias_) {
+      Some(r) => r
+      None => Json::null()
+    }
+    match pq.root {
+      RFQuery(request~, shape~, selection~, ..) => {
+        let rows = extract_rows(result_json)
+        let shaped = shape_rows(
+          ctx.meta,
+          request.collection,
+          selection,
+          rows,
+          shape,
+        ) catch {
+          _ => Json::null()
+        }
+        data[alias_] = shaped
+      }
+      RFMutation(model~, kind~, selection~, ..) => {
+        let rows = match result_json {
+          Json::Array(rs) => rs
+          _ => []
+        }
+        data[alias_] = shape_mutation(ctx.meta, model, kind, selection, rows)
+      }
+      _ => ()
+    }
+  }
+  let response : Map[String, Json] = { "data": Json::object(data) }
+  Json::object(response)
+}
