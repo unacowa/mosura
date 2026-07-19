@@ -491,11 +491,11 @@ fn fields_translate(
             ),
           ),
         )
+        ignore(arguments)
         join_relationship_fields.push({
           table_alias,
           column_alias,
           relationship_name: relationship,
-          arguments,
           query,
         })
       }
@@ -534,7 +534,6 @@ priv struct JoinFieldInfo {
   table_alias : TableAlias
   column_alias : ColumnAlias
   relationship_name : String
-  arguments : Map[String, NdcArgument]
   query : NdcQuery
 }
 

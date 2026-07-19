@@ -3,7 +3,6 @@
 ///|
 pub suberror SchemaBuildError {
   InternalParseError(String)
-  ConflictingGraphQlType(String)
 } derive(Debug)
 
 ///|
@@ -11,7 +10,6 @@ pub fn SchemaBuildError::display(self : SchemaBuildError) -> String {
   match self {
     InternalParseError(e) =>
       "internal error when parsing introspection schema : \{e}"
-    ConflictingGraphQlType(t) => "multiple definitions of graphql type: \{t}"
   }
 }
 
