@@ -2,183 +2,184 @@
 # tag: in-scope (CI で実行・グリーン維持) / pending (未着手の M に属する) / out-of-scope (MVP 対象外、削除しない)
 
 [cases."lang-graphql/query_testdata/err/0007_fragment_definition_with_invalid_fragment_name"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/0008_fragment_definition_with_invalid_type_condition"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/0009_fragment_definition_with_invalid_selection_set"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/0024_document_with_incorrect_definition"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/0025_document_with_incorrect_definition_and_selection_set"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/0027_invalid_type_system_extension"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/0029_operation_definition_with_empty_selection_set"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/0030_operation_definition_with_description"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/0031_argument_with_erronous_string_value"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/0035_unterminated_string_value_in_object_value"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/0040_operation_definition_missing_selection_set"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/0041_operation_definition_with_missing_selection_set"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/0046_incomplete_spreads"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/0047_empty_variable_definition"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/1000_multibyte_chars_bad"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/1001_multibyte_chars_bad"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/1002_multibyte_chars_bad"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/6000_stackoverflow1"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/6001_stackoverflow2"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/9005_escaped_char"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/9007_unterminated_string_value_in_object_value_argument"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/err/9008_unterminated_string_value"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0001_empty"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0002_selection_simple"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0003_selection_with_fields"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0004_selection_with_fields_aliases_arguments"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0005_selection_with_inline_fragments"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0006_selection_with_fragment_spread"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0012_fragment_definition"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0013_fragment_definition_with_fragment_spread"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0020_operation_type_definition"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0021_operation_type_definition_with_arguments"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0022_operation_type_definition_with_arguments_and_directives"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0030_values"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0031_variables_with_default"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0034_query_shorthand_followed_by_fragment_definition"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0035_query_with_variables"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0036_parses_variable_definition_with_list_type"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/0037_operation_type_definition_with_inline_fragment"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/1111_parses_variable_inline_values"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/1113_parses_multibyte_chars"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/1114_parses_anonymous_mutation"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/1115_parses_anonymous_subscription"]
-tag = "out-of-scope"
+tag = "in-scope"
+milestone = "m1"
 reason = "subscription は対象外"
 
 [cases."lang-graphql/query_testdata/ok/9011_escaped_char"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/query_testdata/ok/9013_emoji_char_in_string_value"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m1"
 
 [cases."lang-graphql/schema_testdata/err/0001_directive_definition_missing_location"]

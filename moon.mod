@@ -19,4 +19,5 @@ import {
   "moonbit-community/postgres@0.0.6",
   "moonbit-community/yaml@0.0.6",
   "gmlewis/sha256@0.17.32",
+  "moonbitlang/x@0.4.46",
 }

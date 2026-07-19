@@ -34,11 +34,12 @@ OUT_OF_SCOPE = [
 def classify(case_id):
     """(tag, milestone, reason) を返す"""
     lower = case_id.lower()
+    # lang-graphql はパーサのテストなので、機能スコープのキーワード判定は適用しない
+    if case_id.startswith("lang-graphql/"):
+        return "pending", "m1", ""
     for kw, reason in OUT_OF_SCOPE:
         if kw in lower:
             return "out-of-scope", "", reason
-    if case_id.startswith("lang-graphql/"):
-        return "pending", "m1", ""
     if case_id.startswith("metadata-resolve/"):
         return "pending", "m2", ""
     if case_id.startswith("ndc-postgres-translation/goldenfiles/mutations"):
