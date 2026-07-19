@@ -1,1 +1,11 @@
+import {
+  "unacowa/mosura/graphql",
+  "unacowa/mosura/schema",
+  "unacowa/mosura/metadata",
+  "unacowa/mosura/ndc_postgres/sqlgen",
+}
 
+import {
+  "unacowa/mosura/schemagen",
+  "moonbitlang/core/encoding/utf8",
+} for "test"
