@@ -66,6 +66,9 @@ cp -r "$TR/goldenfiles" "$TR/snapshots" "$FX/ndc-postgres-translation/"
 # insta .snap → 素の期待値ファイル (.expected) へ変換
 python3 "$ROOT/scripts/convert_snaps.py" "$FX/metadata-resolve" "$FX/ndc-postgres-translation"
 
+# 5) execute 用シード SQL (COPY → INSERT 変換)
+python3 "$ROOT/scripts/convert_execute_seed.py" "$HASURA/v3/crates/engine/tests"
+
 # 由来の記録
 cat > "$FX/SOURCES.md" <<EOF
 # fixtures の由来
