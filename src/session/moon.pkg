@@ -1,3 +1,6 @@
 import {
   "unacowa/mosura/metadata",
+  "gmlewis/sha256",
+  "gmlewis/base64",
+  "moonbitlang/core/json",
 }

@@ -14,7 +14,12 @@ pub async fn run_server(
     match (request.meth, request.path) {
       (Post, "/graphql") => {
         // セッション解決 (AuthConfig が無ければ admin)
-        let session = @session.resolve_session(ctx.meta.auth, request.headers) catch {
+        let now_secs = (@env.now() / 1000).reinterpret_as_int64()
+        let session = @session.resolve_session(
+          ctx.meta.auth,
+          request.headers,
+          now_epoch_secs=Some(now_secs),
+        ) catch {
           @session.Unauthorized(msg) => {
             conn.send_response(401, "Unauthorized", extra_headers={
               "Content-Type": "application/json",

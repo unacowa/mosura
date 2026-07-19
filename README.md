@@ -41,6 +41,7 @@ M0〜M7 の初期スコープ実装済み (2026-07-20)。
 - `mosura serve --metadata <yaml>` で GraphQL エンドポイントが起動する (native)
 - query (filter / order_by / limit / offset / relationship / by_pk / introspection / 変数)
 - ロール別権限 (行フィルタ + カラム制限 + スキーマ可視性)、V2 風 CRUD (admin)
+- 認証: 開発モード (adminSecret) と JWT HS256 (`https://hasura.io/jwt/claims` / `claims.jwt.hasura.io` 名前空間、x-hasura-role によるロール切替、exp 検査)
 - Cloudflare Workers: plan/shape の 2 フェーズ API ([examples/workers](examples/workers/))
 - V3 メタデータ (subgraphs 形式 JSON) の互換ロード + V3 実フィクスチャでの E2E 検証
 - フィクスチャ台帳: in-scope 208 全グリーン / pending 334 / out-of-scope 140
