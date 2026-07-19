@@ -34,6 +34,11 @@ jobs:
       - name: Toolchain version
         run: moon version --all
 
+      - name: Fetch registry index and dependencies
+        run: |
+          moon update
+          moon install
+
       - name: Check (native)
         run: moon check --target native --deny-warn
 
