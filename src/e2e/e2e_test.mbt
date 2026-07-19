@@ -12,11 +12,7 @@ fn pg_host() -> String {
 ///|
 fn pg_port() -> Int {
   match @env.get_env_var("MOSURA_TEST_PG_PORT") {
-    Some(p) =>
-      match (try? @string.parse_int(p)) {
-        Ok(v) => v
-        Err(_) => 5435
-      }
+    Some(p) => @string.parse_int(p) catch { _ => 5435 }
     None => 5435
   }
 }

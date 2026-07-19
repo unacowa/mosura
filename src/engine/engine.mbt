@@ -163,33 +163,19 @@ pub async fn execute_request(
         }
         // universe = [ { "rows": [...] } ] (variables なしの場合)
         let rows = extract_rows(universe)
-        let shaped = shape_rows(
+        data[alias_] = shape_rows(
           ctx.meta,
           request.collection,
           selection,
           rows,
           shape,
-        ) catch {
-          e =>
-            return error_response(
-              match e {
-                ShapeError(m) => "response shaping failed: \{m}"
-                _ => "response shaping failed"
-              },
-            )
-        }
-        data[alias_] = shaped
+        )
       }
     }
   }
   let response : Map[String, Json] = { "data": Json::object(data) }
   Json::object(response)
 }
-
-///|
-pub suberror ShapeError {
-  ShapeError(String)
-} derive(Debug)
 
 ///|
 /// universe JSON から rows 配列を取り出す
@@ -214,7 +200,7 @@ fn shape_rows(
   selection : @schema.NSelectionSet,
   rows : Array[Json],
   shape : @ir.ResponseShape,
-) -> Json raise ShapeError {
+) -> Json {
   let shaped_rows = rows.map(row => shape_row(meta, model_name, selection, row))
   // map の中で raise できないため二段階でチェック
   let out : Array[Json] = []
@@ -242,11 +228,7 @@ fn shape_row(
   let out : Map[String, Json] = Map([])
   for _, f in selection.fields {
     let alias_ = f.nalias.0.as_str()
-    let fc = try? f.field_call()
-    let fc = match fc {
-      Ok(fc) => fc
-      Err(_) => continue
-    }
+    let fc = f.field_call() catch { _ => continue }
     match fc.info.generic {
       Introspection =>
         if fc.name.as_str() == "__typename" {
@@ -305,10 +287,7 @@ fn shape_mutation(
       let out : Map[String, Json] = Map([])
       for _, f in selection.fields {
         let alias_ = f.nalias.0.as_str()
-        let fc = match (try? f.field_call()) {
-          Ok(fc) => fc
-          Err(_) => continue
-        }
+        let fc = f.field_call() catch { _ => continue }
         match fc.info.generic {
           AffectedRows => out[alias_] = Json::number(rows.length().to_double())
           ReturningRows(_) => {
@@ -507,16 +486,13 @@ pub fn shape_results(
     match pq.root {
       RFQuery(request~, shape~, selection~, ..) => {
         let rows = extract_rows(result_json)
-        let shaped = shape_rows(
+        data[alias_] = shape_rows(
           ctx.meta,
           request.collection,
           selection,
           rows,
           shape,
-        ) catch {
-          _ => Json::null()
-        }
-        data[alias_] = shaped
+        )
       }
       RFMutation(model~, kind~, selection~, ..) => {
         let rows = match result_json {

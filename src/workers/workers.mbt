@@ -11,8 +11,9 @@
 ///|
 fn build_session(role : String, session_vars_json : String) -> @session.Session {
   let variables : Map[String, String] = Map([])
-  match (try? @json.parse(session_vars_json)) {
-    Ok(Json::Object(m)) =>
+  let parsed = @json.parse(session_vars_json) catch { _ => Json::null() }
+  match parsed {
+    Json::Object(m) =>
       for k, v in m {
         match v {
           Json::String(s) => variables[k.to_lower()] = s
@@ -98,16 +99,16 @@ pub fn mosura_shape(
     Ok(p) => p
   }
   let results : Map[String, Json] = Map([])
-  match (try? @json.parse(results_json)) {
-    Ok(Json::Object(m)) =>
+  let parsed_results = @json.parse(results_json) catch {
+    _ => return error_json("results must be a JSON object")
+  }
+  match parsed_results {
+    Json::Object(m) =>
       for alias_, v in m {
         // 値は JSON テキスト (文字列) か、すでにパース済みの JSON を許容
         match v {
           Json::String(text) =>
-            match (try? @json.parse(text)) {
-              Ok(parsed) => results[alias_] = parsed
-              Err(_) => results[alias_] = Json::null()
-            }
+            results[alias_] = @json.parse(text) catch { _ => Json::null() }
           other => results[alias_] = other
         }
       }

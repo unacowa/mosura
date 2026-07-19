@@ -107,7 +107,7 @@ test "M2: メタデータからスキーマ生成 + クエリ正規化" {
     ),
   )
   // ルートフィールドの検証
-  assert_eq(op.selection_set.fields.size(), 1)
+  assert_eq(op.selection_set.fields.length(), 1)
   let articles = op.selection_set.fields.values().collect()[0]
   let fc = articles.field_call()
   assert_eq(fc.name.as_str(), "articles")
@@ -116,7 +116,7 @@ test "M2: メタデータからスキーマ生成 + クエリ正規化" {
     _ => fail("expected ModelSelect annotation")
   }
   // 引数 where/order_by/limit が正規化されている
-  assert_eq(fc.arguments.size(), 3)
+  assert_eq(fc.arguments.length(), 3)
   let where_arg = fc.arguments
     .get(@graphql.Name::new_unchecked("where"))
     .unwrap()

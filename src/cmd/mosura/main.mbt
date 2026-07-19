@@ -19,37 +19,25 @@ fn parse_pg_url(url : String) -> (String, Int, String, String, String)? {
   } else {
     return None
   }
-  let rest = url.substring(start=prefix.length()).to_string()
+  let rest = url[prefix.length():].to_owned()
   let at = rest.find("@")
   let (userinfo, hostpart) = match at {
-    Some(i) =>
-      (
-        rest.substring(start=0, end=i).to_string(),
-        rest.substring(start=i + 1).to_string(),
-      )
+    Some(i) => (rest[0:i].to_owned(), rest[i + 1:].to_owned())
     None => ("postgres", rest)
   }
   let (user, password) = match userinfo.find(":") {
-    Some(i) =>
-      (
-        userinfo.substring(start=0, end=i).to_string(),
-        userinfo.substring(start=i + 1).to_string(),
-      )
+    Some(i) => (userinfo[0:i].to_owned(), userinfo[i + 1:].to_owned())
     None => (userinfo, "")
   }
   let (hostport, db) = match hostpart.find("/") {
-    Some(i) =>
-      (
-        hostpart.substring(start=0, end=i).to_string(),
-        hostpart.substring(start=i + 1).to_string(),
-      )
+    Some(i) => (hostpart[0:i].to_owned(), hostpart[i + 1:].to_owned())
     None => (hostpart, "postgres")
   }
   let (host, port) = match hostport.find(":") {
     Some(i) => {
-      let p = hostport.substring(start=i + 1).to_string()
+      let p = hostport[i + 1:].to_owned()
       let port = @string.parse_int(p) catch { _ => return None }
-      (hostport.substring(start=0, end=i).to_string(), port)
+      (hostport[0:i].to_owned(), port)
     }
     None => (hostport, 5432)
   }
@@ -58,10 +46,8 @@ fn parse_pg_url(url : String) -> (String, Int, String, String, String)? {
 
 ///|
 fn load_metadata_from(path : String) -> Result[@metadata.Metadata, String] {
-  let text = try? read_metadata_text(path)
-  let text = match text {
-    Ok(t) => t
-    Err(_) => return Err("cannot read metadata path: \{path}")
+  let text = read_metadata_text(path) catch {
+    _ => return Err("cannot read metadata path: \{path}")
   }
   let meta = @metadata.load_yaml(text) catch { m => return Err(m.display()) }
   Ok(meta)
