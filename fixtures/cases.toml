@@ -2518,7 +2518,7 @@ tag = "out-of-scope"
 reason = "aggregates は MVP 対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/dup_array_relationship"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/simple"]
@@ -2555,130 +2555,130 @@ milestone = "m6"
 
 [cases."ndc-postgres-translation/goldenfiles/native_queries/select_artist"]
 tag = "out-of-scope"
-reason = "native queries は対象外 (将来検討)"
+reason = "native queries は対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/native_queries/select_artist_by_id"]
 tag = "out-of-scope"
-reason = "native queries は対象外 (将来検討)"
+reason = "native queries は対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/native_queries/select_artist_by_name"]
 tag = "out-of-scope"
-reason = "native queries は対象外 (将来検討)"
+reason = "native queries は対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/native_queries/select_artist_with_album_by_title"]
 tag = "out-of-scope"
-reason = "native queries は対象外 (将来検討)"
+reason = "native queries は対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/native_queries/select_artist_with_album_by_title_relationship_arguments"]
 tag = "out-of-scope"
-reason = "native queries は対象外 (将来検討)"
+reason = "native queries は対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/nested_aggregates"]
 tag = "out-of-scope"
 reason = "aggregates は MVP 対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/nested_array_relationships"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/nested_recursive_relationship"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/no_fields"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/select_array_column"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "native query 前提のため対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/select_array_column_nested_types"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "native query 前提のため対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/select_array_column_reverse"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "native query 前提のため対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/select_array_variable"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "native query 前提のため対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/select_array_variable_nested_types"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "native query 前提のため対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/select_composite_column_complex"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "ネスト/composite 型は対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/select_composite_column_nested_field_count"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "ネスト/composite 型は対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/select_composite_column_simple"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "ネスト/composite 型は対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/select_composite_variable_complex"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "ネスト/composite 型は対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/select_composite_variable_simple"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "ネスト/composite 型は対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/select_nested_column_complex"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "ネスト/composite 型は対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/select_nested_column_simple"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "ネスト/composite 型は対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/select_track_order_by_artist_id_and_album_title"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "リレーション跨ぎの order by は未対応 (将来対応)"
 
 [cases."ndc-postgres-translation/goldenfiles/select_where_album_id_equals_self_nested_object_relationship"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/select_where_array_relationship"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/select_where_in_variable"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "native query 前提のため対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/select_where_large_or"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/select_where_not_null"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/select_where_or_to_in_optimization"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/select_where_prefix_function"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "in-scope"
+milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/select_where_related_exists"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/select_where_string"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/select_where_unrelated_exists"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/select_with_limit"]
@@ -2686,57 +2686,57 @@ tag = "pending"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/simple_array_relationship"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/simple_object_relationship"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/sorting_by_nested_relationship_column"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "リレーション跨ぎの order by は未対応 (将来対応)"
 
 [cases."ndc-postgres-translation/goldenfiles/sorting_by_nested_relationship_column_with_predicate"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "リレーション跨ぎの order by は未対応 (将来対応)"
 
 [cases."ndc-postgres-translation/goldenfiles/sorting_by_nested_relationship_count"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "リレーション跨ぎの order by は未対応 (将来対応)"
 
 [cases."ndc-postgres-translation/goldenfiles/sorting_by_no_relationship_aggregate"]
 tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+reason = "リレーション跨ぎの order by は未対応 (将来対応)"
 
 [cases."ndc-postgres-translation/goldenfiles/sorting_by_recursive_relationship_column"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "リレーション跨ぎの order by は未対応 (将来対応)"
 
 [cases."ndc-postgres-translation/goldenfiles/sorting_by_relationship_column"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "リレーション跨ぎの order by は未対応 (将来対応)"
 
 [cases."ndc-postgres-translation/goldenfiles/sorting_by_relationship_column_with_true_predicate"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "リレーション跨ぎの order by は未対応 (将来対応)"
 
 [cases."ndc-postgres-translation/goldenfiles/sorting_by_relationship_count"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "リレーション跨ぎの order by は未対応 (将来対応)"
 
 [cases."ndc-postgres-translation/goldenfiles/sorting_by_relationship_count_with_predicate"]
-tag = "pending"
-milestone = "m3"
+tag = "out-of-scope"
+reason = "リレーション跨ぎの order by は未対応 (将来対応)"
 
 [cases."ndc-postgres-translation/goldenfiles/values/select_types_on_comparisons"]
 tag = "pending"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/values/select_types_on_native_queries"]
-tag = "out-of-scope"
-reason = "native queries は対象外 (将来検討)"
+tag = "pending"
+milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/very_nested_recursive_relationship"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
