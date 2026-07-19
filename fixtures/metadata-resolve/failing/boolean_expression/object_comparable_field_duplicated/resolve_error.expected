@@ -1,0 +1,1 @@
+Error: the comparable field 'name' is defined more than once in the boolean expression type 'institution_bool_exp (in subgraph default)'

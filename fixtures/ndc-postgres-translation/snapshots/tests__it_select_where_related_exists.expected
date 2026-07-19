@@ -1,0 +1,73 @@
+SELECT
+  coalesce(json_agg(row_to_json("%8_universe")), '[]') AS "universe"
+FROM
+  (
+    SELECT
+      *
+    FROM
+      (
+        SELECT
+          coalesce(json_agg(row_to_json("%9_rows")), '[]') AS "rows"
+        FROM
+          (
+            SELECT
+              "%2_artist"."Name" AS "title",
+              "%3_RELATIONSHIP_albums"."albums" AS "albums"
+            FROM
+              (
+                SELECT
+                  "%0_artist".*
+                FROM
+                  "public"."Artist" AS "%0_artist"
+                WHERE
+                  EXISTS (
+                    SELECT
+                      1 AS "one"
+                    FROM
+                      "public"."Album" AS "%1_album"
+                    WHERE
+                      (
+                        (
+                          "%1_album"."Title" LIKE cast($1 as "pg_catalog"."varchar")
+                        )
+                        AND ("%0_artist"."ArtistId" = "%1_album"."ArtistId")
+                      )
+                  )
+              ) AS "%2_artist"
+              LEFT OUTER JOIN LATERAL (
+                SELECT
+                  row_to_json("%3_RELATIONSHIP_albums") AS "albums"
+                FROM
+                  (
+                    SELECT
+                      *
+                    FROM
+                      (
+                        SELECT
+                          coalesce(json_agg(row_to_json("%6_rows")), '[]') AS "rows"
+                        FROM
+                          (
+                            SELECT
+                              "%5_album"."Title" AS "title"
+                            FROM
+                              (
+                                SELECT
+                                  "%4_album".*
+                                FROM
+                                  "public"."Album" AS "%4_album"
+                                WHERE
+                                  ("%2_artist"."ArtistId" = "%4_album"."ArtistId")
+                              ) AS "%5_album"
+                          ) AS "%6_rows"
+                      ) AS "%6_rows"
+                  ) AS "%3_RELATIONSHIP_albums"
+              ) AS "%3_RELATIONSHIP_albums" ON ('true')
+          ) AS "%9_rows"
+      ) AS "%9_rows"
+  ) AS "%8_universe";
+
+{
+    1: String(
+        "Supernatural",
+    ),
+}

@@ -1,0 +1,1 @@
+Error: error in boolean expression type 'Album_aggregate_bool_exp (in subgraph default)': the type of the comparable field 'titles' ([String]) is an array type. Nested aggregation over array types is not supported

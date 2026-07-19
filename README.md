@@ -1,0 +1,48 @@
+# Mosura
+
+Hasura GraphQL Engine V3 のクエリエンジン部分を **MoonBit** で再実装するプロジェクト。
+wasm / JS / ネイティブの複数バックエンドを持つ MoonBit の特性を活かし、Edge を含む様々なランタイムで動く軽量な GraphQL エンジンを目指す。
+
+## ゴール
+
+- YAML 形式のメタデータ（設定ファイル）から GraphQL スキーマを自動生成する
+- ロールベースの権限管理（行フィルタ・カラム制限）とデータ制約をメタデータで宣言する
+- GraphQL クエリを SQL に変換し、PostgreSQL に対して実行する
+- DB レイヤは Hasura V3 の NDC（Native Data Connector）設計を継承し、プラガブルにする
+
+## ノンゴール
+
+- Web UI（コンソール）の移植
+- Hasura DDN のメタデータビルドサービスやクラウド機能の再現
+
+## 開発方針：TDD
+
+**この移植の最も重要な合理性は、移植元のテストケースが揃っていることにある。**
+Hasura V3 / ndc-postgres のテスト資産（パーサゴールデン、メタデータ解決スナップショット、
+E2E 期待レスポンス、SQL 生成スナップショット、計 700 ケース超）をすべて `fixtures/` に取り込み、
+実装より先にレッドの状態を作ってからグリーンにする。進捗の一次指標はフィクスチャ合格率。
+詳細は [docs/implementation-plan.md](docs/implementation-plan.md) §1。
+
+## 設計上の決定事項
+
+| # | 論点 | 決定 |
+|---|------|------|
+| 1 | DB 抽象化 | Hasura V3 の NDC 設計を継承。ただしコネクタはまず in-process（MoonBit trait）で実装し、境界は NDC 仕様に揃える |
+| 2 | メタデータ形式 | YAML（OpenDD の語彙を踏襲したサブセット）。ビルドサービスは持たず、エンジンが YAML を直接読み込み・検証する |
+| 3 | 初期対象 DB | PostgreSQL（`ndc-postgres` 相当を最初のコネクタとして実装） |
+| 4 | 初期ターゲットランタイム | PostgreSQL ワイヤプロトコルで直接通信できる環境（TCP ソケットが使えるランタイム）を前提とする。Edge 対応はソケット抽象化の上で後続対応 |
+
+詳細は [docs/architecture.md](docs/architecture.md) を参照。
+
+## ステータス
+
+設計フェーズ。実装は未着手。
+
+## 参照実装
+
+- [hasura/graphql-engine `/v3`](https://github.com/hasura/graphql-engine/tree/master/v3) — Rust 製 V3 エンジン（Apache 2.0）
+  - `lang-graphql` — GraphQL パーサ/バリデータ
+  - `metadata-resolve` — メタデータ解決
+  - `graphql-ir` — IR 生成（権限の織り込み）
+- [hasura/ndc-postgres](https://github.com/hasura/ndc-postgres) — NDC → SQL 生成の参照（Apache 2.0）
+- [NDC Specification](https://hasura.github.io/ndc-spec/) — コネクタ境界の仕様

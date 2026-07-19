@@ -1,0 +1,1 @@
+Error: error in boolean expression type 'Album_aggregate_bool_exp (in subgraph default)': the boolean expression type (Album_aggregate_bool_exp (in subgraph default)) used in the comparable field 'title' must have a 'scalar aggregate' operand, to match the field type 'String'

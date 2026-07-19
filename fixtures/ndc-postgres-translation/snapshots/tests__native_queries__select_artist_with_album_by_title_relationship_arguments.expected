@@ -1,0 +1,98 @@
+WITH "%1_NATIVE_QUERY_artist" AS (
+  WITH "%13_NATIVE_QUERY_artist" AS (
+    SELECT
+      *
+    FROM
+      public."Artist"
+  )
+  SELECT
+    *
+  FROM
+    "%13_NATIVE_QUERY_artist" AS "%14_NATIVE_QUERY_artist"
+),
+"%5_NATIVE_QUERY_album_by_title" AS (
+  WITH "%15_NATIVE_QUERY_album_by_title" AS (
+    SELECT
+      *
+    FROM
+      public."Album"
+    WHERE
+      "Title" LIKE cast($1 as "pg_catalog"."varchar")
+      AND "AlbumId" < 300
+  )
+  SELECT
+    *
+  FROM
+    "%15_NATIVE_QUERY_album_by_title" AS "%16_NATIVE_QUERY_album_by_title"
+)
+SELECT
+  coalesce(json_agg(row_to_json("%9_universe")), '[]') AS "universe"
+FROM
+  (
+    SELECT
+      *
+    FROM
+      (
+        SELECT
+          coalesce(json_agg(row_to_json("%10_rows")), '[]') AS "rows"
+        FROM
+          (
+            SELECT
+              "%2_artist"."Name" AS "Name",
+              "%3_RELATIONSHIP_Albums"."Albums" AS "Albums"
+            FROM
+              (
+                SELECT
+                  "%0_artist".*
+                FROM
+                  "%1_NATIVE_QUERY_artist" AS "%0_artist"
+                ORDER BY
+                  "%0_artist"."ArtistId" ASC
+                LIMIT
+                  5
+              ) AS "%2_artist"
+              LEFT OUTER JOIN LATERAL (
+                SELECT
+                  row_to_json("%3_RELATIONSHIP_Albums") AS "Albums"
+                FROM
+                  (
+                    SELECT
+                      *
+                    FROM
+                      (
+                        SELECT
+                          coalesce(json_agg(row_to_json("%7_rows")), '[]') AS "rows"
+                        FROM
+                          (
+                            SELECT
+                              "%6_album_by_title"."Title" AS "title"
+                            FROM
+                              (
+                                SELECT
+                                  "%4_album_by_title".*
+                                FROM
+                                  "%5_NATIVE_QUERY_album_by_title" AS "%4_album_by_title"
+                                WHERE
+                                  (
+                                    "%2_artist"."ArtistId" = "%4_album_by_title"."ArtistId"
+                                  )
+                                ORDER BY
+                                  "%4_album_by_title"."AlbumId" ASC
+                              ) AS "%6_album_by_title"
+                            ORDER BY
+                              "%6_album_by_title"."AlbumId" ASC
+                          ) AS "%7_rows"
+                      ) AS "%7_rows"
+                  ) AS "%3_RELATIONSHIP_Albums"
+              ) AS "%3_RELATIONSHIP_Albums" ON ('true')
+            ORDER BY
+              "%2_artist"."ArtistId" ASC
+          ) AS "%10_rows"
+      ) AS "%10_rows"
+  ) AS "%9_universe";
+
+{
+    1: String(
+        "%Rock%",
+    ),
+}

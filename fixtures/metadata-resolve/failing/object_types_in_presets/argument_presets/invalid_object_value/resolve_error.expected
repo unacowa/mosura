@@ -1,0 +1,1 @@
+Error: Type error in preset argument objects for role admin in command InsertAlbum (in subgraph default): Expected an object value of type InsertAlbumObject (in subgraph default) but got value "Invalid object value"

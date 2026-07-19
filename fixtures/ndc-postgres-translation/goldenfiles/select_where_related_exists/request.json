@@ -1,0 +1,59 @@
+{
+  "$schema": "../../../../../../static/query.schema.json",
+  "collection": "artist",
+  "query": {
+    "fields": {
+      "title": {
+        "type": "column",
+        "column": "name",
+        "arguments": {}
+      },
+      "albums": {
+        "type": "relationship",
+        "relationship": "artist_albums",
+        "arguments": {},
+        "query": {
+          "fields": {
+            "title": {
+              "type": "column",
+              "column": "title",
+              "arguments": {}
+            }
+          }
+        }
+      }
+    },
+    "predicate": {
+      "type": "exists",
+      "in_collection": {
+        "type": "related",
+        "relationship": "artist_albums",
+        "arguments": {}
+      },
+      "predicate": {
+        "type": "binary_comparison_operator",
+        "column": {
+          "type": "column",
+          "name": "title",
+          "path": []
+        },
+        "operator": "_like",
+        "value": {
+          "type": "scalar",
+          "value": "Supernatural"
+        }
+      }
+    }
+  },
+  "arguments": {},
+  "collection_relationships": {
+    "artist_albums": {
+      "arguments": {},
+      "column_mapping": {
+        "id": ["artist_id"]
+      },
+      "relationship_type": "array",
+      "target_collection": "album"
+    }
+  }
+}

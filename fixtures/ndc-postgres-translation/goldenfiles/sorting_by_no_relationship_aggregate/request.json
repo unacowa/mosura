@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../../../../static/query.schema.json",
+  "collection": "Album",
+  "query": {
+    "fields": {
+      "Name": {
+        "type": "column",
+        "column": "Title",
+        "arguments": {}
+      }
+    },
+    "order_by": {
+      "elements": [
+        {
+          "target": {
+            "type": "aggregate",
+            "path": [],
+            "aggregate": {
+              "type": "single_column",
+              "column": "TopRadioChartPlacement",
+              "function": "impossible"
+            }
+          },
+          "order_direction": "desc"
+        }
+      ]
+    },
+    "limit": 3
+  },
+  "arguments": {},
+  "collection_relationships": {}
+}

@@ -1,0 +1,7 @@
+Error: the following argument in command function_with_duplicate_args (in subgraph default) is defined more than once: duplicate_argument
+    ╭─[ <unknown>:18:25 ]
+    │
+ 18 │                 "name": "duplicate_argument",
+    │                         ──────────┬─────────  
+    │                                   ╰─────────── Command 'function_with_duplicate_args' has a duplicate argument definition for 'duplicate_argument'
+────╯

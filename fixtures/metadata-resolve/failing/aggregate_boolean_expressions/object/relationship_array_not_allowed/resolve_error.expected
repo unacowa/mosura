@@ -1,0 +1,1 @@
+Error: error in boolean expression type 'Album_aggregate_bool_exp (in subgraph default)': the comparable relationship 'tracks' for the operand type 'Album (in subgraph default)' is an array relationship. This is not supported

@@ -1,0 +1,12 @@
+Error: Error in model permission for model 'Albums (in subgraph subgraphs)' for role 'user': preset argument 'include_rereleases' value has a type error: Expected a value of type Boolean but got value "incorrect type"
+    ╭─[ <unknown>:65:35 ]
+    │
+ 65 │                           "argument": "include_rereleases",
+    │                                       ──────────┬─────────  
+    │                                                 ╰─────────── This argument preset's value has a type error
+ 66 │ ╭─▶                       "value": {
+    ┆ ┆   
+ 68 │ ├─▶                       }
+    │ │                             
+    │ ╰───────────────────────────── This argument preset value has a type error
+────╯

@@ -1,0 +1,47 @@
+{
+  "$schema": "../../../../../../static/query.schema.json",
+  "collection": "Artist",
+  "query": {
+    "fields": {
+      "Name": {
+        "type": "column",
+        "column": "Name",
+        "arguments": {}
+      }
+    },
+    "order_by": {
+      "elements": [
+        {
+          "target": {
+            "type": "aggregate",
+            "path": [
+              {
+                "relationship": "ArtistAlbum",
+                "arguments": {},
+                "predicate": null
+              }
+            ],
+            "aggregate": {
+              "type": "single_column",
+              "column": "AlbumId",
+              "function": "count"
+            }
+          },
+          "order_direction": "desc"
+        }
+      ]
+    },
+    "limit": 3
+  },
+  "arguments": {},
+  "collection_relationships": {
+    "ArtistAlbum": {
+      "column_mapping": {
+        "ArtistId": ["ArtistId"]
+      },
+      "relationship_type": "array",
+      "target_collection": "Album",
+      "arguments": {}
+    }
+  }
+}

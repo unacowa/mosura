@@ -1,0 +1,9 @@
+Error: Error in model permission for model 'Albums (in subgraph subgraphs)' for role 'user': model source is required for model 'Albums (in subgraph subgraphs)' to resolve predicate
+    ╭─[ <unknown>:7:9 ]
+    │
+  7 │ ╭─▶         {
+    ┆ ┆   
+ 46 │ ├─▶         },
+    │ │                
+    │ ╰──────────────── No source is defined for this model
+────╯

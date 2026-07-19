@@ -1,0 +1,1 @@
+Error: error in boolean expression type 'String_aggregate_bool_exp (in subgraph default)': multiple graphql types found with the same name: String_bool_exp

@@ -1,0 +1,1 @@
+Error: Procedure based commands are not supported in relationships. Relationship 'procedureResult' on type 'MyObject (in subgraph default)' targets command 'procedure_with_args (in subgraph default)' which is backed by procedure 'procedure_with_args'

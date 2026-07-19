@@ -1,0 +1,1 @@
+Error: error in boolean expression type 'String_aggregate_bool_exp (in subgraph default)': the aggregation function '_crazy' returns an array type ([String]). Array types are not supported in aggregate comparisons

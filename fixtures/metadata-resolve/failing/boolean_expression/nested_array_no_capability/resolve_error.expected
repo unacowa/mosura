@@ -1,0 +1,2 @@
+Error: The data connector 'db (in subgraph default)' does not support filtering by nested object arrays. The comparable field 'staff' within institution_bool_exp (in subgraph default)' is of an object array type: [staff_member] (in subgraph default)
+Error: The data connector 'db (in subgraph default)' does not support filtering by nested object arrays. The comparable field 'pets' within staff_bool_exp (in subgraph default)' is of an object array type: [pet] (in subgraph default)

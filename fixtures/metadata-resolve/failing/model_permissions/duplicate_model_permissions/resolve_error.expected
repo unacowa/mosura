@@ -1,0 +1,7 @@
+Error: multiple model permissions defined for model: Albums (in subgraph subgraphs)
+    ╭─[ <unknown>:81:26 ]
+    │
+ 81 │             "modelName": "Albums",
+    │                          ────┬───  
+    │                              ╰───── A model permissions has already been defined for this model
+────╯

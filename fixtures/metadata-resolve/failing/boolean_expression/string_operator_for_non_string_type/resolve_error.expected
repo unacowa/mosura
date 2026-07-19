@@ -1,0 +1,1 @@
+Error: the operator '_contains' in the boolean expression 'Int_bool_exp (in subgraph default)' is only applicable on string scalars: scalar type 'Int' is not a string

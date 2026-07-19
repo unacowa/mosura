@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../../../../static/query.schema.json",
+  "collection": "Album",
+  "query": {
+    "fields": {
+      "AlbumId": {
+        "type": "column",
+        "column": "Id",
+        "arguments": {}
+      }
+    },
+    "predicate": {
+      "type": "binary_comparison_operator",
+      "column": {
+        "type": "column",
+        "name": "Title",
+        "path": []
+      },
+      "operator": "_in",
+      "value": {
+        "type": "scalar",
+        "value": ["Mozart: Chamber Music", "Something else"]
+      }
+    }
+  },
+  "arguments": {},
+  "collection_relationships": {}
+}

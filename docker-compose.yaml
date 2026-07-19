@@ -1,0 +1,19 @@
+# E2E テスト用 PostgreSQL (docs/implementation-plan.md M4)
+# 使い方: docker compose up -d
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: mosura
+      POSTGRES_PASSWORD: mosura
+      POSTGRES_DB: mosura
+    ports:
+      - "5433:5432"
+    volumes:
+      # M4 で fixtures/execute から生成するシード SQL を置く
+      - ./scripts/pg-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "mosura"]
+      interval: 5s
+      timeout: 5s
+      retries: 10

@@ -1,0 +1,5 @@
+import {
+  "unacowa/mosura/graphql",
+}
+
+pkgtype(kind: "executable")

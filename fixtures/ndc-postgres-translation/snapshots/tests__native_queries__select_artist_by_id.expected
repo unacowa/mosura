@@ -1,0 +1,40 @@
+WITH "%1_NATIVE_QUERY_artist_by_id" AS (
+  WITH "%7_NATIVE_QUERY_artist_by_id" AS (
+    SELECT
+      *
+    FROM
+      public."Artist"
+    WHERE
+      "ArtistId" = 1
+  )
+  SELECT
+    *
+  FROM
+    "%7_NATIVE_QUERY_artist_by_id" AS "%8_NATIVE_QUERY_artist_by_id"
+)
+SELECT
+  coalesce(json_agg(row_to_json("%3_universe")), '[]') AS "universe"
+FROM
+  (
+    SELECT
+      *
+    FROM
+      (
+        SELECT
+          coalesce(json_agg(row_to_json("%4_rows")), '[]') AS "rows"
+        FROM
+          (
+            SELECT
+              "%2_artist_by_id"."Name" AS "Name"
+            FROM
+              (
+                SELECT
+                  "%0_artist_by_id".*
+                FROM
+                  "%1_NATIVE_QUERY_artist_by_id" AS "%0_artist_by_id"
+              ) AS "%2_artist_by_id"
+          ) AS "%4_rows"
+      ) AS "%4_rows"
+  ) AS "%3_universe";
+
+{}

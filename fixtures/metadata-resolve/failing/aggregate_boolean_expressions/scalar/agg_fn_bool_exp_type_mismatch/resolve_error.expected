@@ -1,0 +1,1 @@
+Error: error in boolean expression type 'String_aggregate_bool_exp (in subgraph default)': type mismatch between the aggregation function '_min' (return type: 'String') and the specified boolean expression type 'Int_bool_exp (in subgraph default)' (operand type: 'Int')

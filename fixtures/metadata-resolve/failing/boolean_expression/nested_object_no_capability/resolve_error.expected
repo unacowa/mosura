@@ -1,0 +1,1 @@
+Error: The data connector 'custom (in subgraph __unknown_namespace)' does not support filtering inside nested objects. The comparable field 'location' within 'institution_bool_exp (in subgraph __unknown_namespace)' is of a nested object type: location (in subgraph __unknown_namespace)

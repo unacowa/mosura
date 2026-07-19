@@ -1,0 +1,4 @@
+_build/
+.mooncakes/
+*.core
+.DS_Store

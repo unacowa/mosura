@@ -1,0 +1,1 @@
+Error: Type error in preset argument actor_bool_exp for role literal_user in command get_actors_by_bool_exp (in subgraph default): Found a literal value but the argument is a boolean expression type 'actor_bool_exp (in subgraph default)'

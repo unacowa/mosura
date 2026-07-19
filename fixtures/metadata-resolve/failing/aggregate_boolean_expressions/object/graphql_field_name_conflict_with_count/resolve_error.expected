@@ -1,0 +1,1 @@
+Error: error in boolean expression type 'Album_aggregate_bool_exp (in subgraph default)': a GraphQL field name conflict exists between the 'title' comparable aggregatable field and the 'title' count aggregation function. One of these will need to be renamed.

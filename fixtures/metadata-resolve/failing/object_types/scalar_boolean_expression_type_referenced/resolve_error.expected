@@ -1,0 +1,1 @@
+Error: Field type IntBoolExp (in subgraph default) could not be found in field int_filter for object type Zoo (in subgraph default)

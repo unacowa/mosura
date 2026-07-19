@@ -1,0 +1,2730 @@
+# テストケース台帳 (scripts/gen_cases.py が生成。tag/milestone/reason の手動編集は再生成後も維持される)
+# tag: in-scope (CI で実行・グリーン維持) / pending (未着手の M に属する) / out-of-scope (MVP 対象外、削除しない)
+
+[cases."lang-graphql/query_testdata/err/0007_fragment_definition_with_invalid_fragment_name"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/0008_fragment_definition_with_invalid_type_condition"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/0009_fragment_definition_with_invalid_selection_set"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/0024_document_with_incorrect_definition"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/0025_document_with_incorrect_definition_and_selection_set"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/0027_invalid_type_system_extension"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/0029_operation_definition_with_empty_selection_set"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/0030_operation_definition_with_description"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/0031_argument_with_erronous_string_value"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/0035_unterminated_string_value_in_object_value"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/0040_operation_definition_missing_selection_set"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/0041_operation_definition_with_missing_selection_set"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/0046_incomplete_spreads"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/0047_empty_variable_definition"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/1000_multibyte_chars_bad"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/1001_multibyte_chars_bad"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/1002_multibyte_chars_bad"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/6000_stackoverflow1"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/6001_stackoverflow2"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/9005_escaped_char"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/9007_unterminated_string_value_in_object_value_argument"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/err/9008_unterminated_string_value"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0001_empty"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0002_selection_simple"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0003_selection_with_fields"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0004_selection_with_fields_aliases_arguments"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0005_selection_with_inline_fragments"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0006_selection_with_fragment_spread"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0012_fragment_definition"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0013_fragment_definition_with_fragment_spread"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0020_operation_type_definition"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0021_operation_type_definition_with_arguments"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0022_operation_type_definition_with_arguments_and_directives"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0030_values"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0031_variables_with_default"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0034_query_shorthand_followed_by_fragment_definition"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0035_query_with_variables"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0036_parses_variable_definition_with_list_type"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/0037_operation_type_definition_with_inline_fragment"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/1111_parses_variable_inline_values"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/1113_parses_multibyte_chars"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/1114_parses_anonymous_mutation"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/1115_parses_anonymous_subscription"]
+tag = "out-of-scope"
+reason = "subscription は対象外"
+
+[cases."lang-graphql/query_testdata/ok/9011_escaped_char"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/query_testdata/ok/9013_emoji_char_in_string_value"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0001_directive_definition_missing_location"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0002_enum_definition_with_missing_name"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0003_enum_definition_with_missing_values"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0004_enum_definition_with_missing_curly"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0005_enum_extension_with_missing_name"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0006_enum_extension_with_missing_requirements"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0010_input_definition_with_missing_name"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0011_input_definition_with_missing_input_values"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0012_input_extension_with_missing_name"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0013_input_extension_with_missing_requirements"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0014_interface_extension_with_missing_name"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0015_interface_extension_with_missing_requirements"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0016_object_type_extension_with_missing_name"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0017_object_type_extension_with_missing_requirements"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0018_scalar_definition_with_missing_name"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0019_scalar_extension_with_missing_name"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0020_union_definition_with_missing_name"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0021_union_definition_with_missing_union_members"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0022_union_extension_with_missing_name"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0023_union_extension_with_missing_requirements"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0026_invalid_definition_squished_between_two_valid_definitions"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0028_invalid_type_system_extension_followed_by_valid"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0032_input_value_with_erronous_string_value"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0033_directive_with_erronous_string_value"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0034_unterminated_string_value_in_list"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0036_unterminated_string_in_default_value"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0042_document_with_incorrect_token"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0043_type_with_trailing_garbage"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0044_list_type_with_no_type"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0045_ignored_token_spans"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0048_unbalanced_list_type_1"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0049_unbalanced_list_type_2"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0050_invalid_implements_list"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/err/0051_union_with_invalid_members_list"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0007_directive_definition"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0008_directive_definition_with_arguments"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0009_directive_definition_repeatable"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0010_enum_type_definition"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0011_enum_type_extension"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0014_input_definition"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0015_input_extension"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0016_interface_definition"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0017_interface_extension"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0018_object_type_definition"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0019_object_type_extension"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0023_scalar_definition"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0024_scalar_extension"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0025_schema_definition"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0026_schema_extension"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0027_union_type_definition"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0028_union_type_definition_followed_by_object_definition"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0029_union_type_extension"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0032_supergraph"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0033_directive_on_argument_definition"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0038_wrapped_named_types"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0040_type_token_order"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/schema_testdata/ok/0041_implements_list"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/testdata/star_wars.schema"]
+tag = "pending"
+milestone = "m1"
+
+[cases."lang-graphql/testdata/unions_parsing"]
+tag = "pending"
+milestone = "m1"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/agg_exp_missing"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/agg_exp_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/count_bool_exp_missing"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/count_bool_exp_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/count_distinct_bool_exp_missing"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/count_distinct_bool_exp_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/count_distinct_not_enabled_on_agg_exp"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/count_not_enabled_on_agg_exp"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/field_array_type_not_allowed"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/field_bool_exp_operand_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/field_duplicated"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/field_not_defined"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/field_object_aggregate_bool_exp_operand_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/field_scalar_aggregate_bool_exp_operand_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/filter_input_model_missing"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/filter_input_model_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/graphql_field_name_conflict_with_count"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/graphql_field_name_conflict_with_count_distinct"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/graphql_field_name_conflict_with_logical_operator"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/graphql_type_name_in_use"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/is_null_is_not_allowed"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/predicate_graphql_type_name_in_use"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/relationship_array_not_allowed"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/relationship_bool_exp_missing"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/relationship_bool_exp_operand_kind_incorrect"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/relationship_bool_exp_operand_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/relationship_command_target_not_supported"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/relationship_duplicated"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/relationship_missing"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/relationship_model_target_missing"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/object/scalar_type_not_allowed"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/agg_exp_missing"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/agg_exp_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/agg_fn_bool_exp_missing"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/agg_fn_bool_exp_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/agg_fn_duplicated"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/agg_fn_not_defined"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/agg_fn_returns_array"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/count_bool_exp_missing"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/count_bool_exp_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/count_distinct_bool_exp_missing"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/count_distinct_bool_exp_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/count_distinct_not_enabled_on_agg_exp"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/count_not_enabled_on_agg_exp"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/graphql_field_name_conflict_with_count"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/graphql_field_name_conflict_with_count_distinct"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/graphql_field_name_conflict_with_logical_operator"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/graphql_type_name_in_use"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/is_null_is_not_allowed"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/object_type_not_allowed"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expression_in_relationship/data_connector_lacks_nested_fields_aggregates_capability"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expression_in_relationship/disallow_count_distinct_on_models"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expression_in_relationship/disallow_object_relationships"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expression_in_relationship/missing_aggregate_exp"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expression_in_relationship/missing_aggregation_function_mappings_to_model_data_connector"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expression_in_relationship/missing_model_source"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expression_in_relationship/operand_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/aggregatable_field_agg_exp_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/aggregatable_field_not_found"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/aggregation_function_return_array_type_mismatch_to_named"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/aggregation_function_return_named_type_mismatch_to_array"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/aggregation_function_return_nullability_mismatch_with_data_connector"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/aggregation_function_return_object_missing_mapping"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/aggregation_function_return_type_repr_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/conflict_between_count_and_aggregatable_field"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/conflict_between_count_and_aggregation_function"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/conflict_between_count_distinct_and_aggregatable_field"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/conflict_between_count_distinct_and_aggregation_function"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/count_distinct_return_type_cannot_use_non_int_inbuilt"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/count_distinct_return_type_not_found copy"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/count_distinct_return_type_on_object_operand_must_be_int_if_connector_type_is_unspecified"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/count_distinct_return_type_on_object_operand_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/count_distinct_return_type_on_scalar_operand_must_be_int_if_connector_type_is_unspecified"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/count_distinct_return_type_on_scalar_operand_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/count_return_type_cannot_use_non_int_inbuilt"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/count_return_type_not_found"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/count_return_type_on_object_operand_must_be_int_if_connector_type_is_unspecified"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/count_return_type_on_object_operand_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/count_return_type_on_scalar_operand_missing_type_representation"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/count_return_type_on_scalar_operand_must_be_int_if_connector_type_is_unspecified"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/count_return_type_on_scalar_operand_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/data_connector_function_return_not_a_scalar"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/data_connector_lacks_aggregates_capability"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/data_connector_lacks_nested_fields_aggregates_capability"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/disallow_count_distinct_on_models"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/disallow_duplicate_graphql_select_type_name"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/disallow_duplicate_model_filter_input_type_name"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/disallow_duplicate_name"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/disallow_multiple_nested_array_agg"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/disallow_object_fields_with_arguments"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/duplicated_aggregatable_fields"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/duplicated_aggregation_functions"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/missing_aggregate_exp_from_model"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/missing_aggregation_function_data_connector"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/missing_aggregation_function_data_connector_function"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/missing_aggregation_function_data_connector_mapping"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/missing_aggregation_function_data_connector_operand_type"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/missing_aggregation_function_mappings_to_model_data_connector"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/missing_aggregation_function_return_type"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/missing_data_connector_scalar_type_repr"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/missing_model_filter_input_field_type"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/missing_model_source"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/missing_operand_object_field_agg_exp"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/missing_operand_object_type"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/missing_operand_scalar_type"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/aggregate_expressions/model_aggregate_exp_type_mismatch"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/failing/boolean_expression/data_connector_not_found"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/disallow_remote_predicate_with_argument_mapping_target"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/missing_object_type"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/missing_scalar_type"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/multidimensional_nested_object_array_disallowed"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/multidimensional_nested_scalar_array_disallowed"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/nested_array_no_capability"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/nested_object_no_capability"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/nested_object_relationship_filter"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/nested_scalar_array_no_capability"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/object_comparable_field_duplicated"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/object_comparable_relationship_duplicated"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/object_logical_operator_field_name_conflict_with_field"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/object_logical_operator_field_name_conflict_with_relationship"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/scalar_bool_exp_on_object_field"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/scalar_comparison_operator_duplicated"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/scalar_invalid_eq_operator_argument_type"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/scalar_invalid_in_operator_argument_type"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/scalar_invalid_string_operator_argument_type"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/scalar_is_null_operator_field_name_conflict"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/scalar_logical_operator_field_name_conflict"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/scalar_missing_mapped_operator"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/scalar_operator_argument_type_mismatch"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/scalars_not_defined_for_command_argument_data_connector"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/failing/boolean_expression/scalars_not_defined_for_data_connector"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/string_operator_for_non_string_type"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/boolean_expression/type_not_known_to_data_connector"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/command_no_ndc_function"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/failing/commands/duplicate_argument"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/failing/commands/functions/cant_map_argument_that_is_preset_in_data_connector_link"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/failing/commands/functions/duplicate_ndc_argument_mapping"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/failing/commands/incompatible_types_in_argument_mapping"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/failing/commands/invalid_output_type"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/failing/commands/literal_used_for_bool_exp_argument_preset"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/failing/commands/procedures/cant_map_argument_that_is_preset_in_data_connector_link"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/failing/commands/procedures/duplicate_command_name"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/failing/commands/procedures/duplicate_ndc_argument_mapping"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/failing/commands/procedures/relationship_from_object_type"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/failing/commands/two_errors"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/failing/commands/unknown_argument_type"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/failing/data_connector_link/incompatible_capabilities_for_local_relationship"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/data_connector_link/incompatible_capabilities_version"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/data_connector_link/invalid_ndc_v01_capabilities_version_failing_with_error"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/data_connector_link/multiple_errors"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/missing_subgraph"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/model_permissions/argument_preset_type_error"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/model_permissions/disallow_duplicate_argument_preset"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/model_permissions/disallow_duplicate_roles"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/model_permissions/duplicate_model_permissions"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/model_permissions/filter_permissions/comparison_operator_not_found"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/model_permissions/filter_permissions/comparison_to_array_type"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/model_permissions/filter_permissions/relationship_not_comparable"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/model_permissions/filter_permissions/unknown_field_in_predicate"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/model_permissions/filter_permissions/unknown_relationship"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/model_permissions/missing_model_source"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/model_permissions/nested_array"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/model_permissions/nested_field_missing_in_boolean_expression"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/model_permissions/nested_field_with_missing_boolean_expression"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/model_permissions/non_custom_type_in_field"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/model_permissions/unknown_argument_preset"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/model_permissions/unknown_model"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/models/cant_map_argument_that_is_preset_in_data_connector_link"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/models/duplicate_argument"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/models/duplicate_graphql_root_fields"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/models/duplicate_ndc_argument_mapping"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/models/missing_object_type"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/models/two_missing_object_types"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types/data_connector_scalars_mismatch"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types/mapped_to_inner_non_null_ndc_type"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types/mapped_to_inner_null_ndc_type"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types/mapped_to_non_array_ndc_type"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types/mapped_to_non_compatible_ndc_type"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types/mapped_to_non_null_ndc_type"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types/mapped_to_null_ndc_type"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types/missing_object_types"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types/recursive_object_types"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types/scalar_boolean_expression_type_referenced"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types_in_presets/argument_presets/invalid_field_value"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types_in_presets/argument_presets/invalid_object_value"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types_in_presets/argument_presets/invalid_object_value_nested_field"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types_in_presets/argument_presets/missing_field"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types_in_presets/argument_presets/missing_field_nested_object"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types_in_presets/field_presets/invalid_field_value"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types_in_presets/field_presets/invalid_list_value"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types_in_presets/field_presets/invalid_object_value"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/object_types_in_presets/field_presets/missing_field"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/order_by_expressions/array_relationship"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/order_by_expressions/disallow_field_with_field_arguments_in_order_by_expressions"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/order_by_expressions/disallow_nested_field_ordering_when_unsupported"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/order_by_expressions/disallow_nested_relationship_ordering_when_unsupported"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/order_by_expressions/disallow_relationship_to_sourceless_command"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/failing/order_by_expressions/disallow_relationship_to_sourceless_model"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/order_by_expressions/disallow_relationships_without_connector_capability"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/order_by_expressions/disallow_remote_relationship"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."metadata-resolve/failing/order_by_expressions/model_type_mismatch"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/order_by_expressions/model_v1_disallow_non_scalar_field"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/order_by_expressions/no_enable_all"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/order_by_expressions/orderable_field_type_error"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/order_by_expressions/unknown_field"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/order_by_expressions/unknown_order_by_expression_in_field"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/order_by_expressions/unknown_order_by_expression_in_model"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/order_by_expressions/unknown_order_by_expression_in_orderable_relationship"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/order_by_expressions/unknown_orderable_type"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/order_by_expressions/unknown_relationship"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/relationships/model_argument_target_type_mismatch"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/relationships/model_argument_target_type_nullability_mismatch"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/remote_relationships_permissions/across_subgraphs"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."metadata-resolve/failing/remote_relationships_permissions/no_equal_operator_defined"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."metadata-resolve/failing/scalar_types/cannot_match_inbuilt_type_name"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/scalar_types/multiple_errors"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/scalar_types/scalar_extraction_function_duplicated"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/failing/simple"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/subgraph_invalid_name"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/supergraph_too_many_graphql_configs"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/failing/type_permissions/rules_based"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/aggregate_boolean_expressions/object/missing_graphqlconfig_aggregate_warning"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/passing/aggregate_boolean_expressions/object/missing_graphqlconfig_logical_operators_warning"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/passing/aggregate_boolean_expressions/object/partial_supergraph"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/passing/aggregate_boolean_expressions/object/simple"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/passing/aggregate_boolean_expressions/scalar/missing_graphqlconfig_aggregate_warning"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/passing/aggregate_boolean_expressions/scalar/missing_graphqlconfig_logical_operators_warning"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/passing/aggregate_boolean_expressions/scalar/simple"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/passing/aggregate_expressions/missing_aggregate_graphql_config"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/passing/aggregate_expressions/missing_filter_input_field_name_in_graphql_config"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/passing/aggregate_expressions/nested_recursive_object"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/passing/aggregate_expressions/relationship"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/passing/aggregate_expressions/root_field"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/passing/aggregate_expressions/warning_for_model_filter_input_type_without_aggregate_expression"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."metadata-resolve/passing/boolean_expression_type/basic"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/boolean_expression_type/basic_with_scalar_logical_operators"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/boolean_expression_type/conflicting_names_warnings"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/boolean_expression_type/nested_object"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/boolean_expression_type/nested_recursive_object"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/boolean_expression_type/nested_scalar_array"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/boolean_expression_type/no_graphql"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/boolean_expression_type/partial_supergraph"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/boolean_expression_type/range"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/boolean_expression_type/regression"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/boolean_expression_type/relationship_with_model_argument_mapping_target"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/boolean_expression_type/scalar_validation_issues"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/boolean_expression_type/string_operator_issues"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/boolean_expression_type/two_data_sources"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/command_permissions/role_based/input_type_permissions"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/passing/command_permissions/role_based/nullable_predicate_args_can_be_preset"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/passing/command_permissions/role_based/predicate_args_can_be_preset"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/passing/command_permissions/rules_based/basic_allow"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/passing/commands/functions/all_args_are_set_including_connector_link_presets"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/passing/commands/functions/issue_when_not_all_arguments_defined"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/passing/commands/functions/issue_when_types_not_compatible_in_argument_mapping"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/passing/commands/functions/literal_used_for_boolean_expression_argument_preset"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/passing/commands/procedures/all_args_are_set_including_connector_link_presets"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/passing/commands/procedures/issue_when_not_all_arguments_defined"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/passing/commands/procedures/issue_when_relationship_is_defined"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/passing/commands/procedures/issue_when_types_not_compatible_in_argument_mapping"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/passing/conflicting_type_names_warnings/scalar_and_boolean_exp"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/conflicting_type_names_warnings/scalar_and_object"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/data_connector_link/invalid_ndc_v01_capabilities_version_passing_with_issue"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/missing_subgraph_when_ignoring_unknown_subgraphs"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/model_permissions/nullable_predicate_args_can_be_preset"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/model_permissions/predicate_args_can_be_preset"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/models/all_args_are_set_including_connector_link_presets"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/models/issue_when_not_all_arguments_defined"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/models/issue_when_types_not_compatible_in_argument_mapping"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/object_types/recursive_types_issues"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/object_types/type_mapping_field_type_issues"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/object_types/with_boolean_expression_inside"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/order_by_expressions/conflicting_names_warnings"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/order_by_expressions/model_v1_upgrade"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/order_by_expressions/model_v2_no_order_by"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/order_by_expressions/model_v2_with_order_by"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/order_by_expressions/nested"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/order_by_expressions/nested_recursive_object"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/relationships/model_argument_target_type"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/relationships/model_argument_target_type_nullable"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/scalar_types/scalar_extraction_function_duplicated"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."metadata-resolve/passing/simple"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/subgraph_valid_name"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/supergraph/config_object_in_subgraph"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/supergraph/missing"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/supergraph/no_subgraphs"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/supergraph/present"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/type_permissions/v2/role_based"]
+tag = "pending"
+milestone = "m2"
+
+[cases."metadata-resolve/passing/type_permissions/v2/rules_based"]
+tag = "pending"
+milestone = "m2"
+
+[cases."execute/aggregates/relationship_field/filtering_ndc_v01"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."execute/aggregates/relationship_field/filtering_ndc_v02"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."execute/aggregates/relationship_field/filtering_null_inputs_ndc_v01"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."execute/aggregates/relationship_field/filtering_null_inputs_ndc_v02"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."execute/aggregates/relationship_field/simple_select"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."execute/aggregates/root_field/custom_count_return_type"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."execute/aggregates/root_field/filtering"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."execute/aggregates/root_field/filtering_null_inputs"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."execute/aggregates/root_field/nested_object"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."execute/aggregates/root_field/simple_select"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."execute/aggregates/root_field/typename"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."execute/apollo_federation_fields/entities"]
+tag = "out-of-scope"
+reason = "Apollo Federation は対象外"
+
+[cases."execute/apollo_federation_fields/service_sdl"]
+tag = "out-of-scope"
+reason = "Apollo Federation は対象外"
+
+[cases."execute/commands/custom_scalar_inputs"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/boolean_expression_command_argument/boolean_expression_type"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/boolean_expression_command_argument/combined_with_type_permissions"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/boolean_expression_command_argument/combined_with_type_permissions_disallow_bad_values"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/boolean_expression_command_argument/combined_with_type_permissions_more_presets"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/boolean_expression_command_argument/combined_with_type_permissions_more_presets_flag_off"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/boolean_expression_command_argument/object_boolean_expression_type"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/boolean_expression_command_argument/passed_by_user"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/command_argument_presets"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/forward_headers"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/model_argument_presets_select_many"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/model_argument_presets_select_many_nullable_arguments"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/model_argument_presets_select_one"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/multiple_arguments"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/object_array_output_type/command_permissions"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/object_array_output_type/output_permissions"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/object_output_type/command_permissions"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/object_output_type/output_permissions"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/preset_arguments"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/scalar_array_output_type"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/functions/scalar_output_type"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/object_type_input_arguments"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/procedures/boolean_expression_argument"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/procedures/forward_headers"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/procedures/multiple_arguments"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/procedures/object_array_output_type/command_permissions"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/procedures/object_array_output_type/output_permissions"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/procedures/object_input_type"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/procedures/object_output_type/command_permissions"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/procedures/object_output_type/output_permissions"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/procedures/scalar_array_output_type"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/commands/procedures/scalar_output_type"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/description"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/input_types/field_presets/commands"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/input_types/field_presets/models"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/empty_select"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/field_arguments/multiple_arguments"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/field_arguments"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/limit_offset/limit"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/limit_offset/limit_offset"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/limit_offset/null_values"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/limit_offset/offset"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/limit_offset/unexpected_value"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/nested_select/no_explicit_type_mapping"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/nested_select/postgres"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/nested_select/relationship"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/nested_select"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/object_type_input_arguments"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/order_by/empty_ordering"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/order_by/filter"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/order_by/multiple_columns"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/order_by/multiple_columns_validation_check"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/order_by/multiple_nested_columns_validation_check"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/order_by/nested"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/order_by/nested_legacy"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/order_by/nested_relationships"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/order_by/relationships/object/nested"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/order_by/relationships/object/simple"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/order_by/remote_relationship"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/order_by"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/order_by/reuse_order_by_expression"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/order_by/with_graphql_config"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/order_by/with_model_v2"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/permission_filter/nested_relationships"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/models/select_many/permission_filter/nested_select/object"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/models/select_many/permission_filter/nested_select/object_is_null"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/models/select_many/permission_filter/relationships/array"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/models/select_many/permission_filter/relationships/object"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/models/select_many/permission_filter/remote_relationships/array"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/permission_filter/remote_relationships/object"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/permission_filter/simple"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/models/select_many/predicate/is_null"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/relationship_predicates/array/nested"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/relationship_predicates/array/nested_multiple_fields"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/relationship_predicates/array/simple"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/relationship_predicates/object/nested"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/relationship_predicates/object/simple"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/relationship_predicates/object/two_relationship_fields"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/relationship_predicates/on_two_fields"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/remote_relationship_predicates/array/nested"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/remote_relationship_predicates/array/nested_multiple_fields"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/remote_relationship_predicates/array/simple"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/remote_relationship_predicates/object/empty_predicate"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/remote_relationship_predicates/object/nested"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/remote_relationship_predicates/object/simple"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/remote_relationship_predicates/object/two_relationship_fields"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/remote_relationship_predicates/on_two_fields"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/select_with_args/filter"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/select_with_args"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/select_with_args/with_graphql_config"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/simple_select/filter"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/simple_select/introspection/introspection"]
+tag = "pending"
+milestone = "m2"
+
+[cases."execute/models/select_many/simple_select/introspection/introspection_user_1"]
+tag = "pending"
+milestone = "m2"
+
+[cases."execute/models/select_many/simple_select/introspection/with_graphql_config"]
+tag = "pending"
+milestone = "m2"
+
+[cases."execute/models/select_many/simple_select"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/type_permission/order_by"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/models/select_many/type_permission/where"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/models/select_many/where/boolean_expression_type"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/filter"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/is_null/boolean_expression_type"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/is_null/object_boolean_expression_type"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/multiple_fields"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/ndc_operators"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/nested_relationships"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/nested_relationships_different_names"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/nested_remote_relationships"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/where/nested_scalar_array/not_supported"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/nested_scalar_array"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/nested_select/array"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/nested_select/array_is_null"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/nested_select/array_with_nested_and"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/nested_select/array_with_nested_and_old_behaviour"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/nested_select/object"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/nested_select/object_is_null"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/no_relation_comparisons_capability/boolean_expression_type/array/nested"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/no_relation_comparisons_capability/boolean_expression_type/array/simple"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/no_relation_comparisons_capability/boolean_expression_type/object/nested"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/no_relation_comparisons_capability/boolean_expression_type/object/simple"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/null_input"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/relationships/boolean_expression_type/array/nested"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/relationships/boolean_expression_type/array/simple"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/relationships/boolean_expression_type/object/nested"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/relationships/boolean_expression_type/object/simple"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/relationships/object_boolean_expression_type/array/nested"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/relationships/object_boolean_expression_type/array/simple"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/relationships/object_boolean_expression_type/object/nested"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/relationships/object_boolean_expression_type/object/simple"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/remote_relationships/boolean_expression_type/array/nested"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/where/remote_relationships/boolean_expression_type/array/simple"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/where/remote_relationships/boolean_expression_type/object/nested"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/where/remote_relationships/boolean_expression_type/object/simple"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/where/remote_relationships/boolean_expression_type/object/simple_across_subgraphs"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/models/select_many/where/shared_boolean_expression"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/simple"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_many/where/with_graphql_config"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_one/custom_scalar"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_one/simple_select/filter"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_one/simple_select/introspection/introspection"]
+tag = "pending"
+milestone = "m2"
+
+[cases."execute/models/select_one/simple_select"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/models/select_one/type_permission"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/multiple_root_fields/successful_execution"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/plugins/pre_ndc_request/pass_through"]
+tag = "out-of-scope"
+reason = "plugin hook は対象外"
+
+[cases."execute/plugins/pre_ndc_request/send_header"]
+tag = "out-of-scope"
+reason = "plugin hook は対象外"
+
+[cases."execute/plugins/pre_ndc_request/send_session_variable"]
+tag = "out-of-scope"
+reason = "plugin hook は対象外"
+
+[cases."execute/plugins/pre_ndc_response/pass_through"]
+tag = "out-of-scope"
+reason = "plugin hook は対象外"
+
+[cases."execute/plugins/pre_parse/pass_through"]
+tag = "out-of-scope"
+reason = "plugin hook は対象外"
+
+[cases."execute/relationships/across_namespace"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/relationships/array/arguments"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/relationships/array/arguments/with_graphql_config"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/relationships/array/arguments_null_inputs"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/relationships/array/arguments_null_inputs/with_graphql_config"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/relationships/array"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/relationships/array/target_model_with_arguments"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/relationships/command_to_command/across_namespace"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/relationships/command_to_command/mutually_recursive"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/relationships/command_to_command/mutually_recursive_across_namespace"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/relationships/command_to_command"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/relationships/command_to_model/across_namespace"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/relationships/command_to_model"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/relationships/command_to_model/with_graphql_config"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/relationships/model_to_command"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/relationships/multi_mapping"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/relationships/nested/selection"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/relationships/nested/selection_no_nested_capability"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/relationships/no_relationship_capability"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/relationships/object"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/relationships/permissions/source_type_permission"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/relationships/permissions/target_model_filter_predicate"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/relationships/permissions/target_model_not_selectable"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/relationships/permissions/target_model_type_field_not_selectable"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/relationships/permissions/target_model_type_permission"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/relationships/permissions/target_model_where_and_order_by"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/relationships/same_relationship_name"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/relay/relay"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/relay/relay_global_id_permission"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/relay/relay_id_in_select"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/relay/relay_node_field"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/relay/relay_node_field_permissions"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/relay/relay_node_interface_permission"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/relay/relay_node_model_select_permissions/no_select_permission_exists_for_role"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/relay/relay_node_model_select_permissions/successful_model_select_permissions"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/relay/relay_node_type_permissions"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/remote_relationships/array/aggregate"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."execute/remote_relationships/array/arguments"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/remote_relationships/array"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/remote_relationships/command/command_to_command"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/remote_relationships/command/join_with_object_value"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/remote_relationships/command/model_to_command/multiple_commands/nested"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/remote_relationships/command/model_to_command/multiple_commands/not_nested"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/remote_relationships/command/model_to_command/multiple_commands/very_nested"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/remote_relationships/command/model_to_command/mutually_recursive"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/remote_relationships/command/model_to_command"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/remote_relationships/command/model_to_command/with_relationship_argument"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/remote_relationships/command/procedures"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/remote_relationships/command/remote_in_local"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."execute/remote_relationships/from_nested"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/remote_relationships/multi_field_mapping"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/remote_relationships/mutually_recursive"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/remote_relationships/mutually_recursive_with_where"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/remote_relationships/remote_in_local/local_array_remote_object/custom_ndc_and_pg_ndc"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/remote_relationships/remote_in_local/local_array_remote_object/two_pg_ndc"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/remote_relationships/remote_in_local"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/remote_relationships/remote_in_local_aliased"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/remote_relationships/target_model_with_arguments"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/remote_relationships/target_model_with_arguments_and_fields"]
+tag = "out-of-scope"
+reason = "remote relationships (複数コネクタ) は対象外"
+
+[cases."execute/session_variables/json_disabled/integer_session_variable"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/session_variables/json_enabled/array_session_variable"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/session_variables/json_enabled/integer_session_variable"]
+tag = "pending"
+milestone = "m5"
+
+[cases."execute/typename"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/variables/non_null_type_default_value"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/variables/non_null_type_default_value_null"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/variables/non_null_type_null_variable"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/variables/non_null_type_omit_variable"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/variables/non_null_type_omit_variable/with_enum"]
+tag = "pending"
+milestone = "m4"
+
+[cases."execute/variables/non_null_type_omit_variable/with_enum_and_validation"]
+tag = "pending"
+milestone = "m4"
+
+[cases."ndc-postgres-translation/goldenfiles/aggregate_count_albums"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."ndc-postgres-translation/goldenfiles/aggregate_distinct_albums"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."ndc-postgres-translation/goldenfiles/aggregate_function_albums"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."ndc-postgres-translation/goldenfiles/aggregate_limit_offset_order_by"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."ndc-postgres-translation/goldenfiles/dup_array_relationship"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/mutations/simple"]
+tag = "pending"
+milestone = "m6"
+
+[cases."ndc-postgres-translation/goldenfiles/mutations/v2_insert"]
+tag = "pending"
+milestone = "m6"
+
+[cases."ndc-postgres-translation/goldenfiles/mutations/v2_insert_empty_objects"]
+tag = "pending"
+milestone = "m6"
+
+[cases."ndc-postgres-translation/goldenfiles/mutations/v2_insert_return_object_relationship"]
+tag = "pending"
+milestone = "m6"
+
+[cases."ndc-postgres-translation/goldenfiles/mutations/v2_update_array_column_empty"]
+tag = "pending"
+milestone = "m6"
+
+[cases."ndc-postgres-translation/goldenfiles/mutations/v2_update_array_column_null"]
+tag = "pending"
+milestone = "m6"
+
+[cases."ndc-postgres-translation/goldenfiles/mutations/v2_update_array_column_with_values"]
+tag = "pending"
+milestone = "m6"
+
+[cases."ndc-postgres-translation/goldenfiles/mutations/v2_update_by_id"]
+tag = "pending"
+milestone = "m6"
+
+[cases."ndc-postgres-translation/goldenfiles/native_queries/select_artist"]
+tag = "out-of-scope"
+reason = "native queries は対象外 (将来検討)"
+
+[cases."ndc-postgres-translation/goldenfiles/native_queries/select_artist_by_id"]
+tag = "out-of-scope"
+reason = "native queries は対象外 (将来検討)"
+
+[cases."ndc-postgres-translation/goldenfiles/native_queries/select_artist_by_name"]
+tag = "out-of-scope"
+reason = "native queries は対象外 (将来検討)"
+
+[cases."ndc-postgres-translation/goldenfiles/native_queries/select_artist_with_album_by_title"]
+tag = "out-of-scope"
+reason = "native queries は対象外 (将来検討)"
+
+[cases."ndc-postgres-translation/goldenfiles/native_queries/select_artist_with_album_by_title_relationship_arguments"]
+tag = "out-of-scope"
+reason = "native queries は対象外 (将来検討)"
+
+[cases."ndc-postgres-translation/goldenfiles/nested_aggregates"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."ndc-postgres-translation/goldenfiles/nested_array_relationships"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/nested_recursive_relationship"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/no_fields"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_array_column"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_array_column_nested_types"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_array_column_reverse"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_array_variable"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_array_variable_nested_types"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_composite_column_complex"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_composite_column_nested_field_count"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_composite_column_simple"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_composite_variable_complex"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_composite_variable_simple"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_nested_column_complex"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_nested_column_simple"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_track_order_by_artist_id_and_album_title"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_where_album_id_equals_self_nested_object_relationship"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_where_array_relationship"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_where_in_variable"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_where_large_or"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_where_not_null"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_where_or_to_in_optimization"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_where_prefix_function"]
+tag = "out-of-scope"
+reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+
+[cases."ndc-postgres-translation/goldenfiles/select_where_related_exists"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_where_string"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_where_unrelated_exists"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/select_with_limit"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/simple_array_relationship"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/simple_object_relationship"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/sorting_by_nested_relationship_column"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/sorting_by_nested_relationship_column_with_predicate"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/sorting_by_nested_relationship_count"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/sorting_by_no_relationship_aggregate"]
+tag = "out-of-scope"
+reason = "aggregates は MVP 対象外"
+
+[cases."ndc-postgres-translation/goldenfiles/sorting_by_recursive_relationship_column"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/sorting_by_relationship_column"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/sorting_by_relationship_column_with_true_predicate"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/sorting_by_relationship_count"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/sorting_by_relationship_count_with_predicate"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/values/select_types_on_comparisons"]
+tag = "pending"
+milestone = "m3"
+
+[cases."ndc-postgres-translation/goldenfiles/values/select_types_on_native_queries"]
+tag = "out-of-scope"
+reason = "native queries は対象外 (将来検討)"
+
+[cases."ndc-postgres-translation/goldenfiles/very_nested_recursive_relationship"]
+tag = "pending"
+milestone = "m3"

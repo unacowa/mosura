@@ -1,0 +1,1 @@
+Error: error in boolean expression type 'Album_aggregate_bool_exp (in subgraph default)': the operand type 'Album (in subgraph default)' does not match the operand type 'Artist (in subgraph default)' from the aggregate expression 'Artist_agg_exp (in subgraph default)'

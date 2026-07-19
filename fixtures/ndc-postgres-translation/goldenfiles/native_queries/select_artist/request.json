@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../../../../../static/query.schema.json",
+  "collection": "artist",
+  "query": {
+    "fields": {
+      "Name": {
+        "type": "column",
+        "column": "Name",
+        "arguments": {}
+      }
+    }
+  },
+  "arguments": {},
+  "collection_relationships": {}
+}

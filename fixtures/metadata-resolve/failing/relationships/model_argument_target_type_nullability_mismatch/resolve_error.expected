@@ -1,0 +1,1 @@
+Error: The source field 'ArtistTenantId' of type 'Int' in the relationship 'Artist' on type 'Album (in subgraph default)' cannot be mapped to the target argument 'tenantId' of type 'Int!' on the target model 'Artists (in subgraph default)' because their types are incompatible

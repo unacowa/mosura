@@ -1,0 +1,1 @@
+Error: The data connector 'custom (in subgraph default)' does not support filtering by nested scalar arrays. The comparable field 'campuses' within 'location_bool_exp (in subgraph default)' is of a scalar array type: [String]

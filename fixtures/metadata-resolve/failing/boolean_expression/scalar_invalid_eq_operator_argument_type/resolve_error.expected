@@ -1,0 +1,1 @@
+Error: the argument type 'Boolean!' for the operator 'equals' in the boolean expression 'postgres_int_comparison_bool_exp (in subgraph default)' should match the scalar type 'Int'

@@ -1,0 +1,7 @@
+Error: unknown model used in model select permissions definition: Albums (in subgraph subgraphs)
+    ╭─[ <unknown>:11:26 ]
+    │
+ 11 │             "modelName": "Albums",
+    │                          ────┬───  
+    │                              ╰───── This model is not defined
+────╯

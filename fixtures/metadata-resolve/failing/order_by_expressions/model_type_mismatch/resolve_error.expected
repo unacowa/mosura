@@ -1,0 +1,1 @@
+Error: Type of order by expression FooOrderByExpression (in subgraph default) does not match object type of model mymodel (in subgraph default).  Model type: RowType (in subgraph default); order by expression type: Foo (in subgraph default)

@@ -1,0 +1,1 @@
+Error: The field 'staff' in object type 'institution (in subgraph default)' cannot be mapped to data connector 'custom (in subgraph default)' field 'institution.staff' because: Type '[staff_member!]! (in subgraph default)' is not compatible with NDC type '[staff_member]!' - Expected a non-nullable type

@@ -1,0 +1,44 @@
+WITH "%1_NATIVE_QUERY_artist_by_name" AS (
+  WITH "%7_NATIVE_QUERY_artist_by_name" AS (
+    SELECT
+      *
+    FROM
+      public."Artist"
+    WHERE
+      "Name" = cast($1 as "pg_catalog"."varchar")
+  )
+  SELECT
+    *
+  FROM
+    "%7_NATIVE_QUERY_artist_by_name" AS "%8_NATIVE_QUERY_artist_by_name"
+)
+SELECT
+  coalesce(json_agg(row_to_json("%3_universe")), '[]') AS "universe"
+FROM
+  (
+    SELECT
+      *
+    FROM
+      (
+        SELECT
+          coalesce(json_agg(row_to_json("%4_rows")), '[]') AS "rows"
+        FROM
+          (
+            SELECT
+              "%2_artist_by_name"."ArtistId" AS "Id"
+            FROM
+              (
+                SELECT
+                  "%0_artist_by_name".*
+                FROM
+                  "%1_NATIVE_QUERY_artist_by_name" AS "%0_artist_by_name"
+              ) AS "%2_artist_by_name"
+          ) AS "%4_rows"
+      ) AS "%4_rows"
+  ) AS "%3_universe";
+
+{
+    1: String(
+        "Rush",
+    ),
+}

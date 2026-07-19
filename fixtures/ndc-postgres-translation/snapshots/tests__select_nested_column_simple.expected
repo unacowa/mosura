@@ -1,0 +1,57 @@
+WITH "%1_NATIVE_QUERY_address_identity_function" AS (
+  WITH "%10_NATIVE_QUERY_address_identity_function" AS (
+    SELECT
+      jsonb_populate_record(cast(null as "public"."person_address"), $1) as result
+  )
+  SELECT
+    *
+  FROM
+    "%10_NATIVE_QUERY_address_identity_function" AS "%11_NATIVE_QUERY_address_identity_function"
+)
+SELECT
+  coalesce(json_agg(row_to_json("%6_universe")), '[]') AS "universe"
+FROM
+  (
+    SELECT
+      *
+    FROM
+      (
+        SELECT
+          coalesce(json_agg(row_to_json("%7_rows")), '[]') AS "rows"
+        FROM
+          (
+            SELECT
+              "%5_nested_fields_collect"."collected" AS "result"
+            FROM
+              (
+                SELECT
+                  "%0_address_identity_function".*
+                FROM
+                  "%1_NATIVE_QUERY_address_identity_function" AS "%0_address_identity_function"
+              ) AS "%2_address_identity_function"
+              LEFT OUTER JOIN LATERAL (
+                SELECT
+                  row_to_json("%3_nested_fields") AS "collected"
+                FROM
+                  (
+                    SELECT
+                      "%4_address_identity_function.result"."address_line_1" AS "the_first_line_of_the_address"
+                    FROM
+                      (
+                        SELECT
+                          ("%2_address_identity_function"."result").*
+                      ) AS "%4_address_identity_function.result"
+                  ) AS "%3_nested_fields"
+              ) AS "%5_nested_fields_collect" ON ('true')
+          ) AS "%7_rows"
+      ) AS "%7_rows"
+  ) AS "%6_universe";
+
+{
+    1: Value(
+        Object {
+            "address_line_1": String("Somstreet 159"),
+            "address_line_2": String("Second door to the right"),
+        },
+    ),
+}

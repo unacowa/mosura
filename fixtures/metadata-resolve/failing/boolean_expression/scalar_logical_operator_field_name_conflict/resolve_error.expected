@@ -1,0 +1,1 @@
+Error: the boolean expression 'string_bool_exp (in subgraph default)' has a GraphQL field name conflict between the '_and' comparable operator and the '_and' logical operator. One of these will need to be renamed.

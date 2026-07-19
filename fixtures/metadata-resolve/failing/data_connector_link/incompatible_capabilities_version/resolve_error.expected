@@ -1,0 +1,1 @@
+Error: The data connector myconnector (in subgraph default) has an error: The version specified in the capabilities ("0.2.0") is not compatible with the schema version specified. The version requirement is ^0.1.0

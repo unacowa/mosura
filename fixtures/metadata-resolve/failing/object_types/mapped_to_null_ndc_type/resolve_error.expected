@@ -1,0 +1,1 @@
+Error: The field 'location' in object type 'institution (in subgraph default)' cannot be mapped to data connector 'custom (in subgraph default)' field 'institution.location' because: Type 'location! (in subgraph default)' is not compatible with NDC type 'location' - Expected a non-nullable type

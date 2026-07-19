@@ -1,0 +1,1 @@
+Error: error in boolean expression type 'MyObject_aggregate_bool_exp (in subgraph default)': the operand type 'MyObject (in subgraph default)' must be a scalar type

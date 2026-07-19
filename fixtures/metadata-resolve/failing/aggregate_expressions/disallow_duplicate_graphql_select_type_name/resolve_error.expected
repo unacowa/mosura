@@ -1,0 +1,1 @@
+Error: graphql config error in Invoice_aggregate_exp (in subgraph default): multiple graphql types found with the same name: App_Invoice

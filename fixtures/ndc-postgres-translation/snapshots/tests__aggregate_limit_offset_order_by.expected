@@ -1,0 +1,48 @@
+SELECT
+  coalesce(json_agg(row_to_json("%4_universe")), '[]') AS "universe"
+FROM
+  (
+    SELECT
+      *
+    FROM
+      (
+        SELECT
+          coalesce(row_to_json("%6_aggregates"), '[]') AS "aggregates"
+        FROM
+          (
+            SELECT
+              min("%3_Invoice"."BillingState") AS "BillingState__min",
+              max("%3_Invoice"."BillingState") AS "BillingState__max",
+              COUNT(DISTINCT "%3_Invoice"."BillingState") AS "BillingState__count_distinct",
+              min("%3_Invoice"."InvoiceId") AS "InvoiceId_min",
+              max("%3_Invoice"."InvoiceId") AS "InvoiceId_max",
+              COUNT("%3_Invoice"."InvoiceId") AS "InvoiceId_count",
+              min("%3_Invoice"."Total") AS "Total__min",
+              max("%3_Invoice"."Total") AS "Total__max",
+              coalesce(sum("%3_Invoice"."Total"), 0) AS "Total__sum",
+              stddev("%3_Invoice"."Total") AS "Total__stddev",
+              COUNT(*) AS "count_all"
+            FROM
+              (
+                SELECT
+                  "%2_Invoice".*
+                FROM
+                  "public"."Invoice" AS "%2_Invoice"
+                WHERE
+                  (
+                    "%2_Invoice"."BillingCountry" = cast($1 as "pg_catalog"."varchar")
+                  )
+                ORDER BY
+                  "%2_Invoice"."InvoiceId" ASC
+                LIMIT
+                  10 OFFSET 5
+              ) AS "%3_Invoice"
+          ) AS "%6_aggregates"
+      ) AS "%6_aggregates"
+  ) AS "%4_universe";
+
+{
+    1: String(
+        "USA",
+    ),
+}

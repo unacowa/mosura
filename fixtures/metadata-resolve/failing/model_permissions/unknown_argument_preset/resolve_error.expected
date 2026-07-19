@@ -1,0 +1,13 @@
+Error: Error in model permission for model 'Albums (in subgraph subgraphs)' for role 'user': a preset argument 'unknown_argument' has been set for the model 'Albums (in subgraph subgraphs)' but no such argument exists for this model
+    ╭─[ <unknown>:7:9 ]
+    │
+  7 │ ╭─▶         {
+    ┆ ┆   
+ 53 │ ├─▶         },
+    │ │                
+    │ ╰──────────────── Arguments are defined on this model
+    │ 
+ 65 │                           "argument": "unknown_argument",
+    │                                       ─────────┬────────  
+    │                                                ╰────────── This argument preset references an argument that does not exist
+────╯

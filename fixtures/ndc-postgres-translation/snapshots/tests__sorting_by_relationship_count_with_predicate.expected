@@ -1,0 +1,67 @@
+SELECT
+  coalesce(json_agg(row_to_json("%5_universe")), '[]') AS "universe"
+FROM
+  (
+    SELECT
+      *
+    FROM
+      (
+        SELECT
+          coalesce(json_agg(row_to_json("%6_rows")), '[]') AS "rows"
+        FROM
+          (
+            SELECT
+              "%1_Artist"."Name" AS "Name"
+            FROM
+              (
+                SELECT
+                  "%0_Artist".*
+                FROM
+                  "public"."Artist" AS "%0_Artist"
+              ) AS "%1_Artist"
+              LEFT OUTER JOIN LATERAL (
+                SELECT
+                  COUNT("%2_ORDER_PART_Album"."count") AS "count"
+                FROM
+                  (
+                    SELECT
+                      1 AS "count"
+                    FROM
+                      "public"."Album" AS "%2_ORDER_PART_Album"
+                    WHERE
+                      (
+                        (
+                          "%1_Artist"."ArtistId" = "%2_ORDER_PART_Album"."ArtistId"
+                        )
+                        AND EXISTS (
+                          SELECT
+                            1 AS "one"
+                          FROM
+                            "public"."Track" AS "%3_track"
+                          WHERE
+                            (
+                              (
+                                "%3_track"."Name" LIKE cast($1 as "pg_catalog"."varchar")
+                              )
+                              AND (
+                                "%2_ORDER_PART_Album"."AlbumId" = "%3_track"."AlbumId"
+                              )
+                            )
+                        )
+                      )
+                  ) AS "%2_ORDER_PART_Album"
+              ) AS "%4_ORDER_FOR_Artist" ON ('true')
+            ORDER BY
+              "%4_ORDER_FOR_Artist"."count" DESC,
+              "%1_Artist"."Name" DESC
+            LIMIT
+              5
+          ) AS "%6_rows"
+      ) AS "%6_rows"
+  ) AS "%5_universe";
+
+{
+    1: String(
+        "The%",
+    ),
+}

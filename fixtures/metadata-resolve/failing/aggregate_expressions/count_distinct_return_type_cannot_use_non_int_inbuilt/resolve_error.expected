@@ -1,0 +1,1 @@
+Error: the return type used on the count distinct aggregate (String) must be an integer type

@@ -1,0 +1,1 @@
+Error: Issue in order by expression 'FooOrderByExpression (in subgraph default)' used by model 'mymodel (in subgraph default)': The orderable relationship 'row_type' defined for 'Foo (in subgraph default)' is not supported in ordering because the data connector 'myconnector (in subgraph default)' does not support nested relationships in ordering

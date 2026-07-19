@@ -1,0 +1,1 @@
+Error: filter input type name graphql configuration must be specified for model Invoice (in subgraph default) because aggregates are used with it

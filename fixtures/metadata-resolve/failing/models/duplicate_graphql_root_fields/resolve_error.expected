@@ -1,0 +1,1 @@
+Error: the model Articles (in subgraph default) has a duplicate root field in the GraphQL schema: Cannot add query root field ArticleByID as it already in use

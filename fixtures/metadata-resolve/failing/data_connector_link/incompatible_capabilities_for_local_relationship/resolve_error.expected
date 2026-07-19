@@ -1,0 +1,1 @@
+Error: The data connector db (in subgraph default) does not support relationships or variables, so it cannot be used for relationship Articles on type author (in subgraph default)

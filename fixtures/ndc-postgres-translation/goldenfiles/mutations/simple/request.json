@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../../../../../static/mutation.schema.json",
+  "operations": [
+    {
+      "type": "procedure",
+      "name": "delete_playlist_track",
+      "arguments": {
+        "track_id": 90
+      },
+      "fields": {
+        "type": "object",
+        "fields": {
+          "affected_rows": {
+            "column": "affected_rows",
+            "type": "column"
+          },
+
+          "returning": {
+            "type": "column",
+            "column": "returning",
+            "fields": {
+              "type": "array",
+              "fields": {
+                "type": "object",
+                "fields": {
+                  "playlist_id": {
+                    "type": "column",
+                    "column": "PlaylistId"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "collection_relationships": {}
+}

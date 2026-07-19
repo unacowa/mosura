@@ -1,0 +1,1 @@
+Error: the field id in author (in subgraph default) should have the type Int for data connector db (in subgraph default) but the field has type String

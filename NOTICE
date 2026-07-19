@@ -1,0 +1,28 @@
+Mosura
+Copyright 2026 unacowa
+
+This product is a MoonBit reimplementation of the Hasura GraphQL Engine V3.
+
+This product includes test fixtures and derived code from the following
+projects:
+
+1. Hasura GraphQL Engine V3 (https://github.com/hasura/graphql-engine)
+   Copyright Hasura, Inc.
+   Licensed under the Apache License, Version 2.0.
+   - fixtures/lang-graphql/    (v3/crates/graphql/lang-graphql/tests)
+   - fixtures/metadata-resolve/ (v3/crates/metadata-resolve/tests)
+   - fixtures/execute/          (v3/crates/engine/tests/execute)
+   - Portions of the source code in src/ are ported from the Rust
+     implementation in v3/crates.
+
+2. hasura/ndc-postgres (https://github.com/hasura/ndc-postgres)
+   Copyright Hasura, Inc.
+   Licensed under the Apache License, Version 2.0.
+   - fixtures/ndc-postgres-translation/ (crates/query-engine/translation/tests)
+   - Portions of the SQL generation code in src/ndc_postgres/sqlgen are
+     ported from the Rust implementation.
+
+3. Parts of fixtures/lang-graphql/ are derived from graphql-js test data,
+   distributed under the MIT License. See fixtures/lang-graphql/LICENSE-MIT.
+
+The pinned upstream commits are recorded in fixtures/SOURCES.md.

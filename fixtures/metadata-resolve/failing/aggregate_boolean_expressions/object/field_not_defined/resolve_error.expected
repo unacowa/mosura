@@ -1,0 +1,1 @@
+Error: error in boolean expression type 'Album_aggregate_bool_exp (in subgraph default)': the field 'nope' used in comparable fields is not an aggregatable field defined in the aggregate expression 'Album_agg_exp (in subgraph default)'

@@ -1,0 +1,1 @@
+Error: An error occurred while mapping arguments in the model collection_with_args (in subgraph default) to the collection collection_with_args in the data connector myconnector (in subgraph default): the argument http_headers is mapped to the data connector argument headers which is already used as an argument preset in the DataConnectorLink

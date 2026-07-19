@@ -1,0 +1,1 @@
+Error: the aggregate expression 'Int4_aggregate_exp (in subgraph default)' used with model 'Invoice (in subgraph default)' must use the Int type for its count distinct aggregate as the data connector 'mypg (in subgraph default)' does not specify a count type in its schema

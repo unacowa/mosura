@@ -1,0 +1,1 @@
+Error: Recursive reference detected for object type 'AddressInput (in subgraph default)' through non-null field path: AddressInput (in subgraph default).resident → PersonInput (in subgraph default).address → AddressInput (in subgraph default)

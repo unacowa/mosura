@@ -1,0 +1,26 @@
+SELECT
+  coalesce(json_agg(row_to_json("%4_universe")), '[]') AS "universe"
+FROM
+  (
+    SELECT
+      *
+    FROM
+      (
+        SELECT
+          coalesce(row_to_json("%6_aggregates"), '[]') AS "aggregates"
+        FROM
+          (
+            SELECT
+              COUNT(DISTINCT "%3_Album"."ArtistId") AS "how_many_distinct_artist_ids"
+            FROM
+              (
+                SELECT
+                  "%2_Album".*
+                FROM
+                  "public"."Album" AS "%2_Album"
+              ) AS "%3_Album"
+          ) AS "%6_aggregates"
+      ) AS "%6_aggregates"
+  ) AS "%4_universe";
+
+{}

@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../../../../static/query.schema.json",
+  "collection": "Company",
+  "query": {
+    "fields": {
+      "Name": {
+        "type": "column",
+        "column": "Name",
+        "arguments": {}
+      }
+    },
+    "order_by": {
+      "elements": [
+        {
+          "order_direction": "asc",
+          "target": {
+            "type": "column",
+            "name": "Name",
+            "path": [
+              {
+                "relationship": "CompanyCEO",
+                "arguments": {},
+                "predicate": null
+              },
+              {
+                "relationship": "PersonParent",
+                "arguments": {},
+                "predicate": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "arguments": {},
+  "collection_relationships": {
+    "CompanyCEO": {
+      "column_mapping": {
+        "CEOId": ["PersonId"]
+      },
+      "relationship_type": "object",
+      "target_collection": "Person",
+      "arguments": {}
+    },
+    "PersonParent": {
+      "column_mapping": {
+        "ParentId": ["PersonId"]
+      },
+      "relationship_type": "object",
+      "target_collection": "Person",
+      "arguments": {}
+    }
+  }
+}

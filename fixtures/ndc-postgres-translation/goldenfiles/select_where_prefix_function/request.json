@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../../../../static/query.schema.json",
+  "collection": "Album",
+  "query": {
+    "fields": {
+      "Id": {
+        "type": "column",
+        "column": "Id",
+        "arguments": {}
+      }
+    },
+    "predicate": {
+      "type": "binary_comparison_operator",
+      "column": {
+        "type": "column",
+        "name": "Id",
+        "path": []
+      },
+      "operator": "some_prefix_function",
+      "value": {
+        "type": "scalar",
+        "value": 10
+      }
+    }
+  },
+  "arguments": {},
+  "collection_relationships": {}
+}

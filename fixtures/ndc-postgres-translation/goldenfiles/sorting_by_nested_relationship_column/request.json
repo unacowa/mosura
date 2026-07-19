@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../../../../static/query.schema.json",
+  "collection": "track",
+  "query": {
+    "fields": {
+      "Name": {
+        "type": "column",
+        "column": "name",
+        "arguments": {}
+      }
+    },
+    "order_by": {
+      "elements": [
+        {
+          "order_direction": "asc",
+          "target": {
+            "type": "column",
+            "name": "name",
+            "path": [
+              {
+                "relationship": "TrackAlbum",
+                "arguments": {},
+                "predicate": null
+              },
+              {
+                "relationship": "AlbumArtist",
+                "arguments": {},
+                "predicate": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "arguments": {},
+  "collection_relationships": {
+    "AlbumArtist": {
+      "column_mapping": {
+        "artist_id": ["artist_id"]
+      },
+      "relationship_type": "object",
+      "target_collection": "artist",
+      "arguments": {}
+    },
+    "TrackAlbum": {
+      "column_mapping": {
+        "album_id": ["album_id"]
+      },
+      "relationship_type": "object",
+      "target_collection": "album",
+      "arguments": {}
+    }
+  }
+}

@@ -1,0 +1,58 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  # ローカル開発環境と揃える (docs/implementation-plan.md §0)
+  MOON_VERSION: "0.1.20260713"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: mosura
+          POSTGRES_PASSWORD: mosura
+          POSTGRES_DB: mosura
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd pg_isready --health-interval 5s
+          --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install MoonBit toolchain (pinned)
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- "$MOON_VERSION"
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: Toolchain version
+        run: moon version --all
+
+      - name: Check (native)
+        run: moon check --target native --deny-warn
+
+      - name: Purity check — core packages must build on js/wasm-gc
+        run: |
+          CORE="src/graphql src/metadata src/schema src/session src/ir src/ndc src/ndc_postgres/sqlgen src/ndc_postgres/exec"
+          moon check --target js $CORE --deny-warn
+          moon check --target wasm-gc $CORE --deny-warn
+
+      - name: Test (native)
+        run: moon test --target native
+
+      - name: Format check
+        run: |
+          moon fmt
+          git diff --exit-code
+
+      - name: cases.toml freshness + tally
+        run: |
+          python3 scripts/gen_cases.py
+          git diff --exit-code fixtures/cases.toml

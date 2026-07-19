@@ -1,0 +1,1 @@
+Error: the type of the comparable field 'staff' on the boolean expresssion 'institution_bool_exp (in subgraph default)' is a multidimensional array type: [[staff_member]] (in subgraph default). Multidimensional arrays are not supported in boolean expressions

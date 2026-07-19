@@ -1,0 +1,59 @@
+{
+  "$schema": "../../../../../../../static/mutation.schema.json",
+  "operations": [
+    {
+      "type": "procedure",
+      "name": "v2_insert_Artist",
+      "arguments": {
+        "objects": [
+          {
+            "name": "Olympians",
+            "id": 276
+          },
+          {
+            "name": "The Other Band"
+          },
+          {
+            "name": "The Null Band",
+            "id": null
+          }
+        ],
+        "post_check": {
+          "type": "or",
+          "expressions": []
+        }
+      },
+      "fields": {
+        "type": "object",
+        "fields": {
+          "affected_rows": {
+            "column": "affected_rows",
+            "type": "column"
+          },
+
+          "returning": {
+            "type": "column",
+            "column": "returning",
+            "fields": {
+              "type": "array",
+              "fields": {
+                "type": "object",
+                "fields": {
+                  "artist_id": {
+                    "type": "column",
+                    "column": "id"
+                  },
+                  "name": {
+                    "type": "column",
+                    "column": "name"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "collection_relationships": {}
+}

@@ -1,0 +1,1 @@
+Error: error in boolean expression type 'Album_aggregate_bool_exp (in subgraph default)': type mismatch between the 'count' aggregate (return type: 'Int') and the specified boolean expression type 'String_bool_exp (in subgraph default)' (operand type: 'String')

@@ -1,0 +1,1 @@
+Error: error in boolean expression type 'String_aggregate_bool_exp (in subgraph default)': could not find a scalar-operanded boolean expression type named 'Int_bool_exp (in subgraph default)'

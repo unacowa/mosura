@@ -1,0 +1,1 @@
+Error: Cannot add the command not_hello (in subgraph default) to GraphQL schema: Cannot add query root field hello as it already in use

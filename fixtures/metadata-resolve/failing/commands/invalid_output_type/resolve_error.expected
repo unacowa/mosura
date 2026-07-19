@@ -1,0 +1,1 @@
+Error: Command 'testCommand (in subgraph default)' has an invalid output type 'NonExistentType'

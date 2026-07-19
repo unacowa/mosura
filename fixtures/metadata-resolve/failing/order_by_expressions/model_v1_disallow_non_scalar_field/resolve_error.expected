@@ -1,0 +1,2 @@
+Error: The orderable field 'string_array' in model 'mymodel (in subgraph default)' is an array type (type: [String!]!) and therefore cannot be used for ordering
+Error: The orderable field 'nested_object' in model 'mymodel (in subgraph default)' is not a scalar field (type: RowType (in subgraph default)) and therefore cannot be used for ordering. Upgrade to version 2 Models and use OrderByExpressions to order by nested fields

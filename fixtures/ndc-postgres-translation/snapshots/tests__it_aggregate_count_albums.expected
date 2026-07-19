@@ -1,0 +1,46 @@
+SELECT
+  coalesce(json_agg(row_to_json("%4_universe")), '[]') AS "universe"
+FROM
+  (
+    SELECT
+      *
+    FROM
+      (
+        SELECT
+          coalesce(json_agg(row_to_json("%5_rows")), '[]') AS "rows"
+        FROM
+          (
+            SELECT
+              "%1_Album"."Title" AS "Title"
+            FROM
+              (
+                SELECT
+                  "%0_Album".*
+                FROM
+                  "public"."Album" AS "%0_Album"
+                LIMIT
+                  5 OFFSET 3
+              ) AS "%1_Album"
+          ) AS "%5_rows"
+      ) AS "%5_rows"
+      CROSS JOIN (
+        SELECT
+          coalesce(row_to_json("%6_aggregates"), '[]') AS "aggregates"
+        FROM
+          (
+            SELECT
+              COUNT(*) AS "how_many_albums"
+            FROM
+              (
+                SELECT
+                  "%2_Album".*
+                FROM
+                  "public"."Album" AS "%2_Album"
+                LIMIT
+                  5 OFFSET 3
+              ) AS "%3_Album"
+          ) AS "%6_aggregates"
+      ) AS "%6_aggregates"
+  ) AS "%4_universe";
+
+{}

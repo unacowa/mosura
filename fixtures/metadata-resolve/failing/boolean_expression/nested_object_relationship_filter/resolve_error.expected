@@ -1,0 +1,1 @@
+Error: The data connector 'db (in subgraph default)' does not support filtering across nested relationships. The nested object field 'songs' within 'institution_boolexp (in subgraph default)' references the boolean expression type 'institution_songs_boolexp (in subgraph default)' which has relationship comparisons, making them nested relationship comparisons.

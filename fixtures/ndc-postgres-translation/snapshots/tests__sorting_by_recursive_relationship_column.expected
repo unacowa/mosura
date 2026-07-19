@@ -1,0 +1,53 @@
+SELECT
+  coalesce(json_agg(row_to_json("%5_universe")), '[]') AS "universe"
+FROM
+  (
+    SELECT
+      *
+    FROM
+      (
+        SELECT
+          coalesce(json_agg(row_to_json("%6_rows")), '[]') AS "rows"
+        FROM
+          (
+            SELECT
+              "%1_Company"."Name" AS "Name"
+            FROM
+              (
+                SELECT
+                  "%0_Company".*
+                FROM
+                  "public"."Company" AS "%0_Company"
+              ) AS "%1_Company"
+              LEFT OUTER JOIN LATERAL (
+                SELECT
+                  "%3_ORDER_PART_Person"."Name" AS "Name"
+                FROM
+                  (
+                    SELECT
+                      "%2_ORDER_PART_Person"."ParentId" AS "ParentId"
+                    FROM
+                      "public"."Person" AS "%2_ORDER_PART_Person"
+                    WHERE
+                      (
+                        "%1_Company"."CEOId" = "%2_ORDER_PART_Person"."PersonId"
+                      )
+                  ) AS "%2_ORDER_PART_Person"
+                  LEFT OUTER JOIN LATERAL (
+                    SELECT
+                      "%3_ORDER_PART_Person"."Name" AS "Name"
+                    FROM
+                      "public"."Person" AS "%3_ORDER_PART_Person"
+                    WHERE
+                      (
+                        "%2_ORDER_PART_Person"."ParentId" = "%3_ORDER_PART_Person"."PersonId"
+                      )
+                  ) AS "%3_ORDER_PART_Person" ON ('true')
+              ) AS "%4_ORDER_FOR_Company" ON ('true')
+            ORDER BY
+              "%4_ORDER_FOR_Company"."Name" ASC
+          ) AS "%6_rows"
+      ) AS "%6_rows"
+  ) AS "%5_universe";
+
+{}

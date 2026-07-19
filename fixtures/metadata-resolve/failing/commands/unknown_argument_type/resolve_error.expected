@@ -1,0 +1,10 @@
+Error: the argument 'argument_with_unknown_type' in command 'function_with_unknown_argument_type (in subgraph default)' has an unknown type: MissingThing!
+    ╭─[ <unknown>:15:25 ]
+    │
+ 14 │                 "name": "argument_with_unknown_type",
+    │                         ──────────────┬─────────────  
+    │                                       ╰─────────────── Command 'function_with_unknown_argument_type' has an argument 'argument_with_unknown_type'
+ 15 │                 "type": "MissingThing!"
+    │                         ───────┬───────  
+    │                                ╰───────── The argument type 'MissingThing!' has not been defined
+────╯

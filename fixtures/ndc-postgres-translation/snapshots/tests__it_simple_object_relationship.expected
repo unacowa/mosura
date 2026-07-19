@@ -1,0 +1,56 @@
+SELECT
+  coalesce(json_agg(row_to_json("%7_universe")), '[]') AS "universe"
+FROM
+  (
+    SELECT
+      *
+    FROM
+      (
+        SELECT
+          coalesce(json_agg(row_to_json("%8_rows")), '[]') AS "rows"
+        FROM
+          (
+            SELECT
+              "%2_RELATIONSHIP_Artist"."Artist" AS "Artist"
+            FROM
+              (
+                SELECT
+                  "%0_Album".*
+                FROM
+                  "public"."Album" AS "%0_Album"
+                LIMIT
+                  5
+              ) AS "%1_Album"
+              LEFT OUTER JOIN LATERAL (
+                SELECT
+                  row_to_json("%2_RELATIONSHIP_Artist") AS "Artist"
+                FROM
+                  (
+                    SELECT
+                      *
+                    FROM
+                      (
+                        SELECT
+                          coalesce(json_agg(row_to_json("%5_rows")), '[]') AS "rows"
+                        FROM
+                          (
+                            SELECT
+                              "%4_Artist"."Name" AS "Name"
+                            FROM
+                              (
+                                SELECT
+                                  "%3_Artist".*
+                                FROM
+                                  "public"."Artist" AS "%3_Artist"
+                                WHERE
+                                  ("%1_Album"."ArtistId" = "%3_Artist"."ArtistId")
+                              ) AS "%4_Artist"
+                          ) AS "%5_rows"
+                      ) AS "%5_rows"
+                  ) AS "%2_RELATIONSHIP_Artist"
+              ) AS "%2_RELATIONSHIP_Artist" ON ('true')
+          ) AS "%8_rows"
+      ) AS "%8_rows"
+  ) AS "%7_universe";
+
+{}
