@@ -1,13 +1,11 @@
+// E2E テスト専用パッケージ (native 専用: 実 PostgreSQL に接続する)
 import {
   "unacowa/mosura/metadata",
   "unacowa/mosura/engine",
-  "unacowa/mosura/server",
+  "unacowa/mosura/schema",
   "unacowa/mosura/ndc_postgres/exec/native",
   "moonbit-community/postgres/client",
   "moonbitlang/async",
   "moonbitlang/core/env",
   "moonbitlang/core/string",
-  "moonbitlang/x/fs",
 }
-
-pkgtype(kind: "executable")

@@ -1,1 +1,9 @@
-
+import {
+  "unacowa/mosura/schema",
+  "unacowa/mosura/engine",
+  "unacowa/mosura/ndc_postgres/exec",
+  "moonbitlang/async",
+  "moonbitlang/async/http",
+  "moonbitlang/async/socket",
+  "moonbitlang/core/json",
+}

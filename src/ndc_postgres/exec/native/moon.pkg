@@ -1,1 +1,5 @@
-
+import {
+  "unacowa/mosura/ndc_postgres/sqlgen",
+  "unacowa/mosura/ndc_postgres/exec",
+  "moonbit-community/postgres/client",
+}

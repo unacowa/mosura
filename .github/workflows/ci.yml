@@ -40,11 +40,17 @@ jobs:
 
       - name: Purity check — core packages must build on js/wasm-gc
         run: |
-          CORE="src/graphql src/metadata src/schema src/session src/ir src/ndc src/ndc_postgres/sqlgen src/ndc_postgres/exec"
+          CORE="src/graphql src/metadata src/schema src/schemagen src/ir src/ndc_postgres/sqlgen src/ndc_postgres/exec src/engine"
           moon check --target js $CORE --deny-warn
           moon check --target wasm-gc $CORE --deny-warn
 
-      - name: Test (native)
+      - name: Test (native, incl. E2E vs PG16 service)
+        env:
+          MOSURA_TEST_PG_HOST: localhost
+          MOSURA_TEST_PG_PORT: "5433"
+          MOSURA_TEST_PG_USER: mosura
+          MOSURA_TEST_PG_PASSWORD: mosura
+          MOSURA_TEST_PG_DB: mosura
         run: moon test --target native
 
       - name: Format check

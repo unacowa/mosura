@@ -1,1 +1,3 @@
-
+import {
+  "unacowa/mosura/ndc_postgres/sqlgen",
+}
