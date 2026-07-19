@@ -430,1160 +430,1449 @@ tag = "in-scope"
 milestone = "m1"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/agg_exp_missing"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/agg_exp_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/count_bool_exp_missing"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/count_bool_exp_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/count_distinct_bool_exp_missing"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/count_distinct_bool_exp_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/count_distinct_not_enabled_on_agg_exp"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/count_not_enabled_on_agg_exp"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/field_array_type_not_allowed"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/field_bool_exp_operand_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/field_duplicated"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/field_not_defined"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/field_object_aggregate_bool_exp_operand_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/field_scalar_aggregate_bool_exp_operand_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/filter_input_model_missing"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/filter_input_model_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/graphql_field_name_conflict_with_count"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/graphql_field_name_conflict_with_count_distinct"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/graphql_field_name_conflict_with_logical_operator"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/graphql_type_name_in_use"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/is_null_is_not_allowed"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/predicate_graphql_type_name_in_use"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/relationship_array_not_allowed"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/relationship_bool_exp_missing"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/relationship_bool_exp_operand_kind_incorrect"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/relationship_bool_exp_operand_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/relationship_command_target_not_supported"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/relationship_duplicated"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/relationship_missing"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/relationship_model_target_missing"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/object/scalar_type_not_allowed"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/agg_exp_missing"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/agg_exp_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/agg_fn_bool_exp_missing"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/agg_fn_bool_exp_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/agg_fn_duplicated"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/agg_fn_not_defined"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/agg_fn_returns_array"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/count_bool_exp_missing"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/count_bool_exp_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/count_distinct_bool_exp_missing"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/count_distinct_bool_exp_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/count_distinct_not_enabled_on_agg_exp"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/count_not_enabled_on_agg_exp"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/graphql_field_name_conflict_with_count"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/graphql_field_name_conflict_with_count_distinct"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/graphql_field_name_conflict_with_logical_operator"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/graphql_type_name_in_use"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/is_null_is_not_allowed"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_boolean_expressions/scalar/object_type_not_allowed"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expression_in_relationship/data_connector_lacks_nested_fields_aggregates_capability"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expression_in_relationship/disallow_count_distinct_on_models"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expression_in_relationship/disallow_object_relationships"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expression_in_relationship/missing_aggregate_exp"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expression_in_relationship/missing_aggregation_function_mappings_to_model_data_connector"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expression_in_relationship/missing_model_source"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "in-scope"
+milestone = "m2"
+reason = "Mosura の検証で拒否できることを回帰固定"
 
 [cases."metadata-resolve/failing/aggregate_expression_in_relationship/operand_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/aggregatable_field_agg_exp_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/aggregatable_field_not_found"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/aggregation_function_return_array_type_mismatch_to_named"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/aggregation_function_return_named_type_mismatch_to_array"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/aggregation_function_return_nullability_mismatch_with_data_connector"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/aggregation_function_return_object_missing_mapping"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/aggregation_function_return_type_repr_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/conflict_between_count_and_aggregatable_field"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/conflict_between_count_and_aggregation_function"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/conflict_between_count_distinct_and_aggregatable_field"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/conflict_between_count_distinct_and_aggregation_function"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/count_distinct_return_type_cannot_use_non_int_inbuilt"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/count_distinct_return_type_not_found copy"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/count_distinct_return_type_on_object_operand_must_be_int_if_connector_type_is_unspecified"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/count_distinct_return_type_on_object_operand_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/count_distinct_return_type_on_scalar_operand_must_be_int_if_connector_type_is_unspecified"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/count_distinct_return_type_on_scalar_operand_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/count_return_type_cannot_use_non_int_inbuilt"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/count_return_type_not_found"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/count_return_type_on_object_operand_must_be_int_if_connector_type_is_unspecified"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/count_return_type_on_object_operand_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/count_return_type_on_scalar_operand_missing_type_representation"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/count_return_type_on_scalar_operand_must_be_int_if_connector_type_is_unspecified"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/count_return_type_on_scalar_operand_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/data_connector_function_return_not_a_scalar"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/data_connector_lacks_aggregates_capability"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/data_connector_lacks_nested_fields_aggregates_capability"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/disallow_count_distinct_on_models"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/disallow_duplicate_graphql_select_type_name"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/disallow_duplicate_model_filter_input_type_name"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/disallow_duplicate_name"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/disallow_multiple_nested_array_agg"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/disallow_object_fields_with_arguments"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/duplicated_aggregatable_fields"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/duplicated_aggregation_functions"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/missing_aggregate_exp_from_model"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/missing_aggregation_function_data_connector"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/missing_aggregation_function_data_connector_function"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/missing_aggregation_function_data_connector_mapping"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/missing_aggregation_function_data_connector_operand_type"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/missing_aggregation_function_mappings_to_model_data_connector"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/missing_aggregation_function_return_type"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/missing_data_connector_scalar_type_repr"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/missing_model_filter_input_field_type"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/missing_model_source"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "in-scope"
+milestone = "m2"
+reason = "Mosura の検証で拒否できることを回帰固定"
 
 [cases."metadata-resolve/failing/aggregate_expressions/missing_operand_object_field_agg_exp"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/missing_operand_object_type"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/missing_operand_scalar_type"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/model_aggregate_exp_type_mismatch"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/data_connector_not_found"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/disallow_remote_predicate_with_argument_mapping_target"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/missing_object_type"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/missing_scalar_type"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/multidimensional_nested_object_array_disallowed"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/multidimensional_nested_scalar_array_disallowed"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/nested_array_no_capability"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/nested_object_no_capability"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/nested_object_relationship_filter"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/nested_scalar_array_no_capability"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/object_comparable_field_duplicated"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/object_comparable_relationship_duplicated"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/object_logical_operator_field_name_conflict_with_field"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/object_logical_operator_field_name_conflict_with_relationship"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/scalar_bool_exp_on_object_field"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/scalar_comparison_operator_duplicated"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/scalar_invalid_eq_operator_argument_type"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/scalar_invalid_in_operator_argument_type"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/scalar_invalid_string_operator_argument_type"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/scalar_is_null_operator_field_name_conflict"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/scalar_logical_operator_field_name_conflict"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/scalar_missing_mapped_operator"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/scalar_operator_argument_type_mismatch"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/scalars_not_defined_for_command_argument_data_connector"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/scalars_not_defined_for_data_connector"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/string_operator_for_non_string_type"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/boolean_expression/type_not_known_to_data_connector"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/command_no_ndc_function"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/commands/duplicate_argument"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/commands/functions/cant_map_argument_that_is_preset_in_data_connector_link"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/commands/functions/duplicate_ndc_argument_mapping"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/commands/incompatible_types_in_argument_mapping"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/commands/invalid_output_type"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/commands/literal_used_for_bool_exp_argument_preset"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/commands/procedures/cant_map_argument_that_is_preset_in_data_connector_link"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/commands/procedures/duplicate_command_name"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/commands/procedures/duplicate_ndc_argument_mapping"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/commands/procedures/relationship_from_object_type"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/commands/two_errors"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/commands/unknown_argument_type"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/data_connector_link/incompatible_capabilities_for_local_relationship"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/data_connector_link/incompatible_capabilities_version"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/data_connector_link/invalid_ndc_v01_capabilities_version_failing_with_error"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/data_connector_link/multiple_errors"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/missing_subgraph"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/model_permissions/argument_preset_type_error"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/model_permissions/disallow_duplicate_argument_preset"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/model_permissions/disallow_duplicate_roles"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/model_permissions/duplicate_model_permissions"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/model_permissions/filter_permissions/comparison_operator_not_found"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/model_permissions/filter_permissions/comparison_to_array_type"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/model_permissions/filter_permissions/relationship_not_comparable"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/model_permissions/filter_permissions/unknown_field_in_predicate"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/model_permissions/filter_permissions/unknown_relationship"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/model_permissions/missing_model_source"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "Mosura の検証で拒否できることを回帰固定"
 
 [cases."metadata-resolve/failing/model_permissions/nested_array"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/model_permissions/nested_field_missing_in_boolean_expression"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/model_permissions/nested_field_with_missing_boolean_expression"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/model_permissions/non_custom_type_in_field"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/model_permissions/unknown_argument_preset"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/model_permissions/unknown_model"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/models/cant_map_argument_that_is_preset_in_data_connector_link"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/models/duplicate_argument"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "Mosura の検証で拒否できることを回帰固定"
 
 [cases."metadata-resolve/failing/models/duplicate_graphql_root_fields"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/models/duplicate_ndc_argument_mapping"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/models/missing_object_type"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "Mosura の検証で拒否できることを回帰固定"
 
 [cases."metadata-resolve/failing/models/two_missing_object_types"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "Mosura の検証で拒否できることを回帰固定"
 
 [cases."metadata-resolve/failing/object_types/data_connector_scalars_mismatch"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types/mapped_to_inner_non_null_ndc_type"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types/mapped_to_inner_null_ndc_type"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types/mapped_to_non_array_ndc_type"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types/mapped_to_non_compatible_ndc_type"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types/mapped_to_non_null_ndc_type"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types/mapped_to_null_ndc_type"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types/missing_object_types"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types/recursive_object_types"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types/scalar_boolean_expression_type_referenced"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types_in_presets/argument_presets/invalid_field_value"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types_in_presets/argument_presets/invalid_object_value"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types_in_presets/argument_presets/invalid_object_value_nested_field"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types_in_presets/argument_presets/missing_field"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types_in_presets/argument_presets/missing_field_nested_object"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types_in_presets/field_presets/invalid_field_value"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types_in_presets/field_presets/invalid_list_value"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types_in_presets/field_presets/invalid_object_value"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/object_types_in_presets/field_presets/missing_field"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/order_by_expressions/array_relationship"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "Mosura の検証で拒否できることを回帰固定"
 
 [cases."metadata-resolve/failing/order_by_expressions/disallow_field_with_field_arguments_in_order_by_expressions"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/order_by_expressions/disallow_nested_field_ordering_when_unsupported"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/order_by_expressions/disallow_nested_relationship_ordering_when_unsupported"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/order_by_expressions/disallow_relationship_to_sourceless_command"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
-
-[cases."metadata-resolve/failing/order_by_expressions/disallow_relationship_to_sourceless_model"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
+
+[cases."metadata-resolve/failing/order_by_expressions/disallow_relationship_to_sourceless_model"]
+tag = "in-scope"
+milestone = "m2"
+reason = "Mosura の検証で拒否できることを回帰固定"
 
 [cases."metadata-resolve/failing/order_by_expressions/disallow_relationships_without_connector_capability"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/order_by_expressions/disallow_remote_relationship"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/order_by_expressions/model_type_mismatch"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/order_by_expressions/model_v1_disallow_non_scalar_field"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/order_by_expressions/no_enable_all"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/order_by_expressions/orderable_field_type_error"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/order_by_expressions/unknown_field"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/order_by_expressions/unknown_order_by_expression_in_field"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/order_by_expressions/unknown_order_by_expression_in_model"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/order_by_expressions/unknown_order_by_expression_in_orderable_relationship"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/order_by_expressions/unknown_orderable_type"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/order_by_expressions/unknown_relationship"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/relationships/model_argument_target_type_mismatch"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/relationships/model_argument_target_type_nullability_mismatch"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/remote_relationships_permissions/across_subgraphs"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "in-scope"
+milestone = "m2"
+reason = "Mosura の検証で拒否できることを回帰固定"
 
 [cases."metadata-resolve/failing/remote_relationships_permissions/no_equal_operator_defined"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/scalar_types/cannot_match_inbuilt_type_name"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/scalar_types/multiple_errors"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/scalar_types/scalar_extraction_function_duplicated"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
-
-[cases."metadata-resolve/failing/simple"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
+
+[cases."metadata-resolve/failing/simple"]
+tag = "in-scope"
+milestone = "m2"
+reason = "Mosura の検証で拒否できることを回帰固定"
 
 [cases."metadata-resolve/failing/subgraph_invalid_name"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/supergraph_too_many_graphql_configs"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/type_permissions/rules_based"]
 tag = "pending"
 milestone = "m2"
+reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/passing/aggregate_boolean_expressions/object/missing_graphqlconfig_aggregate_warning"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/aggregate_boolean_expressions/object/missing_graphqlconfig_logical_operators_warning"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/aggregate_boolean_expressions/object/partial_supergraph"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/aggregate_boolean_expressions/object/simple"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/aggregate_boolean_expressions/scalar/missing_graphqlconfig_aggregate_warning"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/aggregate_boolean_expressions/scalar/missing_graphqlconfig_logical_operators_warning"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/aggregate_boolean_expressions/scalar/simple"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/aggregate_expressions/missing_aggregate_graphql_config"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/aggregate_expressions/missing_filter_input_field_name_in_graphql_config"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/aggregate_expressions/nested_recursive_object"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/aggregate_expressions/relationship"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/aggregate_expressions/root_field"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/aggregate_expressions/warning_for_model_filter_input_type_without_aggregate_expression"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/boolean_expression_type/basic"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/boolean_expression_type/basic_with_scalar_logical_operators"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/boolean_expression_type/conflicting_names_warnings"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/boolean_expression_type/nested_object"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/boolean_expression_type/nested_recursive_object"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/boolean_expression_type/nested_scalar_array"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/boolean_expression_type/no_graphql"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/boolean_expression_type/partial_supergraph"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/boolean_expression_type/range"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/boolean_expression_type/regression"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/boolean_expression_type/relationship_with_model_argument_mapping_target"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/boolean_expression_type/scalar_validation_issues"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/boolean_expression_type/string_operator_issues"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/boolean_expression_type/two_data_sources"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/command_permissions/role_based/input_type_permissions"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/command_permissions/role_based/nullable_predicate_args_can_be_preset"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/command_permissions/role_based/predicate_args_can_be_preset"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/command_permissions/rules_based/basic_allow"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/commands/functions/all_args_are_set_including_connector_link_presets"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/commands/functions/issue_when_not_all_arguments_defined"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/commands/functions/issue_when_types_not_compatible_in_argument_mapping"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/commands/functions/literal_used_for_boolean_expression_argument_preset"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/commands/procedures/all_args_are_set_including_connector_link_presets"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/commands/procedures/issue_when_not_all_arguments_defined"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/commands/procedures/issue_when_relationship_is_defined"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/commands/procedures/issue_when_types_not_compatible_in_argument_mapping"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/conflicting_type_names_warnings/scalar_and_boolean_exp"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/conflicting_type_names_warnings/scalar_and_object"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/data_connector_link/invalid_ndc_v01_capabilities_version_passing_with_issue"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/missing_subgraph_when_ignoring_unknown_subgraphs"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/model_permissions/nullable_predicate_args_can_be_preset"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/model_permissions/predicate_args_can_be_preset"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/models/all_args_are_set_including_connector_link_presets"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/models/issue_when_not_all_arguments_defined"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/models/issue_when_types_not_compatible_in_argument_mapping"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/object_types/recursive_types_issues"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/object_types/type_mapping_field_type_issues"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/object_types/with_boolean_expression_inside"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/order_by_expressions/conflicting_names_warnings"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/order_by_expressions/model_v1_upgrade"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/order_by_expressions/model_v2_no_order_by"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/order_by_expressions/model_v2_with_order_by"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/order_by_expressions/nested"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/order_by_expressions/nested_recursive_object"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/relationships/model_argument_target_type"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/relationships/model_argument_target_type_nullable"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/scalar_types/scalar_extraction_function_duplicated"]
-tag = "out-of-scope"
-reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
+tag = "in-scope"
+milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/simple"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/subgraph_valid_name"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/supergraph/config_object_in_subgraph"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/supergraph/missing"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/supergraph/no_subgraphs"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/supergraph/present"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/type_permissions/v2/role_based"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."metadata-resolve/passing/type_permissions/v2/rules_based"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
+reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."execute/aggregates/relationship_field/filtering_ndc_v01"]
 tag = "out-of-scope"

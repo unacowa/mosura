@@ -305,25 +305,35 @@ pub fn build_schema(meta : @metadata.Metadata) -> @schema.Schema raise {
     let gql_name = ot.graphql_type_name
     let args = model_select_arguments(gql_name)
     let roles = model_permission_roles(meta, model_name)
+    let select_field_name = model.select_many_name
     let select_data : @schema.SField = {
-      name: name(model_name),
+      name: name(select_field_name),
       description: None,
       info: ModelSelect(model_name),
       field_type: list_of(named_type(gql_name, false), false),
       arguments: args,
       deprecation_status: NotDeprecated,
     }
-    root_fields[name(model_name)] = @schema.conditional_namespaced(
+    root_fields[name(select_field_name)] = @schema.conditional_namespaced(
       select_data, roles,
     )
-    if !model.primary_key.is_empty() {
+    // 一意取得ルートフィールド (select_uniques 指定 or primary_key 由来)
+    let uniques : Array[(String, Array[String])] = if !model.select_uniques.is_empty() {
+      model.select_uniques
+    } else if !model.primary_key.is_empty() {
+      [("\{select_field_name}_by_pk", model.primary_key)]
+    } else {
+      []
+    }
+    for unique in uniques {
+      let (root_name, key_fields) = unique
       let pk_args : @sorted_map.SortedMap[
         @graphql.Name,
         @schema.Namespaced[@schema.SInputField],
       ] = @sorted_map.SortedMap([])
-      for pk in model.primary_key {
+      for pk in key_fields {
         let f = ot.fields.iter().find_first(x => x.name == pk).unwrap()
-        // 主キー引数は non-null
+        // 一意キー引数は non-null
         let base_scalar = scalar_name(f.field_type)
         pk_args[name(pk)] = mk_input_field(
           pk,
@@ -332,14 +342,14 @@ pub fn build_schema(meta : @metadata.Metadata) -> @schema.Schema raise {
         )
       }
       let by_pk_data : @schema.SField = {
-        name: name("\{model_name}_by_pk"),
+        name: name(root_name),
         description: None,
         info: ModelSelectByPk(model_name),
         field_type: named_type(gql_name, true),
         arguments: pk_args,
         deprecation_status: NotDeprecated,
       }
-      root_fields[name("\{model_name}_by_pk")] = @schema.conditional_namespaced(
+      root_fields[name(root_name)] = @schema.conditional_namespaced(
         by_pk_data, roles,
       )
     }

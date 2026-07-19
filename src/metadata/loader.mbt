@@ -179,6 +179,22 @@ fn load_document(
         Some(s) => s
         None => raise MissingField(kind~, field="source")
       }
+      let primary_key = json_string_array_field(def, kind, "primaryKey")
+      let select_many_name = match
+        json_opt_string_field(def, kind, "selectManyName") {
+        Some(n) => n
+        None => name
+      }
+      let select_uniques : Array[(String, Array[String])] = []
+      match json_get(def, "selectUniques") {
+        Some(Json::Array(items)) =>
+          for item in items {
+            let root = json_string_field(item, kind, "queryRootField")
+            let keys = json_string_array_field(item, kind, "uniqueIdentifier")
+            select_uniques.push((root, keys))
+          }
+        _ => ()
+      }
       let model : Model = {
         name,
         object_type: json_string_field(def, kind, "objectType"),
@@ -188,7 +204,9 @@ fn load_document(
           def, kind, "filterableFields",
         ),
         orderable_fields: json_string_array_field(def, kind, "orderableFields"),
-        primary_key: json_string_array_field(def, kind, "primaryKey"),
+        primary_key,
+        select_many_name,
+        select_uniques,
         description: json_opt_string_field(def, kind, "description"),
       }
       if meta.models.contains(name) {
