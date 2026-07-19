@@ -71,8 +71,13 @@ pub(all) struct Model {
   filterable_fields : Array[String]
   /// order_by で使えるフィールド
   orderable_fields : Array[String]
-  /// 主キーフィールド (arts_by_pk / update/delete_by_pk の生成に使う)
+  /// 主キーフィールド (<name>_by_pk / update/delete_by_pk の生成に使う)
   primary_key : Array[String]
+  /// 一覧取得のルートフィールド名 (省略時はモデル名)
+  select_many_name : String
+  /// 一意取得のルートフィールド群 (フィールド名, キー列)。
+  /// 空の場合は primary_key から <select_many_name>_by_pk を生成
+  select_uniques : Array[(String, Array[String])]
   description : String?
 }
 
