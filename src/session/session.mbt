@@ -27,9 +27,10 @@ pub suberror AuthError {
 /// - AuthConfig なし: 常に admin (開発モード)
 /// - adminSecret あり + x-hasura-admin-secret ヘッダあり: 一致した場合のみ
 ///   x-hasura-role (既定 admin) と x-hasura-* 変数を信頼する。不一致は拒否
-/// - jwtHs256Secret あり (admin-secret ヘッダなし): Authorization: Bearer の
-///   JWT を検証し、Hasura claims からロールとセッション変数を得る。
-///   x-hasura-role ヘッダによる切替は allowed-roles 内でのみ許可
+/// - JWT モード (admin-secret ヘッダなし): Authorization: Bearer の JWT を検証し、
+///   Hasura claims からロールとセッション変数を得る。鍵は jwtHs256Secret (HS256)
+///   または jwtRs256 の n/e (RS256) から決まる。x-hasura-role ヘッダによる切替は
+///   allowed-roles 内でのみ許可
 /// - AuthConfig があるのに利用可能な認証方式が無い場合は拒否 (fail-closed)。
 ///   綴り間違い等で認証欄が空になっても admin に落ちない
 /// - now_epoch_secs は JWT の exp / nbf (epoch 秒) の検査に使う。
@@ -71,9 +72,17 @@ pub fn resolve_session(
       }
     _ => ()
   }
-  // JWT モード
-  match config.jwt_hs256_secret {
-    Some(secret) => {
+  // JWT モード: 設定された鍵からアルゴリズムを決める (HS256 / RS256)
+  let jwt_key : JwtKey? = match config.jwt_hs256_secret {
+    Some(secret) => Some(Hs256(secret))
+    None =>
+      match (config.jwt_rs256_modulus, config.jwt_rs256_exponent) {
+        (Some(n), Some(e)) => Some(Rs256(modulus=n, exponent=e))
+        _ => None
+      }
+  }
+  match jwt_key {
+    Some(key) => {
       let token = match h.get("authorization") {
         Some(value) =>
           if value.has_prefix("Bearer ") {
@@ -83,7 +92,7 @@ pub fn resolve_session(
           }
         None => raise Unauthorized("missing Authorization header")
       }
-      let payload = verify_jwt_hs256(token, secret, now_epoch_secs~)
+      let payload = verify_jwt(token, key, now_epoch_secs~)
       return session_from_claims(payload, h.get("x-hasura-role"))
     }
     None => ()
@@ -92,10 +101,10 @@ pub fn resolve_session(
   match config.admin_secret {
     Some(_) => raise Unauthorized("missing x-hasura-admin-secret header")
     None =>
-      // adminSecret も jwtHs256Secret も無い (綴り間違い等で全フィールドが
-      // None になった、または jwtHs256SecretFromEnv がランタイム層で未解決)
+      // adminSecret も JWT 鍵も無い (綴り間違い等で全フィールドが None になった、
+      // または jwtHs256SecretFromEnv / jwtRs256 がランタイム層で未解決)
       raise Unauthorized(
-        "AuthConfig has no usable authentication method (check adminSecret / jwtHs256Secret / jwtHs256SecretFromEnv)",
+        "AuthConfig has no usable authentication method (check adminSecret / jwtHs256Secret / jwtRs256)",
       )
   }
 }

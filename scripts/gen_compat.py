@@ -215,13 +215,17 @@ FEATURES = [
         dict(
             feature="認証: JWT",
             level="partial",
-            supported="HS256 署名検証 (定数時間比較)、V2 (`https://hasura.io/jwt/claims`) / "
+            supported="HS256 (共有鍵、定数時間比較) と RS256 (RSASSA-PKCS1-v1_5 + SHA-256、"
+            "事前解決済み JWK n/e。core BigInt の modpow で自前検証、js/wasm-gc 可)。"
+            "alg は鍵種別で決まり詐称による格下げを拒否。V2 (`https://hasura.io/jwt/claims`) / "
             "V3 (`claims.jwt.hasura.io`) 両 claims 名前空間、default-role / allowed-roles、"
             "`x-hasura-role` ヘッダによるロール切替、`x-hasura-*` claim のセッション変数化、"
-            "exp / nbf 検査",
-            unsupported="RS256 / ES256 等の非対称鍵、JWKS URL、audience / issuer 検査、"
+            "exp / nbf 検査。検証コアは provider 非依存で切り出し可能な構造 (jwt.mbt / "
+            "hasura_claims.mbt)",
+            unsupported="JWKS URL からの鍵取得 (jwkFromUrl — 鍵素材の注入経路はあるが "
+            "HTTP fetch 未実装)、ES256 / EdDSA、audience / issuer / allowedSkew 検査、"
             "文字列化 (stringified JSON) claims、claims_map / claims 位置のカスタマイズ、"
-            "webhook モード",
+            "Cookie / カスタムヘッダのトークン位置、webhook モード",
             extra="src/session/jwt_test.mbt",
             issues=['#41'],
         ),

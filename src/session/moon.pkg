@@ -3,4 +3,5 @@ import {
   "gmlewis/sha256",
   "gmlewis/base64",
   "moonbitlang/core/json",
+  "moonbitlang/core/bigint",
 }

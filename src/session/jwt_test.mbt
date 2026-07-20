@@ -31,6 +31,8 @@ fn jwt_auth() -> @metadata.AuthConfig? {
     admin_secret: None,
     jwt_hs256_secret: Some(TEST_SECRET),
     jwt_hs256_secret_from_env: None,
+    jwt_rs256_modulus: None,
+    jwt_rs256_exponent: None,
   })
 }
 
@@ -207,6 +209,8 @@ test "併用: admin-secret ヘッダ提示時は開発モード、無ければ J
     admin_secret: Some("topsecret"),
     jwt_hs256_secret: Some(TEST_SECRET),
     jwt_hs256_secret_from_env: None,
+    jwt_rs256_modulus: None,
+    jwt_rs256_exponent: None,
   })
   // admin-secret 提示 → 開発モードで任意ロール
   let dev = resolve_session(
@@ -415,6 +419,8 @@ test "fail-closed: AuthConfig に利用可能な認証方式が無ければ admi
     admin_secret: None,
     jwt_hs256_secret: None,
     jwt_hs256_secret_from_env: None,
+    jwt_rs256_modulus: None,
+    jwt_rs256_exponent: None,
   })
   try
     resolve_session(empty_auth, Map([]), now_epoch_secs=None) |> ignore
@@ -428,6 +434,8 @@ test "fail-closed: AuthConfig に利用可能な認証方式が無ければ admi
     admin_secret: None,
     jwt_hs256_secret: None,
     jwt_hs256_secret_from_env: Some("MOSURA_JWT_SECRET"),
+    jwt_rs256_modulus: None,
+    jwt_rs256_exponent: None,
   })
   try
     resolve_session(
@@ -441,4 +449,110 @@ test "fail-closed: AuthConfig に利用可能な認証方式が無ければ admi
   } noraise {
     _ => fail("expected Unauthorized (fail-closed)")
   }
+}
+
+///|
+// openssl 生成の 2048bit RSA 鍵で署名した RS256 トークンと JWK n/e (scratchpad で生成)
+const RS256_TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6InVzZXIiLCJ4LWhhc3VyYS1hbGxvd2VkLXJvbGVzIjpbInVzZXIiLCJlZGl0b3IiXSwieC1oYXN1cmEtdXNlci1pZCI6IjQyIn19.GIPirJKcrifn0ZPQ1SMECrMaD_4QZd_iLOt-61qHp5dZKTlkFcyQXcKe-Lxh5mWH8d7k3YsKEz0g4-XctTkqzikRM9QQmgVp_s3bOmYFyb1Tgw4cCjfFiuUAqkiru2qYNU7wDLbZj4b2jCU9b6eqiteXOEoGvKXFTjTxF05oTwKDeMnPs4qIWYxlFBt9LHTNZzkDDH7UwBiyHIAs-jEU4DaHYeVTKby8wMqpbmW39wLQaCAop_xBHbk7kNyRPHOrOSZifo9GtyO5W_I_wCOEnvYPpwt08rdllHkQ8C7ouzkdKp8SCDcA9-ya5fv-NieoPaX5O6sYzvKNOZo3aSiU2w"
+
+///|
+const RS256_N = "3VOa-tgSGT1I9GXxd1z0fSVPvMr706vJe9grOdE6txvzRwFOzvkAliqLwl5wsQkqgVP00tsIMnuSInZqQSe_eiXeVWwoVMAWDGgp7_0G7QT1XQZ8Sdmy0NYkt5CrE_F_i4DvrSO4KY9_JV6qOkipSyrD9ARxKZwMtxPFqYbAS8fhO5UW9X5y5ZvcZvKMX5DdYIY7c_VrZVIyIIlHcFe-sAxQ6e0JfIAF5EeUtBF7E6OCyQRitnirbFMOJoS2kezffXhLgmPqdQezq2ov3k_kcyBFWByCTWeCdZcUCrNlej_GC2u3wA3om7npPZiCk-J_KpA6ycLFcxfVMEhGmogtiw"
+
+///|
+const RS256_E = "AQAB"
+
+///|
+fn rs256_auth() -> @metadata.AuthConfig? {
+  Some({
+    admin_secret: None,
+    jwt_hs256_secret: None,
+    jwt_hs256_secret_from_env: None,
+    jwt_rs256_modulus: Some(RS256_N),
+    jwt_rs256_exponent: Some(RS256_E),
+  })
+}
+
+///|
+test "JWT RS256: 正しい署名のトークンで claims からセッションが得られる" {
+  let session = resolve_session(
+    rs256_auth(),
+    { "Authorization": "Bearer \{RS256_TOKEN}" },
+    now_epoch_secs=None,
+  )
+  assert_eq(session.role, "user")
+  assert_eq(session.variables.get("x-hasura-user-id"), Some("42"))
+}
+
+///|
+test "JWT RS256: verify_jwt を直接呼んでペイロードを得る" {
+  let payload = verify_jwt(
+    RS256_TOKEN,
+    Rs256(modulus=RS256_N, exponent=RS256_E),
+    now_epoch_secs=None,
+  )
+  match payload {
+    Json::Object(p) => assert_eq(p.get("name"), Some(Json::string("John Doe")))
+    _ => fail("payload is not an object")
+  }
+}
+
+///|
+test "JWT RS256: 改竄されたペイロード (署名不一致) は拒否される" {
+  // name を書き換えたが署名は元のまま
+  let bad = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkphbmUgRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6InVzZXIiLCJ4LWhhc3VyYS1hbGxvd2VkLXJvbGVzIjpbInVzZXIiLCJlZGl0b3IiXSwieC1oYXN1cmEtdXNlci1pZCI6IjQyIn19.GIPirJKcrifn0ZPQ1SMECrMaD_4QZd_iLOt-61qHp5dZKTlkFcyQXcKe-Lxh5mWH8d7k3YsKEz0g4-XctTkqzikRM9QQmgVp_s3bOmYFyb1Tgw4cCjfFiuUAqkiru2qYNU7wDLbZj4b2jCU9b6eqiteXOEoGvKXFTjTxF05oTwKDeMnPs4qIWYxlFBt9LHTNZzkDDH7UwBiyHIAs-jEU4DaHYeVTKby8wMqpbmW39wLQaCAop_xBHbk7kNyRPHOrOSZifo9GtyO5W_I_wCOEnvYPpwt08rdllHkQ8C7ouzkdKp8SCDcA9-ya5fv-NieoPaX5O6sYzvKNOZo3aSiU2w"
+  try
+    verify_jwt(
+      bad,
+      Rs256(modulus=RS256_N, exponent=RS256_E),
+      now_epoch_secs=None,
+    )
+    |> ignore
+  catch {
+    Unauthorized(_) => ()
+  } noraise {
+    _ => fail("expected Unauthorized (tampered payload)")
+  }
+}
+
+///|
+test "JWT RS256: HS256 鍵で RS256 トークンを検証しようとすると alg 不一致で拒否" {
+  try
+    verify_jwt(RS256_TOKEN, Hs256("whatever"), now_epoch_secs=None) |> ignore
+  catch {
+    Unauthorized(_) => ()
+  } noraise {
+    _ => fail("expected Unauthorized (alg mismatch)")
+  }
+}
+
+///|
+test "JWT RS256: RS256 鍵で HS256 トークンを検証しようとすると alg 不一致で拒否" {
+  let hs_token = make_token(CLAIMS_PAYLOAD)
+  try
+    verify_jwt(
+      hs_token,
+      Rs256(modulus=RS256_N, exponent=RS256_E),
+      now_epoch_secs=None,
+    )
+    |> ignore
+  catch {
+    Unauthorized(_) => ()
+  } noraise {
+    _ => fail("expected Unauthorized (alg mismatch)")
+  }
+}
+
+///|
+test "JWT RS256: YAML の AuthConfig(jwtRs256) を通しても検証できる (ローダ配線)" {
+  let yaml = "kind: AuthConfig\nversion: v1\ndefinition:\n  jwtRs256:\n    modulus: \"" +
+    RS256_N +
+    "\"\n    exponent: \"AQAB\"\n"
+  let meta = @metadata.load_yaml(yaml)
+  let session = resolve_session(
+    meta.auth,
+    { "Authorization": "Bearer " + RS256_TOKEN },
+    now_epoch_secs=None,
+  )
+  assert_eq(session.role, "user")
+  assert_eq(session.variables.get("x-hasura-user-id"), Some("42"))
 }
