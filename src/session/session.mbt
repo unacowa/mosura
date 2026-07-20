@@ -30,11 +30,15 @@ pub suberror AuthError {
 /// - jwtHs256Secret あり (admin-secret ヘッダなし): Authorization: Bearer の
 ///   JWT を検証し、Hasura claims からロールとセッション変数を得る。
 ///   x-hasura-role ヘッダによる切替は allowed-roles 内でのみ許可
-/// - now_epoch_secs を与えると JWT の exp (epoch 秒) を検査する
+/// - AuthConfig があるのに利用可能な認証方式が無い場合は拒否 (fail-closed)。
+///   綴り間違い等で認証欄が空になっても admin に落ちない
+/// - now_epoch_secs は JWT の exp / nbf (epoch 秒) の検査に使う。
+///   このパッケージは pure (時刻を取得しない) なので呼び出し側が明示的に渡す。
+///   None は「時刻検査をしない」という意思表示 (テスト用途)
 pub fn resolve_session(
   auth : @metadata.AuthConfig?,
   headers : Map[String, String],
-  now_epoch_secs? : Int64? = None,
+  now_epoch_secs~ : Int64?,
 ) -> Session raise AuthError {
   // ヘッダ名は小文字化して扱う
   let h : Map[String, String] = Map([])
@@ -84,8 +88,14 @@ pub fn resolve_session(
     }
     None => ()
   }
+  // fail-closed: AuthConfig が存在する以上、認証をパスしない限り admin にはしない
   match config.admin_secret {
     Some(_) => raise Unauthorized("missing x-hasura-admin-secret header")
-    None => Session::admin()
+    None =>
+      // adminSecret も jwtHs256Secret も無い (綴り間違い等で全フィールドが
+      // None になった、または jwtHs256SecretFromEnv がランタイム層で未解決)
+      raise Unauthorized(
+        "AuthConfig has no usable authentication method (check adminSecret / jwtHs256Secret / jwtHs256SecretFromEnv)",
+      )
   }
 }

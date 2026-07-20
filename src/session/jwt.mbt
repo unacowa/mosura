@@ -8,7 +8,8 @@
 //
 // ロール切替: x-hasura-role ヘッダがあれば allowed-roles 内でのみ許可。
 // 無ければ default-role を使う。
-// exp (epoch 秒) は now_epoch_secs が与えられた場合のみ検査する。
+// exp / nbf (epoch 秒) は now_epoch_secs が与えられた場合のみ検査する。
+// このパッケージは pure (時刻を取得しない) ため now は必須引数で呼び出し側が渡す。
 
 ///|
 const CLAIMS_NAMESPACE_V2 = "https://hasura.io/jwt/claims"
@@ -42,11 +43,12 @@ fn constant_time_eq(a : String, b : String) -> Bool {
 }
 
 ///|
-/// HS256 署名付き JWT を検証してペイロード (JSON) を返す
+/// HS256 署名付き JWT を検証してペイロード (JSON) を返す。
+/// now_epoch_secs に None を渡すと exp / nbf の時刻検査をスキップする (テスト用途)
 pub fn verify_jwt_hs256(
   token : String,
   secret : String,
-  now_epoch_secs? : Int64? = None,
+  now_epoch_secs~ : Int64?,
 ) -> Json raise AuthError {
   let parts = token.split(".").map(s => s.to_owned()).collect()
   if parts.length() != 3 {
@@ -80,16 +82,27 @@ pub fn verify_jwt_hs256(
   let payload = @json.parse(b64url_decode(parts[1])) catch {
     _ => raise Unauthorized("invalid JWT: payload is not valid JSON")
   }
-  // exp 検査 (現在時刻が与えられた場合のみ)
+  // exp / nbf 検査 (現在時刻が与えられた場合のみ)。
+  // クレームが存在するのに数値でない場合は不正なトークンとして拒否する
   match (now_epoch_secs, payload) {
-    (Some(now), Json::Object(p)) =>
+    (Some(now), Json::Object(p)) => {
       match p.get("exp") {
         Some(Json::Number(exp, ..)) =>
           if now >= exp.to_int64() {
             raise Unauthorized("invalid JWT: token has expired")
           }
-        _ => ()
+        Some(_) => raise Unauthorized("invalid JWT: exp claim is not a number")
+        None => ()
       }
+      match p.get("nbf") {
+        Some(Json::Number(nbf, ..)) =>
+          if now < nbf.to_int64() {
+            raise Unauthorized("invalid JWT: token is not yet valid (nbf)")
+          }
+        Some(_) => raise Unauthorized("invalid JWT: nbf claim is not a number")
+        None => ()
+      }
+    }
     _ => ()
   }
   payload
