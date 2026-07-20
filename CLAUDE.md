@@ -10,6 +10,7 @@ moon test --target native              # 全テスト (--target native 必須。
 moon check --target native --deny-warn # lint (CI と同条件。warning はエラー扱い)
 moon fmt                               # フォーマッタ (CI で diff チェックされる)
 python3 scripts/gen_cases.py           # fixtures/cases.toml 再生成 (CI で freshness チェック)
+python3 scripts/gen_compat.py          # docs/compatibility.md 再生成 (同上。行の編集はスクリプト側)
 docker compose up -d                   # E2E 用 PostgreSQL 16 (localhost:5433, mosura/mosura/mosura)
 ```
 
@@ -49,6 +50,7 @@ moon check --target wasm-gc $CORE --deny-warn
 | 開発フロー全般 (fixtures 台帳、ゴールデン更新、E2E、CI) | [docs/development.md](docs/development.md) |
 | MoonBit / moon / 依存ライブラリのハマりどころ | [docs/moonbit-notes.md](docs/moonbit-notes.md) |
 | 進捗・引き継ぎの見取り図 (一次情報は `gh pr/issue list`・`gen_cases.py`) | [docs/status.md](docs/status.md) |
+| Hasura V3 との機能別互換性 (レベル定義と根拠) | [docs/compatibility.md](docs/compatibility.md) (編集は `scripts/gen_compat.py`) |
 | レイヤ構成・NDC 境界・Workers 対応の設計 | [docs/architecture.md](docs/architecture.md) |
 | マイルストーン定義 (M0–M7) とスコープ判断の経緯 | [docs/implementation-plan.md](docs/implementation-plan.md) |
 
