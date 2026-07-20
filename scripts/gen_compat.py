@@ -234,14 +234,15 @@ FEATURES = [
             feature="V3 metadata.json (subgraphs 形式) の互換ロード",
             level="partial",
             supported="ObjectType / Model / Relationship / ModelPermissions / TypePermissions / "
-            "DataConnectorLink を変換。旧 ObjectBooleanExpressionType による filter 解決、"
+            "DataConnectorLink を変換。filter 解決は新形式 BooleanExpressionType (object operand の "
+            "comparableFields) と旧 ObjectBooleanExpressionType の両対応で、解決できない "
+            "filterExpressionType は fail-closed でロードエラー (サイレントにフィルタを落とさない)。"
             "未定義 connector のスタブ生成",
-            unsupported="**新形式 BooleanExpressionType は未読込で、サイレントにフィルタ無しへ"
-            "フォールバックする** (2024-11 以降の DDN メタデータでは filter が消える。要注意)。"
+            unsupported="BooleanExpressionType の comparableRelationships (リレーション述語 — #32/#38)。"
             "Command 系 Relationship、rules-based permissions、Model v2 / OrderByExpression / "
             "GraphqlConfig 等の kind は skip。resolved スナップショット完全一致 (pending 211)",
             patterns=[r"^metadata-resolve/"],
-            issues=['#26', '#35', '#40'],
+            issues=['#35', '#40'],
         ),
     ]),
     ("データコネクタ (NDC) / 実行系", [
