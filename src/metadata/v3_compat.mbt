@@ -131,6 +131,17 @@ pub fn load_v3_metadata(
     objects, object_type_fields,
   )
 
+  // OpenDD フラグ require_valid_ndc_v01_version: NDC v0.1 の無効な
+  // capabilities バージョンを警告ではなくビルドエラーに昇格させる
+  let require_valid_ndc_v01 = match jv3_get(j, "flags") {
+    Some(flags) =>
+      match jv3_get(flags, "require_valid_ndc_v01_version") {
+        Some(Json::True) => true
+        _ => false
+      }
+    None => false
+  }
+
   // 2 パス目: 変換
   let docs : Array[Json] = []
   let skipped : Map[String, Bool] = Map([])
@@ -170,7 +181,34 @@ pub fn load_v3_metadata(
         let def = v3_def(obj)
         let name = jv3_str(def, "name")
         defined_connectors[name] = true
-        docs.push(mk_connector_doc(name))
+        // 実接続の NDC schema/capabilities バージョンを保持・検証する。
+        // schema を持たない (スタブ相当の) 定義は None のまま素通し。
+        let (ndc_version, capabilities_version) = match jv3_get(def, "schema") {
+          Some(schema) => {
+            let sv = match jv3_get(schema, "version") {
+              Some(Json::String(v)) => Some(v)
+              _ => None
+            }
+            let cv = match jv3_get(schema, "capabilities") {
+              Some(caps) =>
+                match jv3_get(caps, "version") {
+                  Some(Json::String(v)) => Some(v)
+                  _ => None
+                }
+              None => None
+            }
+            match (sv, cv) {
+              (Some(s), Some(c)) =>
+                validate_ndc_capabilities_version(
+                  name, s, c, require_valid_ndc_v01,
+                )
+              _ => ()
+            }
+            (sv, cv)
+          }
+          None => (None, None)
+        }
+        docs.push(mk_connector_doc(name, ndc_version, capabilities_version))
       }
       "ObjectBooleanExpressionType" | "BooleanExpressionType" => ()
       // OrderByExpression は 1 パス目で消費済み。GraphqlConfig は命名の
@@ -197,7 +235,8 @@ pub fn load_v3_metadata(
   if auto_stub_connectors {
     for name, _ in referenced_connectors {
       if !defined_connectors.contains(name) {
-        docs.push(mk_connector_doc(name))
+        // スタブ接続は schema/capabilities を持たないため検証しない
+        docs.push(mk_connector_doc(name, None, None))
       }
     }
   }
@@ -347,13 +386,117 @@ fn mk_doc(kind : String, definition : Json) -> Json {
 }
 
 ///|
-fn mk_connector_doc(name : String) -> Json {
+/// 検証済みの DataConnectorLink ドキュメントを組み立てる。url は実行時テスト用の
+/// 環境変数へ落とし込む従来挙動を維持しつつ、検証済みの NDC バージョン情報を
+/// 埋め込む (loader が DataConnectorLink の enriched フィールドに反映する)。
+fn mk_connector_doc(
+  name : String,
+  ndc_version : String?,
+  capabilities_version : String?,
+) -> Json {
   let conn : Map[String, Json] = { "urlFromEnv": Json::string("PG_MAIN_URL") }
   let def : Map[String, Json] = {
     "name": Json::string(name),
     "connection": Json::object(conn),
   }
+  match ndc_version {
+    Some(v) => def["ndcVersion"] = Json::string(v)
+    None => ()
+  }
+  match capabilities_version {
+    Some(v) => def["capabilitiesVersion"] = Json::string(v)
+    None => ()
+  }
   mk_doc("DataConnectorLink", Json::object(def))
+}
+
+///|
+/// NDC capabilities のバージョン検証 (upstream metadata-resolve
+/// stages/data_connectors/types.rs の validate_ndc_version 相当)。
+///
+/// schema_version: DataConnectorLink.schema.version。"v0.1" → NDC v0.1.x /
+///   "v0.2" → NDC v0.2.x。それ以外は検証対象外 (upstream は OpenDD enum で弾く)。
+/// capabilities_version: schema.capabilities.version の文字列。
+/// require_valid_ndc_v01: OpenDD フラグ require_valid_ndc_v01_version。
+///
+/// 判定: NDC v0.1.x は semver `^0.1.0` (= 0.1.x)、v0.2.x は `^0.2.0` (= 0.2.x)
+/// に一致しなければならない。
+/// - 一致しない有効 semver → IncompatibleNdcVersion 相当 (常にエラー)
+/// - 無効 semver かつ v0.2 → InvalidNdcVersion 相当 (常にエラー)
+/// - 無効 semver かつ v0.1 → 旧ビルド後方互換の警告。フラグ時のみエラーに昇格
+fn validate_ndc_capabilities_version(
+  connector_name : String,
+  schema_version : String,
+  capabilities_version : String,
+  require_valid_ndc_v01 : Bool,
+) -> Unit raise MetadataError {
+  let expected_minor = match schema_version {
+    "v0.1" => 1
+    "v0.2" => 2
+    _ => return
+  }
+  match parse_exact_semver(capabilities_version) {
+    Some((major, minor, _)) =>
+      if !(major == 0 && minor == expected_minor) {
+        raise InvalidValue(
+          kind="DataConnectorLink",
+          field="schema.capabilities.version",
+          message="connector '\{connector_name}': capabilities version '\{capabilities_version}' is incompatible with NDC schema version '\{schema_version}' (requires ^0.\{expected_minor}.0)",
+        )
+      }
+    None =>
+      if expected_minor == 2 {
+        raise InvalidValue(
+          kind="DataConnectorLink",
+          field="schema.capabilities.version",
+          message="connector '\{connector_name}': invalid NDC v0.2 capabilities version '\{capabilities_version}'",
+        )
+      } else if require_valid_ndc_v01 {
+        raise InvalidValue(
+          kind="DataConnectorLink",
+          field="schema.capabilities.version",
+          message="connector '\{connector_name}': invalid NDC v0.1 capabilities version '\{capabilities_version}'",
+        )
+      }
+  }
+}
+
+///|
+/// semver 文字列を厳密な major.minor.patch (3 個の非負整数) として解釈する。
+/// pre-release / build metadata や要素数の過不足はすべて無効 (None) とみなす。
+/// "^0.1.0" / "" / "*" / "v0.1" 等はいずれも None。
+fn parse_exact_semver(s : String) -> (Int, Int, Int)? {
+  let parts = s.split(".").map(p => p.to_owned()).collect()
+  if parts.length() != 3 {
+    return None
+  }
+  match
+    (
+      parse_nonneg_int(parts[0]),
+      parse_nonneg_int(parts[1]),
+      parse_nonneg_int(parts[2]),
+    ) {
+    (Some(a), Some(b), Some(c)) => Some((a, b, c))
+    _ => None
+  }
+}
+
+///|
+/// 非負整数文字列を Int に解釈する (空文字・非数字を含む場合は None)
+fn parse_nonneg_int(s : String) -> Int? {
+  let chars = s.to_array()
+  if chars.length() == 0 {
+    return None
+  }
+  let mut acc = 0
+  for c in chars {
+    let v = c.to_int()
+    if v < '0'.to_int() || v > '9'.to_int() {
+      return None
+    }
+    acc = acc * 10 + (v - '0'.to_int())
+  }
+  Some(acc)
 }
 
 ///|

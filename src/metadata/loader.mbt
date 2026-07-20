@@ -170,6 +170,11 @@ fn load_document(
           Some(s) => s
           None => "public"
         },
+        // v3 互換ローダが検証済みの NDC バージョン情報を埋め込む (無ければ None)
+        ndc_version: json_opt_string_field(def, kind, "ndcVersion"),
+        capabilities_version: json_opt_string_field(
+          def, kind, "capabilitiesVersion",
+        ),
       }
       if meta.connectors.contains(name) {
         raise DuplicateName(kind~, name~)
