@@ -1875,48 +1875,48 @@ milestone = "m2"
 reason = "V3 互換ローダの受理スモーク (resolve スナップショット照合は対象外)"
 
 [cases."execute/aggregates/relationship_field/filtering_ndc_v01"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."execute/aggregates/relationship_field/filtering_ndc_v02"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."execute/aggregates/relationship_field/filtering_null_inputs_ndc_v01"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."execute/aggregates/relationship_field/filtering_null_inputs_ndc_v02"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."execute/aggregates/relationship_field/simple_select"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."execute/aggregates/root_field/custom_count_return_type"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."execute/aggregates/root_field/filtering"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."execute/aggregates/root_field/filtering_null_inputs"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."execute/aggregates/root_field/nested_object"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."execute/aggregates/root_field/simple_select"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."execute/aggregates/root_field/typename"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."execute/apollo_federation_fields/entities"]
 tag = "out-of-scope"
@@ -2163,8 +2163,8 @@ tag = "pending"
 milestone = "m4"
 
 [cases."execute/models/select_many/order_by/remote_relationship"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/models/select_many/order_by"]
 tag = "pending"
@@ -2203,12 +2203,12 @@ tag = "pending"
 milestone = "m5"
 
 [cases."execute/models/select_many/permission_filter/remote_relationships/array"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/models/select_many/permission_filter/remote_relationships/object"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/models/select_many/permission_filter/simple"]
 tag = "in-scope"
@@ -2247,36 +2247,36 @@ tag = "pending"
 milestone = "m4"
 
 [cases."execute/models/select_many/remote_relationship_predicates/array/nested"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/models/select_many/remote_relationship_predicates/array/nested_multiple_fields"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/models/select_many/remote_relationship_predicates/array/simple"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/models/select_many/remote_relationship_predicates/object/empty_predicate"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/models/select_many/remote_relationship_predicates/object/nested"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/models/select_many/remote_relationship_predicates/object/simple"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/models/select_many/remote_relationship_predicates/object/two_relationship_fields"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/models/select_many/remote_relationship_predicates/on_two_fields"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/models/select_many/select_with_args/filter"]
 tag = "pending"
@@ -2351,8 +2351,8 @@ tag = "pending"
 milestone = "m4"
 
 [cases."execute/models/select_many/where/nested_remote_relationships"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/models/select_many/where/nested_scalar_array/not_supported"]
 tag = "pending"
@@ -2439,20 +2439,20 @@ tag = "pending"
 milestone = "m4"
 
 [cases."execute/models/select_many/where/remote_relationships/boolean_expression_type/array/nested"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/models/select_many/where/remote_relationships/boolean_expression_type/array/simple"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/models/select_many/where/remote_relationships/boolean_expression_type/object/nested"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/models/select_many/where/remote_relationships/boolean_expression_type/object/simple"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/models/select_many/where/remote_relationships/boolean_expression_type/object/simple_across_subgraphs"]
 tag = "pending"
@@ -2659,12 +2659,12 @@ tag = "pending"
 milestone = "m5"
 
 [cases."execute/remote_relationships/array/aggregate"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."execute/remote_relationships/array/arguments"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/remote_relationships/array"]
 tag = "in-scope"
@@ -2711,44 +2711,44 @@ tag = "out-of-scope"
 reason = "Command 機構は採用しない (V2 風 CRUD を採用)"
 
 [cases."execute/remote_relationships/from_nested"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/remote_relationships/multi_field_mapping"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/remote_relationships/mutually_recursive"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/remote_relationships/mutually_recursive_with_where"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/remote_relationships/remote_in_local/local_array_remote_object/custom_ndc_and_pg_ndc"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/remote_relationships/remote_in_local/local_array_remote_object/two_pg_ndc"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/remote_relationships/remote_in_local"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/remote_relationships/remote_in_local_aliased"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/remote_relationships/target_model_with_arguments"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/remote_relationships/target_model_with_arguments_and_fields"]
-tag = "out-of-scope"
-reason = "remote relationships (複数コネクタ) は対象外"
+tag = "pending"
+reason = "remote relationships: スコープ入り (#73)。実装まで pending"
 
 [cases."execute/session_variables/json_disabled/integer_session_variable"]
 tag = "in-scope"
@@ -2791,20 +2791,20 @@ tag = "pending"
 milestone = "m4"
 
 [cases."ndc-postgres-translation/goldenfiles/aggregate_count_albums"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."ndc-postgres-translation/goldenfiles/aggregate_distinct_albums"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."ndc-postgres-translation/goldenfiles/aggregate_function_albums"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."ndc-postgres-translation/goldenfiles/aggregate_limit_offset_order_by"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."ndc-postgres-translation/goldenfiles/dup_array_relationship"]
 tag = "in-scope"
@@ -2863,8 +2863,8 @@ tag = "out-of-scope"
 reason = "native queries は対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/nested_aggregates"]
-tag = "out-of-scope"
-reason = "aggregates は MVP 対象外"
+tag = "pending"
+reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."ndc-postgres-translation/goldenfiles/nested_array_relationships"]
 tag = "in-scope"
