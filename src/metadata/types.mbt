@@ -35,6 +35,12 @@ pub(all) struct DataConnectorLink {
   url_from_env : String?
   /// テーブルの既定スキーマ (省略時 "public")
   db_schema : String
+  /// NDC スキーマバージョン ("v0.1" / "v0.2")。
+  /// スキーマを持たない自動スタブ接続では None
+  ndc_version : String?
+  /// 宣言された capabilities のバージョン文字列 (完全な semver)。
+  /// スキーマを持たない自動スタブ接続では None
+  capabilities_version : String?
 }
 
 ///|

@@ -89,6 +89,12 @@ let v3_failing_rejected : Array[String] = [
   "fixtures/metadata-resolve/failing/aggregate_expressions/missing_operand_object_field_agg_exp",
   "fixtures/metadata-resolve/failing/aggregate_expressions/missing_operand_object_type",
   "fixtures/metadata-resolve/failing/aggregate_expressions/model_aggregate_exp_type_mismatch",
+  // DataConnectorLink の NDC capabilities バージョン検証で拒否できるケース。
+  // incompatible_capabilities_for_local_relationship はバージョン整合ではなく
+  // リレーション capability の内容検証 (後段) が必要なため pending のまま。
+   "fixtures/metadata-resolve/failing/data_connector_link/incompatible_capabilities_version",
+  "fixtures/metadata-resolve/failing/data_connector_link/invalid_ndc_v01_capabilities_version_failing_with_error",
+  "fixtures/metadata-resolve/failing/data_connector_link/multiple_errors",
 ]
 
 ///|
