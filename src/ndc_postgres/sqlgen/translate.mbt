@@ -1016,6 +1016,14 @@ fn translate_order_by_path_group(
   for pe_idx in 0..<group.path.length() {
     let pe = group.path[pe_idx]
     let relationship = env.lookup_relationship(pe.relationship)
+    // 配列リレーションを経由するカラムソートは行数が定まらないため不可。
+    // 終端だけでなく経路の中間要素も検証する (中間が array だと JOIN が
+    // 複数行を返し外側の LIMIT/行数が壊れる。upstream は全経路要素を検証)
+    if relationship.relationship_type == "array" {
+      raise NotImplemented(
+        "order by column across an array relationship (requires an aggregate)",
+      )
+    }
     let target_alias = state.make_table_alias(
       "ORDER_PART_\{relationship.target_collection}",
     )
@@ -1044,13 +1052,6 @@ fn translate_order_by_path_group(
         )
       }
     } else {
-      // 配列リレーション越しのカラムソートは行数が定まらないため不可
-      // (upstream MissingAggregateForArrayRelationOrdering)
-      if relationship.relationship_type == "array" {
-        raise NotImplemented(
-          "order by column across an array relationship (requires an aggregate)",
-        )
-      }
       for c in group.columns {
         let col = env.lookup_column(relationship.target_collection, c.name)
         select_list.push(

@@ -104,6 +104,31 @@ fn serde_value_debug(j : Json) -> String {
 }
 
 ///|
+/// fixtures/cases.toml から in-scope の translation ケース名を読む (簡易パーサ)。
+/// in-scope タグのケースが skip されたら CI が落ちるようにするための突き合わせ
+fn in_scope_translation_cases() -> Array[String] raise {
+  let prefix = "ndc-postgres-translation/goldenfiles/"
+  let text = @fs.read_file_to_string("fixtures/cases.toml")
+  let out : Array[String] = []
+  let mut current : String? = None
+  for line in text.split("\n") {
+    let l = line.to_owned().trim(chars=" \r").to_owned()
+    if l.has_prefix("[cases.\"") && l.has_suffix("\"]") {
+      current = Some(l["[cases.\"".length():l.length() - 2].to_owned())
+    } else if l == "tag = \"in-scope\"" {
+      match current {
+        Some(id) =>
+          if id.has_prefix(prefix) {
+            out.push(id[prefix.length():].to_owned())
+          }
+        None => ()
+      }
+    }
+  }
+  out
+}
+
+///|
 fn run_translation_case(dir : String) -> Result[String, String] raise {
   let config = @json.parse(@fs.read_file_to_string("\{dir}/configuration.json"))
   let metadata = decode_pg_metadata(config) catch {
@@ -125,6 +150,7 @@ test "ndc-postgres translation goldens" {
   let dirs = @fs.read_dir("\{base}/goldenfiles")
   dirs.sort()
   let mut passed = 0
+  let passed_names : Array[String] = []
   let skipped : Array[String] = []
   let failures : Array[String] = []
   for case_name in dirs {
@@ -152,6 +178,7 @@ test "ndc-postgres translation goldens" {
         let expected = @fs.read_file_to_string(expected_path)
         if normalize_sql_text(actual_text) == normalize_sql_text(expected) {
           passed += 1
+          passed_names.push(case_name)
         } else {
           failures.push(case_name)
         }
@@ -167,6 +194,18 @@ test "ndc-postgres translation goldens" {
   if failures.length() > 0 {
     let joined = failures.join(", ")
     fail("mismatch: \{joined}")
+  }
+  // cases.toml との突き合わせ: in-scope タグのケースは必ずスナップショット照合を
+  // 通過していること (raise → skip やスナップショット欠如で黙ってグリーンにしない)
+  let not_green : Array[String] = []
+  for name in in_scope_translation_cases() {
+    if !passed_names.contains(name) {
+      not_green.push(name)
+    }
+  }
+  if not_green.length() > 0 {
+    let joined = not_green.join(", ")
+    fail("in-scope cases did not pass snapshot comparison: \{joined}")
   }
   assert_true(passed >= 10)
 }
