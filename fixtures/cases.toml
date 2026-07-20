@@ -2811,36 +2811,36 @@ tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/simple"]
-tag = "pending"
-milestone = "m6"
+tag = "out-of-scope"
+reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK (RETURNING の %check__constraint + bool_and) とトランザクション分離 (BEGIN ISOLATION LEVEL) は未対応 — Issue #18 で追跡"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/v2_insert"]
-tag = "pending"
-milestone = "m6"
+tag = "out-of-scope"
+reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK (RETURNING の %check__constraint + bool_and) とトランザクション分離 (BEGIN ISOLATION LEVEL) は未対応 — Issue #18 で追跡"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/v2_insert_empty_objects"]
-tag = "pending"
-milestone = "m6"
+tag = "out-of-scope"
+reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK (RETURNING の %check__constraint + bool_and) とトランザクション分離 (BEGIN ISOLATION LEVEL) は未対応 — Issue #18 で追跡"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/v2_insert_return_object_relationship"]
-tag = "pending"
-milestone = "m6"
+tag = "out-of-scope"
+reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK (RETURNING の %check__constraint + bool_and) とトランザクション分離 (BEGIN ISOLATION LEVEL) は未対応 — Issue #18 で追跡"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/v2_update_array_column_empty"]
-tag = "pending"
-milestone = "m6"
+tag = "out-of-scope"
+reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK (RETURNING の %check__constraint + bool_and) とトランザクション分離 (BEGIN ISOLATION LEVEL) は未対応 — Issue #18 で追跡"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/v2_update_array_column_null"]
-tag = "pending"
-milestone = "m6"
+tag = "out-of-scope"
+reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK (RETURNING の %check__constraint + bool_and) とトランザクション分離 (BEGIN ISOLATION LEVEL) は未対応 — Issue #18 で追跡"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/v2_update_array_column_with_values"]
-tag = "pending"
-milestone = "m6"
+tag = "out-of-scope"
+reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK (RETURNING の %check__constraint + bool_and) とトランザクション分離 (BEGIN ISOLATION LEVEL) は未対応 — Issue #18 で追跡"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/v2_update_by_id"]
-tag = "pending"
-milestone = "m6"
+tag = "out-of-scope"
+reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK (RETURNING の %check__constraint + bool_and) とトランザクション分離 (BEGIN ISOLATION LEVEL) は未対応 — Issue #18 で追跡"
 
 [cases."ndc-postgres-translation/goldenfiles/native_queries/select_artist"]
 tag = "out-of-scope"
@@ -3029,3 +3029,23 @@ milestone = "m3"
 [cases."ndc-postgres-translation/goldenfiles/very_nested_recursive_relationship"]
 tag = "in-scope"
 milestone = "m3"
+
+[cases."mosura/mutations/delete_by_pk"]
+tag = "in-scope"
+milestone = "m6"
+
+[cases."mosura/mutations/insert_empty_returning"]
+tag = "in-scope"
+milestone = "m6"
+
+[cases."mosura/mutations/insert_multi_row_with_default"]
+tag = "in-scope"
+milestone = "m6"
+
+[cases."mosura/mutations/insert_single_row"]
+tag = "in-scope"
+milestone = "m6"
+
+[cases."mosura/mutations/update_by_pk"]
+tag = "in-scope"
+milestone = "m6"

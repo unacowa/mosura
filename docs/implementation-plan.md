@@ -192,8 +192,8 @@ src/
 - `insert_<model>` / `update_<model>_by_pk` / `delete_<model>_by_pk` の自動生成（V2 風）
 - INSERT/UPDATE/DELETE + RETURNING の sqlgen、トランザクション（複数 root field の原子性）
 - ArgumentPresets / 入力プリセット（権限による列固定・チェック制約）
-- **TDD**: ndc-postgres translation フィクスチャの mutations 系を in-scope 化。V2 風 CRUD は V3 に対応フィクスチャがないため、この部分のみ自作の E2E ゴールデンを書き足す（自作分は fixtures/mosura/ 配下に分離し、移植分と区別する）
-- **DoD**: mutations 系フィクスチャ + 自作 CRUD ゴールデンの in-scope 100% グリーン
+- **TDD**: V2 風 CRUD は V3 に対応フィクスチャがないため、自作の SQL ゴールデンで固定する（fixtures/mosura/mutations/ 配下に分離し、移植分と区別する）。ndc-postgres translation の mutations 系ゴールデン (mutation/v2) は SQL 形状 (INSERT の check 制約列等) を採用しないため out-of-scope とする（issue #8 の判断: 現行 CRUD は E2E 検証済みで、~700 行の mutation/v2 移植は SQL 形状互換以外の価値が薄い）
+- **DoD**: 自作 CRUD ゴールデン (fixtures/mosura/mutations) の in-scope 100% グリーン
 - 注: `update_<model>_by_pk` / `delete_<model>_by_pk` は主キーが定義された Model のみ生成
 
 ### M7: Edge / Cloudflare Workers（中）
