@@ -152,6 +152,18 @@ pub fn load_v3_metadata(
       "OrderByExpression" => ()
       "GraphqlConfig" =>
         skipped["GraphqlConfig(naming not honored — defaults used)"] = true
+      "ScalarType" => {
+        // Mosura はスカラー型レジストリを持たないため定義自体は読み飛ばすが、
+        // 組込スカラー名 (ID/Int/String/Boolean/Float) との衝突は V3 と同様に
+        // ビルドエラーにする (2024-09-26 互換性チェック)
+        let sname = jv3_str(v3_def(obj), "name")
+        if ["ID", "Int", "String", "Boolean", "Float"].contains(sname) {
+          raise MetadataParse(
+            "v3 ScalarType '\{sname}' conflicts with a built-in scalar type name",
+          )
+        }
+        skipped["ScalarType"] = true
+      }
       other => skipped[other] = true
     }
   }
@@ -247,10 +259,19 @@ fn comparable_field_names(
   container : Json,
 ) -> Array[String] raise MetadataError {
   let fields : Array[String] = []
+  let seen : Map[String, Bool] = Map([])
   match jv3_get(container, "comparableFields") {
     Some(Json::Array(items)) =>
       for item in items {
-        fields.push(jv3_str(item, "fieldName"))
+        let fname = jv3_str(item, "fieldName")
+        // 同一フィールドを comparableFields に重複登録するのは V3 ではビルドエラー
+        if seen.contains(fname) {
+          raise MetadataParse(
+            "duplicate comparableField '\{fname}' in boolean expression type",
+          )
+        }
+        seen[fname] = true
+        fields.push(fname)
       }
     _ => ()
   }
