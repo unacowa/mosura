@@ -66,3 +66,8 @@ jobs:
         run: |
           python3 scripts/gen_cases.py
           git diff --exit-code fixtures/cases.toml
+
+      - name: compatibility.md freshness
+        run: |
+          python3 scripts/gen_compat.py
+          git diff --exit-code docs/compatibility.md

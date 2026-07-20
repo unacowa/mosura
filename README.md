@@ -58,6 +58,7 @@ curl -X POST localhost:8080/graphql -d '{"query":"{ articles { id } }"}'
 | ドキュメント | 内容 |
 |---|---|
 | [docs/architecture.md](docs/architecture.md) | レイヤ構成・NDC 境界・Workers 対応の設計 |
+| [docs/compatibility.md](docs/compatibility.md) | Hasura V3 互換性マトリクス (機能別の対応状況。生成物) |
 | [docs/implementation-plan.md](docs/implementation-plan.md) | M0–M7 のマイルストーン定義と TDD 戦略 |
 | [docs/development.md](docs/development.md) | 開発フロー (fixtures 台帳、ゴールデン更新、E2E、CI) |
 | [docs/moonbit-notes.md](docs/moonbit-notes.md) | MoonBit / 依存ライブラリのハマりどころ集 |
