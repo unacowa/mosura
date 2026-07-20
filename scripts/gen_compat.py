@@ -72,7 +72,7 @@ FEATURES = [
             "書いてもエラーにしない (V3 はエラー)。ネスト/composite/配列型カラム、"
             "model arguments、native query 前提のモデル",
             patterns=[r"^execute/models/", r"^ndc-postgres-translation/goldenfiles/select_"],
-            issues=['#28', '#29'],
+            issues=['#33', '#34', '#36'],
         ),
         dict(
             feature="by_pk 単一取得",
@@ -95,7 +95,7 @@ FEATURES = [
             supported="なし (GraphQL からは書けない)",
             unsupported="bool_exp にリレーションフィールドが生成されない。"
             "NDC/SQL 層の exists 変換は実装済みで、bool_exp 生成と IR 配線のみが残作業",
-            issues=['#27'],
+            issues=['#32'],
         ),
         dict(
             feature="order_by のリレーション跨ぎ",
@@ -239,7 +239,7 @@ FEATURES = [
             "Command 系 Relationship、rules-based permissions、Model v2 / OrderByExpression / "
             "GraphqlConfig 等の kind は skip。resolved スナップショット完全一致 (pending 211)",
             patterns=[r"^metadata-resolve/"],
-            issues=['#26'],
+            issues=['#26', '#35'],
         ),
     ]),
     ("データコネクタ (NDC) / 実行系", [
