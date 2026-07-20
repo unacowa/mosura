@@ -93,6 +93,8 @@ pub async fn execute_request(
       return error_response(
         match e {
           @ir.IrInternal(m) => "internal error: \{m}"
+          @ir.IrPermissionDenied(m) => m
+          @ir.IrBadRequest(m) => m
           @ir.UnsupportedField(f) => "unsupported field: \{f}"
           _ => "planning error"
         },
@@ -397,6 +399,8 @@ pub fn plan_request(
         error_response(
           match e {
             @ir.IrInternal(m) => "internal error: \{m}"
+            @ir.IrPermissionDenied(m) => m
+            @ir.IrBadRequest(m) => m
             @ir.UnsupportedField(f) => "unsupported field: \{f}"
             _ => "planning error"
           },
