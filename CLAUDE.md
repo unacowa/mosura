@@ -48,7 +48,7 @@ moon check --target wasm-gc $CORE --deny-warn
 |------|-------------|
 | 開発フロー全般 (fixtures 台帳、ゴールデン更新、E2E、CI) | [docs/development.md](docs/development.md) |
 | MoonBit / moon / 依存ライブラリのハマりどころ | [docs/moonbit-notes.md](docs/moonbit-notes.md) |
-| 現在の進捗・未着手の作業・引き継ぎ状態 | [docs/status.md](docs/status.md) + `gh issue list` / `gh pr list` |
+| 進捗・引き継ぎの見取り図 (一次情報は `gh pr/issue list`・`gen_cases.py`) | [docs/status.md](docs/status.md) |
 | レイヤ構成・NDC 境界・Workers 対応の設計 | [docs/architecture.md](docs/architecture.md) |
 | マイルストーン定義 (M0–M7) とスコープ判断の経緯 | [docs/implementation-plan.md](docs/implementation-plan.md) |
 
