@@ -107,6 +107,30 @@ pub fn load_v3_metadata(
     }
   }
 
+  // 1 パス目: AggregateExpression。定義を収集して接続非依存の検証を行い、
+  // Model.aggregateExpression の fail-closed 解決に使う operand 種別マップを返す。
+  // オブジェクト型のフィールド名集合 (aggregatableField 存在チェック用) は
+  // 生の ObjectType 定義から作る (オブジェクト表記フィールドで読み飛ばした
+  // ObjectType も対象にするため、変換後 docs ではなく生 JSON から取る)。
+  let object_type_fields : Map[String, Map[String, Bool]] = Map([])
+  for obj in objects {
+    if v3_kind(obj) == "ObjectType" {
+      let def = v3_def(obj)
+      let fset : Map[String, Bool] = Map([])
+      match jv3_get(def, "fields") {
+        Some(Json::Array(items)) =>
+          for item in items {
+            fset[jv3_str(item, "name")] = true
+          }
+        _ => ()
+      }
+      object_type_fields[jv3_str(def, "name")] = fset
+    }
+  }
+  let agg_exps : Map[String, AggOperandKind] = collect_and_validate_aggregate_expressions(
+    objects, object_type_fields,
+  )
+
   // 2 パス目: 変換
   let docs : Array[Json] = []
   let skipped : Map[String, Bool] = Map([])
@@ -121,7 +145,9 @@ pub fn load_v3_metadata(
           None => skipped["ObjectType(unsupported field type)"] = true
         }
       "Model" => {
-        let (doc, connector) = convert_model(obj, bool_exps, order_exps)
+        let (doc, connector) = convert_model(
+          obj, bool_exps, order_exps, agg_exps,
+        )
         docs.push(doc)
         referenced_connectors[connector] = true
       }
@@ -402,9 +428,41 @@ fn convert_model(
   obj : Json,
   bool_exps : Map[String, Array[String]],
   order_exps : Map[String, Array[String]],
+  agg_exps : Map[String, AggOperandKind],
 ) -> (Json, String) raise MetadataError {
   let def = v3_def(obj)
   let name = jv3_str(def, "name")
+  // aggregateExpression → AggregateExpression の解決。
+  // filterExpressionType と同様に fail-closed: 未解決参照は黙って落とさず拒否する。
+  // また operand の object 型が Model の objectType と一致しない場合も拒否する
+  // (V3 の model_aggregate_exp_type_mismatch 相当)。
+  match jv3_get(def, "aggregateExpression") {
+    Some(Json::String(agg_name)) =>
+      match agg_exps.get(agg_name) {
+        Some(AggObject(operand_type)) => {
+          let model_object_type = match jv3_get(def, "objectType") {
+            Some(Json::String(ot)) => ot
+            _ =>
+              raise MetadataParse("v3 Model '\{name}' has no objectType string")
+          }
+          if operand_type != model_object_type {
+            raise MetadataParse(
+              "v3 Model '\{name}': aggregateExpression '\{agg_name}' aggregates over '\{operand_type}' but the model's object type is '\{model_object_type}'",
+            )
+          }
+        }
+        Some(AggScalar(scalar_type)) =>
+          // scalar operand の aggregate expression は object 型の Model には使えない
+          raise MetadataParse(
+            "v3 Model '\{name}': aggregateExpression '\{agg_name}' aggregates over scalar type '\{scalar_type}', not the model's object type",
+          )
+        None =>
+          raise MetadataParse(
+            "v3 Model '\{name}': aggregateExpression '\{agg_name}' does not resolve to a known AggregateExpression (refusing to silently drop aggregates)",
+          )
+      }
+    _ => ()
+  }
   let source = match jv3_get(def, "source") {
     Some(s) => s
     None => raise MetadataParse("v3 Model '\{name}' has no source")
@@ -504,6 +562,186 @@ fn convert_model(
     None => ()
   }
   (mk_doc("Model", Json::object(out)), connector)
+}
+
+///|
+/// AggregateExpression の operand 種別 (Model の型整合チェック用)
+priv enum AggOperandKind {
+  AggObject(String) // object operand: aggregatedType (object 型名)
+  AggScalar(String) // scalar operand: aggregatedType (スカラー型名)
+}
+
+///|
+/// 型表記文字列から nullable (!) / list ([]) のラッパを取り除いて素の型名を得る
+fn strip_type_wrappers(t : String) -> String {
+  let mut s = t
+  while true {
+    if s.has_suffix("!") {
+      s = s[0:s.length() - 1].to_owned()
+    } else if s.has_prefix("[") && s.has_suffix("]") {
+      s = s[1:s.length() - 1].to_owned()
+    } else {
+      break
+    }
+  }
+  s
+}
+
+///|
+/// AggregateExpression 定義を収集し、接続非依存の検証を行う。
+/// 接続 (data connector) に依存する検証 (関数マッピング・スカラー表現・capability・
+/// count 戻り値の表現整合 等) は Mosura が connector をスタブ化しているため実装しない。
+/// 返り値: aggregate expression 名 → operand 種別 (Model.aggregateExpression 解決用)。
+///
+/// 実装する検証 (upstream metadata-resolve/stages/aggregates 由来):
+/// - DuplicateAggregateExpressionDefinition (同名重複)
+/// - AggregateOperandObjectTypeNotFound (object operand の型が未定義)
+/// - AggregateOperandObjectFieldDuplicated (aggregatableField 重複)
+/// - AggregateOperandObjectFieldNotFound (aggregatableField が operand 型に無い)
+/// - AggregateOperandObjectFieldAggregateExpressionNotFound (参照先 agg exp が無い)
+/// - AggregateOperandFunctionDuplicated (aggregationFunction 名の重複)
+/// - Aggregatable/AggregationFunctionNameConflict (count 既定名 _count/_count_distinct と衝突)
+/// - InvalidCountReturnType (count/countDistinct の戻り値が Int 以外の組込型)
+fn collect_and_validate_aggregate_expressions(
+  objects : Array[Json],
+  object_type_fields : Map[String, Map[String, Bool]],
+) -> Map[String, AggOperandKind] raise MetadataError {
+  // フェーズ A: 全 aggregate expression 名と operand 種別を収集 (同名重複を検出)
+  let agg_exps : Map[String, AggOperandKind] = Map([])
+  for obj in objects {
+    if v3_kind(obj) == "AggregateExpression" {
+      let def = v3_def(obj)
+      let name = jv3_str(def, "name")
+      if agg_exps.contains(name) {
+        raise MetadataParse(
+          "v3 AggregateExpression '\{name}' is defined more than once",
+        )
+      }
+      let operand = match jv3_get(def, "operand") {
+        Some(o) => o
+        None =>
+          raise MetadataParse("v3 AggregateExpression '\{name}' has no operand")
+      }
+      let kind = match jv3_get(operand, "object") {
+        Some(oo) => AggObject(jv3_str(oo, "aggregatedType"))
+        None =>
+          match jv3_get(operand, "scalar") {
+            Some(so) => AggScalar(jv3_str(so, "aggregatedType"))
+            None =>
+              raise MetadataParse(
+                "v3 AggregateExpression '\{name}' operand is neither object nor scalar",
+              )
+          }
+      }
+      agg_exps[name] = kind
+    }
+  }
+
+  // フェーズ B: 各 aggregate expression の内部検証 (参照存在チェックには
+  // フェーズ A で集めた全名集合が必要なため 2 段階)
+  for obj in objects {
+    if v3_kind(obj) == "AggregateExpression" {
+      let def = v3_def(obj)
+      let name = jv3_str(def, "name")
+      let operand = jv3_get(def, "operand").unwrap()
+      // GraphqlConfig 既定名。default GraphqlConfig を使う Mosura では
+      // count/countDistinct のフィールド名は _count / _count_distinct 固定。
+      let has_graphql = jv3_get(def, "graphql") is Some(_)
+      match jv3_get(operand, "object") {
+        Some(oo) => {
+          let operand_type = jv3_str(oo, "aggregatedType")
+          // object operand 型は既知の ObjectType でなければならない
+          let fields = match object_type_fields.get(operand_type) {
+            Some(f) => f
+            None =>
+              raise MetadataParse(
+                "v3 AggregateExpression '\{name}': operand object type '\{operand_type}' cannot be found",
+              )
+          }
+          let seen_fields : Map[String, Bool] = Map([])
+          match jv3_get(oo, "aggregatableFields") {
+            Some(Json::Array(items)) =>
+              for item in items {
+                let fname = jv3_str(item, "fieldName")
+                if seen_fields.contains(fname) {
+                  raise MetadataParse(
+                    "v3 AggregateExpression '\{name}' has duplicate aggregatable field '\{fname}'",
+                  )
+                }
+                seen_fields[fname] = true
+                if !fields.contains(fname) {
+                  raise MetadataParse(
+                    "v3 AggregateExpression '\{name}': aggregatable field '\{fname}' does not exist on operand type '\{operand_type}'",
+                  )
+                }
+                let field_agg = jv3_str(item, "aggregateExpression")
+                if !agg_exps.contains(field_agg) {
+                  raise MetadataParse(
+                    "v3 AggregateExpression '\{name}': aggregatable field '\{fname}' references unknown AggregateExpression '\{field_agg}'",
+                  )
+                }
+                // count 既定名との衝突 (aggregatable field 側)
+                if has_graphql &&
+                  (fname == "_count" || fname == "_count_distinct") {
+                  raise MetadataParse(
+                    "v3 AggregateExpression '\{name}': aggregatable field name '\{fname}' conflicts with the GraphqlConfig count field name",
+                  )
+                }
+              }
+            _ => ()
+          }
+        }
+        None =>
+          // scalar operand: aggregationFunctions の重複 / count 名衝突を検証
+          match jv3_get(operand, "scalar") {
+            Some(so) => {
+              let seen_fns : Map[String, Bool] = Map([])
+              match jv3_get(so, "aggregationFunctions") {
+                Some(Json::Array(items)) =>
+                  for item in items {
+                    let fnname = jv3_str(item, "name")
+                    if seen_fns.contains(fnname) {
+                      raise MetadataParse(
+                        "v3 AggregateExpression '\{name}' has duplicate aggregation function '\{fnname}'",
+                      )
+                    }
+                    seen_fns[fnname] = true
+                    if has_graphql &&
+                      (fnname == "_count" || fnname == "_count_distinct") {
+                      raise MetadataParse(
+                        "v3 AggregateExpression '\{name}': aggregation function name '\{fnname}' conflicts with the GraphqlConfig count field name",
+                      )
+                    }
+                  }
+                _ => ()
+              }
+            }
+            None => ()
+          }
+      }
+      // count / countDistinct の戻り値: Int 以外の組込型は不可。
+      // (未知のカスタム型チェック UnknownCountReturnType は Mosura がスカラー型
+      //  レジストリを持たないため実装しない)
+      for count_key in ["count", "countDistinct"] {
+        match jv3_get(def, count_key) {
+          Some(cdef) =>
+            match jv3_get(cdef, "returnType") {
+              Some(Json::String(rt)) => {
+                let base = strip_type_wrappers(rt)
+                if ["Float", "String", "Boolean", "ID"].contains(base) {
+                  raise MetadataParse(
+                    "v3 AggregateExpression '\{name}': \{count_key} return type '\{rt}' must be an integer type",
+                  )
+                }
+              }
+              _ => ()
+            }
+          None => ()
+        }
+      }
+    }
+  }
+  agg_exps
 }
 
 ///|

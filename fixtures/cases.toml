@@ -720,7 +720,7 @@ milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/aggregatable_field_not_found"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
@@ -750,27 +750,27 @@ milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/conflict_between_count_and_aggregatable_field"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/conflict_between_count_and_aggregation_function"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/conflict_between_count_distinct_and_aggregatable_field"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/conflict_between_count_distinct_and_aggregation_function"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/count_distinct_return_type_cannot_use_non_int_inbuilt"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
@@ -800,7 +800,7 @@ milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/count_return_type_cannot_use_non_int_inbuilt"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
@@ -865,7 +865,7 @@ milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/disallow_duplicate_name"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
@@ -880,17 +880,17 @@ milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/duplicated_aggregatable_fields"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/duplicated_aggregation_functions"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/missing_aggregate_exp_from_model"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
@@ -940,12 +940,12 @@ milestone = "m2"
 reason = "Mosura の検証で拒否できることを回帰固定"
 
 [cases."metadata-resolve/failing/aggregate_expressions/missing_operand_object_field_agg_exp"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/missing_operand_object_type"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
@@ -955,7 +955,7 @@ milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
 [cases."metadata-resolve/failing/aggregate_expressions/model_aggregate_exp_type_mismatch"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m2"
 reason = "V3 固有の検証範囲 (未実装バリデーション) のため拒否判定は将来対応"
 
