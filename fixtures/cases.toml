@@ -2171,7 +2171,7 @@ tag = "pending"
 milestone = "m4"
 
 [cases."execute/models/select_many/order_by/reuse_order_by_expression"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/models/select_many/order_by/with_graphql_config"]
