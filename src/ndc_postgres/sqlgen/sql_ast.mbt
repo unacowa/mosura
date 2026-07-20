@@ -135,6 +135,15 @@ pub(all) enum Expression {
   Value(SqlValue)
   Cast(expression~ : Expression, ty~ : CastType)
   CorrelatedSubSelect(Select)
+  Count(CountType)
+}
+
+///|
+/// COUNT 集約 (upstream sql::ast::Expression::Count / CountType)
+pub(all) enum CountType {
+  CountStar
+  CountSimple(ColumnReference)
+  CountDistinct(ColumnReference)
 }
 
 ///|

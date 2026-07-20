@@ -744,6 +744,138 @@ fn translate_query(
 }
 
 ///|
+/// 集約サブクエリ (aggregates)。rows と同じベーススキャン (predicate/order/limit/offset)
+/// をもう一度採番し (別エイリアス)、集約関数式を SELECT する。
+/// upstream translate_aggregates 相当。
+fn translate_aggregates(
+  env : Env,
+  state : State,
+  collection : String,
+  query : NdcQuery,
+  aggregates : Map[String, NdcAggregate],
+) -> Select raise TranslateError {
+  let (current_table0, from_clause0) = make_reference_and_from_clause(
+    env,
+    state,
+    MakeFromCollection(collection),
+    None,
+  )
+  let subquery_scope = TableScope::new(current_table0)
+  let subquery_select = star_from_select(current_table0.reference, from_clause0)
+  subquery_select.where_ = match query.predicate {
+    None => true_expr()
+    Some(predicate) =>
+      filtering_translate(env, state, subquery_scope, predicate)
+  }
+  match query.order_by {
+    Some(elements) => {
+      for e in elements {
+        if !e.target_path.is_empty() {
+          raise NotImplemented("aggregate order by across relationship")
+        }
+      }
+      let (order_by, _joins) = sorting_translate(
+        env, state, subquery_scope, elements,
+      )
+      subquery_select.order_by = order_by
+    }
+    None => ()
+  }
+  subquery_select.limit = query.limit
+  subquery_select.offset = query.offset
+  let alias_ = state.make_table_alias(current_table0.collection)
+  let agg_table : TableReference = AliasedTable(alias_)
+  let columns : Array[(ColumnAlias, Expression)] = []
+  for name, agg in aggregates {
+    let expr : Expression = match agg {
+      StarCount => Count(CountStar)
+      ColumnCount(column~, distinct~) => {
+        let column_info = env.lookup_column(collection, column)
+        let cref : ColumnReference = TableColumn(
+          table=agg_table,
+          name=ColumnName(column_info.name),
+        )
+        if distinct {
+          Count(CountDistinct(cref))
+        } else {
+          Count(CountSimple(cref))
+        }
+      }
+      SingleColumn(column~, function~) => {
+        let column_info = env.lookup_column(collection, column)
+        let cref = Expression::ColumnReference(
+          TableColumn(table=agg_table, name=ColumnName(column_info.name)),
+        )
+        // sum は空集合で NULL を返すため coalesce(..., 0) で包む (upstream 準拠)。
+        // min/max/stddev 等はそのまま。
+        if function == "sum" {
+          FunctionCall(function="coalesce", args=[
+            FunctionCall(function="sum", args=[cref]),
+            Value(VInt4(0)),
+          ])
+        } else {
+          FunctionCall(function~, args=[cref])
+        }
+      }
+    }
+    columns.push((ColumnAlias(name), expr))
+  }
+  let agg_select = simple_select(columns)
+  agg_select.from = Some(FromSelect(select=subquery_select, alias_~))
+  agg_select
+}
+
+///|
+/// rows (任意) と aggregates を CROSS JOIN して universe にまとめる
+/// (sql/helpers.rs の aggregate 対応版、variables なし)。
+fn select_rowset_with_aggregates(
+  output_pair : (TableAlias, ColumnAlias),
+  row_pair : (TableAlias, ColumnAlias),
+  aggregates_alias : TableAlias,
+  fields : Map[String, NdcField]?,
+  row_select : Select,
+  agg_select : Select,
+) -> Select {
+  let (output_table_alias, output_column_alias) = output_pair
+  let (row_table_alias, row_column_alias) = row_pair
+  // aggregates json: coalesce(row_to_json("%N_aggregates"), '[]') AS "aggregates"
+  let aggregates_json = simple_select([
+    (
+      ColumnAlias("aggregates"),
+      Expression::FunctionCall(function="coalesce", args=[
+        RowToJson(AliasedTable(aggregates_alias)),
+        Value(EmptyJsonArray),
+      ]),
+    ),
+  ])
+  aggregates_json.from = Some(
+    FromSelect(select=agg_select, alias_=aggregates_alias),
+  )
+  let has_fields = match fields {
+    Some(f) => !f.is_empty()
+    None => false
+  }
+  let select_star = if has_fields {
+    let rows_json = select_rows_as_json(
+      row_select, row_column_alias, row_table_alias,
+    )
+    let s = star_select(FromSelect(select=rows_json, alias_=row_table_alias))
+    s.joins = [CrossJoin(select=aggregates_json, alias_=aggregates_alias)]
+    s
+  } else {
+    star_select(FromSelect(select=aggregates_json, alias_=aggregates_alias))
+  }
+  let output = wrap_in_json_agg(
+    Expression::RowToJson(AliasedTable(output_table_alias)),
+  )
+  let final_select = simple_select([(output_column_alias, output)])
+  final_select.from = Some(
+    FromSelect(select=select_star, alias_=output_table_alias),
+  )
+  final_select
+}
+
+///|
 /// sql/helpers.rs::select_rowset_without_variables (rows のみ)
 fn select_rowset_without_variables(
   aggregate_results : Bool,
@@ -1662,16 +1794,57 @@ pub fn translate_query_request(
     None,
     request.query,
   )
+  // aggregates がある場合、rows のベーススキャン (%0/%1) の直後・
+  // universe より前に aggregates のベーススキャン (%2/%3) を採番する。
+  // (variables との併用は未対応)
+  let agg_select : Select? = match request.query.aggregates {
+    Some(aggs) =>
+      if aggs.is_empty() {
+        None
+      } else {
+        // variables (foreach) と aggregates の併用は未対応。黙って集約を
+        // 落とすと結果が欠けるため fail-closed で拒否する。
+        match variables_pair {
+          Some(_) =>
+            raise NotImplemented("aggregates combined with variables (foreach)")
+          None =>
+            Some(
+              translate_aggregates(
+                env,
+                state,
+                request.collection,
+                request.query,
+                aggs,
+              ),
+            )
+        }
+      }
+    None => None
+  }
   // upstream (query/mod.rs) と同じ順で採番する:
   // universe → rows → aggregates → universe_agg
   let output = (state.make_table_alias("universe"), ColumnAlias("universe"))
   let row = (state.make_table_alias("rows"), ColumnAlias("rows"))
-  let _aggregates = state.make_table_alias("aggregates")
+  let aggregates_alias = state.make_table_alias("aggregates")
   let universe_agg = state.make_table_alias("universe_agg")
-  let json_select = match variables_pair {
-    None => select_rowset_without_variables(true, output, row, row_select)
-    Some(vp) =>
-      select_rowset_with_variables(output, row, vp, universe_agg, row_select)
+  let json_select = match agg_select {
+    Some(agg) =>
+      select_rowset_with_aggregates(
+        output,
+        row,
+        aggregates_alias,
+        request.query.fields,
+        row_select,
+        agg,
+      )
+    None =>
+      match variables_pair {
+        None => select_rowset_without_variables(true, output, row, row_select)
+        Some(vp) =>
+          select_rowset_with_variables(
+            output, row, vp, universe_agg, row_select,
+          )
+      }
   }
   let json_select = normalize_select(json_select)
   let sql = SQL::new()

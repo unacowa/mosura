@@ -18,10 +18,18 @@ pub(all) struct QueryRequest {
 ///|
 pub(all) struct NdcQuery {
   fields : Map[String, NdcField]?
+  aggregates : Map[String, NdcAggregate]?
   limit : Int?
   offset : Int?
   predicate : NdcExpression?
   order_by : Array[NdcOrderByElement]?
+}
+
+///|
+pub(all) enum NdcAggregate {
+  StarCount
+  ColumnCount(column~ : String, distinct~ : Bool)
+  SingleColumn(column~ : String, function~ : String)
 }
 
 ///|
@@ -164,9 +172,15 @@ pub fn decode_query_request(j : Json) -> QueryRequest raise NdcDecodeError {
 
 ///|
 fn decode_query(j : Json) -> NdcQuery raise NdcDecodeError {
-  match jget(j, "aggregates") {
-    Some(Json::Null) | None => ()
-    Some(_) => raise NdcDecode("aggregates not supported")
+  let aggregates : Map[String, NdcAggregate]? = match jget(j, "aggregates") {
+    Some(Json::Object(m)) => {
+      let out : Map[String, NdcAggregate] = Map([])
+      for name, a in m {
+        out[name] = decode_aggregate(a)
+      }
+      Some(out)
+    }
+    _ => None
   }
   let fields : Map[String, NdcField]? = match jget(j, "fields") {
     Some(Json::Object(m)) => {
@@ -226,10 +240,28 @@ fn decode_query(j : Json) -> NdcQuery raise NdcDecodeError {
   }
   {
     fields,
+    aggregates,
     limit: jint(j, "limit"),
     offset: jint(j, "offset"),
     predicate,
     order_by,
+  }
+}
+
+///|
+fn decode_aggregate(j : Json) -> NdcAggregate raise NdcDecodeError {
+  match jget(j, "type") {
+    Some(Json::String("star_count")) => StarCount
+    Some(Json::String("column_count")) => {
+      let distinct = match jget(j, "distinct") {
+        Some(Json::True) => true
+        _ => false
+      }
+      ColumnCount(column=jstr(j, "column"), distinct~)
+    }
+    Some(Json::String("single_column")) =>
+      SingleColumn(column=jstr(j, "column"), function=jstr(j, "function"))
+    _ => raise NdcDecode("unknown aggregate type")
   }
 }
 

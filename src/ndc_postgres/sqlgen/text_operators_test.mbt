@@ -36,6 +36,7 @@ fn translate_text_op(op : String) -> String raise {
     collection: "articles",
     query: {
       fields: Some({ "title": FColumn(column="title") }),
+      aggregates: None,
       limit: None,
       offset: None,
       predicate: Some(
