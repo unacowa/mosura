@@ -68,6 +68,8 @@ let v3_failing_rejected : Array[String] = [
   "fixtures/metadata-resolve/failing/model_permissions/missing_model_source", "fixtures/metadata-resolve/failing/models/duplicate_argument",
   "fixtures/metadata-resolve/failing/models/missing_object_type", "fixtures/metadata-resolve/failing/models/two_missing_object_types",
   "fixtures/metadata-resolve/failing/order_by_expressions/array_relationship", "fixtures/metadata-resolve/failing/order_by_expressions/disallow_relationship_to_sourceless_model",
+  "fixtures/metadata-resolve/failing/order_by_expressions/model_type_mismatch", "fixtures/metadata-resolve/failing/order_by_expressions/unknown_field",
+  "fixtures/metadata-resolve/failing/order_by_expressions/unknown_order_by_expression_in_model",
   "fixtures/metadata-resolve/failing/remote_relationships_permissions/across_subgraphs",
   "fixtures/metadata-resolve/failing/simple",
 ]
