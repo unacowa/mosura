@@ -110,6 +110,23 @@ async fn main {
       return
     }
   }
+  // jwtHs256SecretFromEnv は起動時に環境変数から解決する
+  let meta = match meta.auth {
+    Some(
+      { jwt_hs256_secret: None, jwt_hs256_secret_from_env: Some(env_name), .. } as auth
+    ) =>
+      match @env.get_env_var(env_name) {
+        Some(secret) =>
+          { ..meta, auth: Some({ ..auth, jwt_hs256_secret: Some(secret) }) }
+        None => {
+          println(
+            "mosura: environment variable \{env_name} (jwtHs256SecretFromEnv) is not set",
+          )
+          return
+        }
+      }
+    _ => meta
+  }
   let ctx = @engine.EngineContext::new(meta) catch {
     _ => {
       println("mosura: failed to build schema")
