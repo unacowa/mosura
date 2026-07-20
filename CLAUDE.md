@@ -13,8 +13,13 @@ python3 scripts/gen_cases.py           # fixtures/cases.toml 再生成 (CI で f
 docker compose up -d                   # E2E 用 PostgreSQL 16 (localhost:5433, mosura/mosura/mosura)
 ```
 
-E2E の接続先は環境変数 `MOSURA_TEST_PG_{HOST,PORT,USER,PASSWORD,DB}` で上書きできる
-(既定: localhost:5433, mosura/mosura/mosura)。
+E2E のコード既定は **localhost:5435 の test/test/test** (開発用コンテナ前提)。
+docker compose の PG (5433, mosura) を使う場合は環境変数の指定が**必須**:
+
+```sh
+export MOSURA_TEST_PG_PORT=5433 MOSURA_TEST_PG_USER=mosura \
+       MOSURA_TEST_PG_PASSWORD=mosura MOSURA_TEST_PG_DB=mosura
+```
 
 コア純度チェック (server/e2e/cmd 以外は js / wasm-gc でもビルド可能であること):
 

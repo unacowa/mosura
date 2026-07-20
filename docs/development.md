@@ -10,11 +10,16 @@
 curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
 
 moon update && moon install    # レジストリ更新 + 依存取得 (.mooncakes/)
-docker compose up -d           # E2E 用 PostgreSQL 16 (localhost:5433)
+docker compose up -d           # E2E 用 PostgreSQL 16 (localhost:5433, mosura/mosura/mosura)
+
+# 注意: E2E のコード既定は localhost:5435 の test/test/test (開発用コンテナ前提)。
+# docker compose の PG を使うなら環境変数の指定が必須:
+export MOSURA_TEST_PG_PORT=5433 MOSURA_TEST_PG_USER=mosura \
+       MOSURA_TEST_PG_PASSWORD=mosura MOSURA_TEST_PG_DB=mosura
 moon test --target native      # 全テスト
 ```
 
-E2E の接続先を変える場合は `MOSURA_TEST_PG_{HOST,PORT,USER,PASSWORD,DB}` を設定する。
+接続先の環境変数は `MOSURA_TEST_PG_{HOST,PORT,USER,PASSWORD,DB}`。
 
 ## CI が要求すること (ローカルで再現する手順)
 
