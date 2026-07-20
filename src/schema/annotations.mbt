@@ -43,6 +43,8 @@ pub(all) enum InputArgKind {
   BoolExpLogical(String)
   /// 比較演算子 (_eq, _gt, ...)
   BoolExpOperator(String)
+  /// bool_exp 入力のリレーションフィールド (Relationship 名。exists に変換される)
+  BoolExpRelationship(String)
   /// order_by 入力のカラム
   OrderByField(String)
   /// order_by 入力のリレーションフィールド (Relationship 名。オブジェクトリレーションのみ)

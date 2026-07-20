@@ -278,3 +278,71 @@ async test "M4 E2E: リレーションを跨ぐ order_by (author.name 降順)" {
     ),
   )
 }
+
+///|
+async test "M4 E2E: where で object リレーションを跨ぐ (author.name = Bob)" {
+  // article を著者名で絞る → author_id=2 (Bob) の記事のみ
+  let response = run_graphql(
+    "t8",
+    (
+      #|{
+      #|  articles(where: {author: {name: {_eq: "Bob"}}}) {
+      #|    id
+      #|    author { name }
+      #|  }
+      #|}
+    ),
+    None,
+  )
+  inspect(
+    response,
+    content=(
+      #|{"data":{"articles":[{"id":2,"author":{"name":"Bob"}}]}}
+    ),
+  )
+}
+
+///|
+async test "M4 E2E: where で array リレーションを跨ぐ (記事タイトルで著者を絞る)" {
+  // "Intro" を含む記事を持つ著者 → Alice (id=1) のみ
+  let response = run_graphql(
+    "t9",
+    (
+      #|{
+      #|  authors(where: {articles: {title: {_like: "Intro%"}}}) {
+      #|    id
+      #|    name
+      #|  }
+      #|}
+    ),
+    None,
+  )
+  inspect(
+    response,
+    content=(
+      #|{"data":{"authors":[{"id":1,"name":"Alice"}]}}
+    ),
+  )
+}
+
+///|
+async test "M4 E2E: where のリレーション条件と通常条件を _and で併用" {
+  let response = run_graphql(
+    "t10",
+    (
+      #|{
+      #|  articles(where: {author: {name: {_eq: "Alice"}}, id: {_gt: 1}}) {
+      #|    id
+      #|  }
+      #|}
+    ),
+    None,
+  )
+  // Alice の記事 (id 1, 3) のうち id > 1 → id=3
+  inspect(
+    response,
+    content=(
+      #|{"data":{"articles":[{"id":3}]}}
+    ),
+  )
+}

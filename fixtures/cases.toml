@@ -2323,11 +2323,11 @@ tag = "pending"
 milestone = "m4"
 
 [cases."execute/models/select_many/where/filter"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/models/select_many/where/is_null/boolean_expression_type"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/models/select_many/where/is_null/object_boolean_expression_type"]
@@ -2455,7 +2455,7 @@ tag = "out-of-scope"
 reason = "remote relationships (複数コネクタ) は対象外"
 
 [cases."execute/models/select_many/where/remote_relationships/boolean_expression_type/object/simple_across_subgraphs"]
-tag = "out-of-scope"
+tag = "in-scope"
 reason = "remote relationships (複数コネクタ) は対象外"
 
 [cases."execute/models/select_many/where/shared_boolean_expression"]
@@ -2767,7 +2767,7 @@ tag = "pending"
 milestone = "m4"
 
 [cases."execute/variables/non_null_type_default_value"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/variables/non_null_type_default_value_null"]

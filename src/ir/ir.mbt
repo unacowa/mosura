@@ -462,7 +462,14 @@ fn build_model_query(
   } else {
     for arg_name, arg in fc.arguments {
       match arg_name.as_str() {
-        "where" => predicate = build_bool_exp(arg.value)
+        "where" =>
+          predicate = build_bool_exp(
+            meta,
+            session,
+            model_name,
+            relationships,
+            arg.value,
+          )
         "order_by" =>
           order_by = Some(
             build_order_by(meta, session, model_name, relationships, arg.value),
@@ -698,6 +705,56 @@ pub fn permission_filter_to_ndc(
 }
 
 ///|
+/// モデルの object type 上のリレーション定義を引く
+fn lookup_relationship_def(
+  meta : @metadata.Metadata,
+  model_name : String,
+  rel_name : String,
+) -> @metadata.Relationship raise {
+  let model = match meta.models.get(model_name) {
+    Some(m) => m
+    None => raise IrInternal("model not found: \{model_name}")
+  }
+  let rels = match meta.relationships.get(model.object_type) {
+    Some(r) => r
+    None => raise IrInternal("no relationships for \{model.object_type}")
+  }
+  for r in rels {
+    if r.name == rel_name {
+      return r
+    }
+  }
+  raise IrInternal("relationship not found: \{rel_name}")
+}
+
+///|
+/// NDC リクエストの collection_relationships にリレーションを登録し、
+/// その NDC 名 ("<object_type>__<rel名>") を返す
+fn register_ndc_relationship(
+  meta : @metadata.Metadata,
+  model_name : String,
+  rel_name : String,
+  rel : @metadata.Relationship,
+  relationships : Map[String, @sqlgen.NdcRelationship],
+) -> String raise {
+  let model = match meta.models.get(model_name) {
+    Some(m) => m
+    None => raise IrInternal("model not found: \{model_name}")
+  }
+  let ndc_rel_name = "\{model.object_type}__\{rel_name}"
+  relationships[ndc_rel_name] = @sqlgen.NdcRelationship::{
+    column_mapping: rel.mapping,
+    relationship_type: match rel.kind {
+      RelObject => "object"
+      RelArray => "array"
+    },
+    target_collection: rel.target_model,
+    arguments: Map([]),
+  }
+  ndc_rel_name
+}
+
+///|
 /// セレクションセット → NDC fields (リレーションは再帰)
 fn build_selection_fields(
   meta : @metadata.Metadata,
@@ -706,10 +763,7 @@ fn build_selection_fields(
   selection_set : @schema.NSelectionSet,
   relationships : Map[String, @sqlgen.NdcRelationship],
 ) -> Map[String, @sqlgen.NdcField] raise {
-  let model = match meta.models.get(model_name) {
-    Some(m) => m
-    None => raise IrInternal("model not found: \{model_name}")
-  }
+  // リレーション定義は lookup_relationship_def が model_name から解決する
   let fields : Map[String, @sqlgen.NdcField] = Map([])
   for _, f in selection_set.fields {
     let fc = f.field_call()
@@ -719,30 +773,10 @@ fn build_selection_fields(
       Introspection => continue
       ModelField(field_name) => fields[alias_] = FColumn(column=field_name)
       RelationshipField(rel_name) => {
-        let rels = match meta.relationships.get(model.object_type) {
-          Some(r) => r
-          None => raise IrInternal("no relationships for \{model.object_type}")
-        }
-        let mut found : @metadata.Relationship? = None
-        for r in rels {
-          if r.name == rel_name {
-            found = Some(r)
-          }
-        }
-        let rel = match found {
-          Some(r) => r
-          None => raise IrInternal("relationship not found: \{rel_name}")
-        }
-        let ndc_rel_name = "\{model.object_type}__\{rel_name}"
-        relationships[ndc_rel_name] = @sqlgen.NdcRelationship::{
-          column_mapping: rel.mapping,
-          relationship_type: match rel.kind {
-            RelObject => "object"
-            RelArray => "array"
-          },
-          target_collection: rel.target_model,
-          arguments: Map([]),
-        }
+        let rel = lookup_relationship_def(meta, model_name, rel_name)
+        let ndc_rel_name = register_ndc_relationship(
+          meta, model_name, rel_name, rel, relationships,
+        )
         let sub_fields = build_selection_fields(
           meta,
           session,
@@ -756,7 +790,14 @@ fn build_selection_fields(
         let mut offset : Int? = None
         for arg_name, arg in fc.arguments {
           match arg_name.as_str() {
-            "where" => predicate = build_bool_exp(arg.value)
+            "where" =>
+              predicate = build_bool_exp(
+                meta,
+                session,
+                rel.target_model,
+                relationships,
+                arg.value,
+              )
             "order_by" =>
               order_by = Some(
                 build_order_by(
@@ -796,7 +837,13 @@ fn build_selection_fields(
 
 ///|
 /// bool_exp の正規化済み値 → NdcExpression
-pub fn build_bool_exp(value : @schema.NValue) -> @sqlgen.NdcExpression? raise {
+pub fn build_bool_exp(
+  meta : @metadata.Metadata,
+  session : @session.Session,
+  model_name : String,
+  relationships : Map[String, @sqlgen.NdcRelationship],
+  value : @schema.NValue,
+) -> @sqlgen.NdcExpression? raise {
   match value {
     SimpleValue(NNull) => None
     Object(fields) => {
@@ -811,7 +858,10 @@ pub fn build_bool_exp(value : @schema.NValue) -> @sqlgen.NdcExpression? raise {
                 }
                 let items : Array[@sqlgen.NdcExpression] = []
                 for item in f.value.as_list() {
-                  match build_bool_exp(item) {
+                  match
+                    build_bool_exp(
+                      meta, session, model_name, relationships, item,
+                    ) {
                     Some(e) => items.push(e)
                     None => ()
                   }
@@ -823,7 +873,14 @@ pub fn build_bool_exp(value : @schema.NValue) -> @sqlgen.NdcExpression? raise {
                 }
               }
               "_not" =>
-                match build_bool_exp(f.value) {
+                match
+                  build_bool_exp(
+                    meta,
+                    session,
+                    model_name,
+                    relationships,
+                    f.value,
+                  ) {
                   Some(e) => conditions.push(ENot(e))
                   None => ()
                 }
@@ -855,6 +912,38 @@ pub fn build_bool_exp(value : @schema.NValue) -> @sqlgen.NdcExpression? raise {
                 _ => raise IrInternal("unexpected bool_exp operator field")
               }
             }
+          }
+          InputArg(BoolExpRelationship(rel_name)) => {
+            if f.value.is_null() {
+              continue
+            }
+            // リレーションを跨ぐ条件は exists に変換する
+            // (object: 関連行が条件を満たす / array: 条件を満たす関連行が存在する)。
+            // 対象モデルのロール行フィルタも exists 内に AND する
+            let rel = lookup_relationship_def(meta, model_name, rel_name)
+            let ndc_rel_name = register_ndc_relationship(
+              meta, model_name, rel_name, rel, relationships,
+            )
+            let inner = build_bool_exp(
+              meta,
+              session,
+              rel.target_model,
+              relationships,
+              f.value,
+            )
+            let inner = apply_permission_filter(
+              meta,
+              session,
+              rel.target_model,
+              inner,
+            )
+            conditions.push(
+              EExistsRelated(
+                relationship=ndc_rel_name,
+                arguments=Map([]),
+                predicate=inner,
+              ),
+            )
           }
           _ => raise IrInternal("unexpected bool_exp field")
         }

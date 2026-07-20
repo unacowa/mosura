@@ -91,11 +91,13 @@ FEATURES = [
         ),
         dict(
             feature="where のリレーション跨ぎ filter",
-            level="todo",
-            supported="なし (GraphQL からは書けない)",
-            unsupported="bool_exp にリレーションフィールドが生成されない。"
-            "NDC/SQL 層の exists 変換は実装済みで、bool_exp 生成と IR 配線のみが残作業",
-            issues=['#32'],
+            level="partial",
+            supported="object / array リレーション経由の条件 (`where: {author: {name: {_eq}}}` 等)。"
+            "exists へ変換し、対象モデルのロール行フィルタも exists 内に AND。"
+            "通常のスカラー条件・_and/_or/_not との併用可",
+            unsupported="リレーション先でさらにリレーションを跨ぐ多段ネスト条件、"
+            "aggregate predicate (関連行数での絞り込み)、複数コネクタ跨ぎ (remote)",
+            patterns=[r"^execute/models/select_many/where/"],
         ),
         dict(
             feature="order_by のリレーション跨ぎ",
