@@ -491,7 +491,7 @@ fn build_model_query(
     }
   }
   let predicate = apply_permission_filter(meta, session, model_name, predicate)
-  { fields: Some(fields), limit, offset, predicate, order_by }
+  { fields: Some(fields), aggregates: None, limit, offset, predicate, order_by }
 }
 
 ///|
@@ -834,7 +834,14 @@ fn build_selection_fields(
           predicate,
         )
         fields[alias_] = FRelationship(
-          query={ fields: Some(sub_fields), limit, offset, predicate, order_by },
+          query={
+            fields: Some(sub_fields),
+            aggregates: None,
+            limit,
+            offset,
+            predicate,
+            order_by,
+          },
           relationship=ndc_rel_name,
           arguments=Map([]),
         )

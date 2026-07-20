@@ -2791,19 +2791,19 @@ tag = "pending"
 milestone = "m4"
 
 [cases."ndc-postgres-translation/goldenfiles/aggregate_count_albums"]
-tag = "pending"
+tag = "in-scope"
 reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."ndc-postgres-translation/goldenfiles/aggregate_distinct_albums"]
-tag = "pending"
+tag = "in-scope"
 reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."ndc-postgres-translation/goldenfiles/aggregate_function_albums"]
-tag = "pending"
+tag = "in-scope"
 reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."ndc-postgres-translation/goldenfiles/aggregate_limit_offset_order_by"]
-tag = "pending"
+tag = "in-scope"
 reason = "aggregates: スコープ入り (#72)。実装まで pending"
 
 [cases."ndc-postgres-translation/goldenfiles/dup_array_relationship"]

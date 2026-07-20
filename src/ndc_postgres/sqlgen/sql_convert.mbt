@@ -324,6 +324,20 @@ pub fn Expression::to_sql(self : Expression, sql : SQL) -> Unit {
       select.to_sql(sql)
       sql.append_syntax(")")
     }
+    Count(count_type) =>
+      match count_type {
+        CountStar => sql.append_syntax("COUNT(*)")
+        CountSimple(column) => {
+          sql.append_syntax("COUNT(")
+          column.to_sql(sql)
+          sql.append_syntax(")")
+        }
+        CountDistinct(column) => {
+          sql.append_syntax("COUNT(DISTINCT ")
+          column.to_sql(sql)
+          sql.append_syntax(")")
+        }
+      }
   }
 }
 
