@@ -48,6 +48,34 @@ pub fn load_v3_metadata(
     _ => raise MetadataParse("v3 metadata must be an object or array")
   }
 
+  // 1 パス目 (order): OrderByExpression (Model v2 の orderByExpression 参照の解決に使う)。
+  // object operand の orderableFields から並べ替え可能フィールド名を取り出す。
+  // scalar operand (フィールド単位の方向設定) は Model からは参照されない
+  let order_exps : Map[String, Array[String]] = Map([])
+  for obj in objects {
+    if v3_kind(obj) == "OrderByExpression" {
+      let def = v3_def(obj)
+      let name = jv3_str(def, "name")
+      let fields : Array[String] = []
+      match jv3_get(def, "operand") {
+        Some(operand) =>
+          match jv3_get(operand, "object") {
+            Some(object_operand) =>
+              match jv3_get(object_operand, "orderableFields") {
+                Some(Json::Array(items)) =>
+                  for item in items {
+                    fields.push(jv3_str(item, "fieldName"))
+                  }
+                _ => ()
+              }
+            None => ()
+          }
+        None => ()
+      }
+      order_exps[name] = fields
+    }
+  }
+
   // 1 パス目: boolean expression 型 (Model.filterExpressionType の解決に使う)。
   // 旧 ObjectBooleanExpressionType (2024-11-18 以降の V3 ではビルドエラー) と
   // 新形式 BooleanExpressionType (operand.object) の両方を受ける
@@ -93,7 +121,7 @@ pub fn load_v3_metadata(
           None => skipped["ObjectType(unsupported field type)"] = true
         }
       "Model" => {
-        let (doc, connector) = convert_model(obj, bool_exps)
+        let (doc, connector) = convert_model(obj, bool_exps, order_exps)
         docs.push(doc)
         referenced_connectors[connector] = true
       }
@@ -119,6 +147,11 @@ pub fn load_v3_metadata(
         docs.push(mk_connector_doc(name))
       }
       "ObjectBooleanExpressionType" | "BooleanExpressionType" => ()
+      // OrderByExpression は 1 パス目で消費済み。GraphqlConfig は命名の
+      // カスタマイズを未対応 (既定値を使用) だが、存在自体はエラーにしない
+      "OrderByExpression" => ()
+      "GraphqlConfig" =>
+        skipped["GraphqlConfig(naming not honored — defaults used)"] = true
       other => skipped[other] = true
     }
   }
@@ -347,6 +380,7 @@ fn convert_object_type(obj : Json) -> Json? raise MetadataError {
 fn convert_model(
   obj : Json,
   bool_exps : Map[String, Array[String]],
+  order_exps : Map[String, Array[String]],
 ) -> (Json, String) raise MetadataError {
   let def = v3_def(obj)
   let name = jv3_str(def, "name")
@@ -355,13 +389,30 @@ fn convert_model(
     None => raise MetadataParse("v3 Model '\{name}' has no source")
   }
   let connector = jv3_str(source, "dataConnectorName")
+  // orderable フィールド: v1 は orderableFields、v2 は orderByExpression 参照。
+  // v2 の orderByExpression が解決できない場合は fail-closed で拒否する
+  // (黙って order_by 不可にすると V3 の挙動と食い違う)
   let orderable : Array[Json] = []
   match jv3_get(def, "orderableFields") {
     Some(Json::Array(items)) =>
       for item in items {
         orderable.push(Json::string(jv3_str(item, "fieldName")))
       }
-    _ => ()
+    _ =>
+      match jv3_get(def, "orderByExpression") {
+        Some(Json::String(obe_name)) =>
+          match order_exps.get(obe_name) {
+            Some(fields) =>
+              for f in fields {
+                orderable.push(Json::string(f))
+              }
+            None =>
+              raise MetadataParse(
+                "v3 Model '\{name}': orderByExpression '\{obe_name}' does not resolve to a known OrderByExpression",
+              )
+          }
+        _ => ()
+      }
   }
   // filterExpressionType → (Object)BooleanExpressionType の comparableFields。
   // 解決できない参照はサイレントに「フィルタなし」へ落とさず fail-closed で拒否する
