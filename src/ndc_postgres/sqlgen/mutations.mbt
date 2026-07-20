@@ -44,6 +44,12 @@ fn returning_sql(
 }
 
 ///|
+/// post-write 権限 CHECK のフラグ列名。書き込み後の行が check 述語を
+/// 満たさない場合に true になる。engine はこのフラグを見て
+/// ミューテーション全体を拒否 (ROLLBACK) する
+pub let check_violation_field : String = "%check__violation"
+
+///|
 fn wrap_mutation_cte(
   sql : SQL,
   build_inner : (SQL) -> Unit raise TranslateError,
@@ -56,12 +62,48 @@ fn wrap_mutation_cte(
 }
 
 ///|
+/// RETURNING に post-write CHECK のフラグ列を追加する。
+/// 述語は書き込み後の行 (INSERT の挿入値 / UPDATE の更新後値) を参照する
+fn check_flag_sql(
+  sql : SQL,
+  metadata : PgMetadata,
+  collection : String,
+  check : NdcExpression?,
+) -> Unit raise TranslateError {
+  match check {
+    None => ()
+    Some(predicate) => {
+      let table = metadata.tables.get(collection).unwrap()
+      let env : Env = {
+        metadata,
+        relationships: Map([]),
+        variables_table: None,
+      }
+      let state : State = { global_table_index: 3000 }
+      let scope = TableScope::new({
+        collection,
+        reference: DBTable(
+          schema=SchemaName(table.schema_name),
+          table=TableName(table.table_name),
+        ),
+      })
+      let expr = filtering_translate(env, state, scope, predicate)
+      sql.append_syntax(", NOT (")
+      normalize_expr(expr).to_sql(sql)
+      sql.append_syntax(") AS ")
+      sql.append_identifier(check_violation_field)
+    }
+  }
+}
+
+///|
 /// INSERT INTO ... VALUES ... RETURNING → json rows
 pub fn build_insert_sql(
   metadata : PgMetadata,
   collection : String,
   rows : Array[Array[(String, Json)]],
   returning : Array[(String, String)],
+  check? : NdcExpression? = None,
 ) -> SQL raise TranslateError {
   let table = match metadata.tables.get(collection) {
     Some(t) => t
@@ -117,6 +159,7 @@ pub fn build_insert_sql(
       }
     }
     returning_sql(sql, metadata, collection, returning)
+    check_flag_sql(sql, metadata, collection, check)
   })
   sql
 }
@@ -156,6 +199,7 @@ pub fn build_update_by_pk_sql(
   set_ : Array[(String, Json)],
   returning : Array[(String, String)],
   filter? : NdcExpression? = None,
+  check? : NdcExpression? = None,
 ) -> SQL raise TranslateError {
   let table = match metadata.tables.get(collection) {
     Some(t) => t
@@ -184,6 +228,7 @@ pub fn build_update_by_pk_sql(
     pk_where_sql(sql, metadata, collection, pk)
     permission_filter_sql(sql, metadata, collection, filter)
     returning_sql(sql, metadata, collection, returning)
+    check_flag_sql(sql, metadata, collection, check)
   })
   sql
 }

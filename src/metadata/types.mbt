@@ -115,6 +115,9 @@ pub(all) struct InsertPermission {
   /// 入力を許可するカラム (None = 全カラム)。presets のカラムは常に入力不可
   columns : Array[String]?
   presets : Array[FieldPreset]
+  /// post-write CHECK: 挿入後の行が満たすべき述語 (filter と同じ JSON 形式)。
+  /// 満たさない行が 1 行でもあればミューテーション全体を拒否しロールバックする
+  check : Json?
 }
 
 ///|
@@ -150,9 +153,13 @@ pub fn InsertPermission::allows_column(
 pub(all) struct UpdatePermission {
   /// _set を許可するカラム (None = 全カラム)。presets のカラムは常に入力不可
   columns : Array[String]?
-  /// 更新対象行の行フィルタ (WHERE に AND される。None なら全行可)
+  /// 更新対象行の行フィルタ (WHERE に AND される。None なら全行可)。
+  /// filter は更新「前」の行に、check は更新「後」の行に適用される
   filter : Json?
   presets : Array[FieldPreset]
+  /// post-write CHECK: 更新後の行が満たすべき述語 (filter と同じ JSON 形式)。
+  /// 満たさなければミューテーション全体を拒否しロールバックする
+  check : Json?
 }
 
 ///|

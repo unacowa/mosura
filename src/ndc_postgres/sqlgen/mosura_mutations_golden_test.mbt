@@ -16,14 +16,31 @@ fn mutations_test_metadata() -> PgMetadata {
   tables["articles"] = { schema_name: "public", table_name: "article", columns }
   let scalar_types : Map[String, PgScalarType] = Map([])
   for t in ["int4", "text", "bool"] {
+    let ops : Map[String, PgComparisonOperator] = Map([])
+    ops["_eq"] = {
+      operator_name: "=",
+      operator_kind: "equal",
+      argument_type: t,
+      is_infix: true,
+    }
     scalar_types[t] = {
       type_name: t,
       schema_name: None,
-      comparison_operators: Map([]),
+      comparison_operators: ops,
       type_representation: None,
     }
   }
   { tables, scalar_types }
+}
+
+///|
+/// post-write CHECK 述語: author_id = 2 (権限 filter と同じ NDC 式)
+fn check_author_is_2() -> NdcExpression {
+  EBinary(
+    column={ name: "author_id", path: [] },
+    operator="_eq",
+    value=CVScalar(Json::number(2)),
+  )
 }
 
 ///|
@@ -79,6 +96,24 @@ fn run_mosura_mutation_case(name : String) -> SQL raise {
       build_delete_by_pk_sql(meta, "articles", [("id", Json::number(10))], [
         ("id", "id"),
       ])
+    "insert_with_check" =>
+      build_insert_sql(
+        meta,
+        "articles",
+        [[("id", Json::number(20)), ("title", Json::string("checked"))]],
+        [("id", "id")],
+        check=Some(check_author_is_2()),
+      )
+    "update_by_pk_with_check" =>
+      build_update_by_pk_sql(
+        meta,
+        "articles",
+        [("id", Json::number(20))],
+        [("author_id", Json::number(3))],
+        [("id", "id"), ("author_id", "author_id")],
+        filter=Some(check_author_is_2()),
+        check=Some(check_author_is_2()),
+      )
     other => fail("unknown mosura mutation case: \{other}")
   }
 }
@@ -116,5 +151,5 @@ test "mosura mutations goldens (fixtures/mosura/mutations)" {
   if failures.length() > 0 {
     fail("golden failures: \{failures.join(", ")}")
   }
-  assert_eq(checked, 5)
+  assert_eq(checked, 7)
 }

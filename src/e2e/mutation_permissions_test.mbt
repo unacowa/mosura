@@ -44,6 +44,29 @@ fn m6p_metadata(sfx : String) -> @metadata.Metadata raise {
       #|    - role: writer
       #|      insert:
       #|        columns: [id, title, author_id]
+      #|    - role: checked
+      #|      insert:
+      #|        columns: [id, title, author_id]
+      #|        check:
+      #|          fieldComparison:
+      #|            field: author_id
+      #|            operator: _eq
+      #|            value:
+      #|              sessionVariable: x-hasura-user-id
+      #|      update:
+      #|        columns: [title, author_id]
+      #|        filter:
+      #|          fieldComparison:
+      #|            field: author_id
+      #|            operator: _eq
+      #|            value:
+      #|              sessionVariable: x-hasura-user-id
+      #|        check:
+      #|          fieldComparison:
+      #|            field: author_id
+      #|            operator: _eq
+      #|            value:
+      #|              sessionVariable: x-hasura-user-id
       #|    - role: user
       #|      select:
       #|        filter:
@@ -353,6 +376,174 @@ async test "M6 権限 E2E: 空の _set はリクエストエラー" {
     response,
     content=(
       #|{"errors":[{"message":"_set must not be empty"}]}
+    ),
+  )
+}
+
+///|
+fn checked_session(user_id : String) -> @session.Session {
+  let vars : Map[String, String] = { "x-hasura-user-id": user_id }
+  { role: "checked", variables: vars }
+}
+
+///|
+/// 1 回の seed で複数リクエストを順に実行する (ロールバック検証用)
+async fn run_m6p_sequence(
+  sfx : String,
+  requests : Array[(@session.Session, String)],
+) -> Array[String] {
+  let meta = m6p_metadata(sfx)
+  let ctx = @engine.EngineContext::new(meta)
+  let responses : Array[String] = []
+  @async.with_task_group(group => {
+    let config = @client.Config::new(
+      pg_host(),
+      port=pg_port(),
+      user=pg_user(),
+      database=pg_database(),
+      password=pg_password(),
+      ssl_mode=@client.SslMode::Disable,
+      application_name="mosura-e2e-m6p",
+    )
+    let (executor, connection) = @native.NativeExecutor::connect(config)
+    group.spawn_bg(() => connection.run())
+    seed(executor.client, sfx)
+    for pair in requests {
+      let (session, query) = pair
+      let body : Map[String, Json] = { "query": Json::string(query) }
+      let result = @engine.execute_request(
+        ctx,
+        session,
+        executor,
+        Json::object(body),
+      )
+      responses.push(result.stringify())
+    }
+    executor.client.close()
+  })
+  responses
+}
+
+///|
+async test "M6 CHECK E2E: check を満たす insert は成功する" {
+  let response = run_m6p_as(
+    "mc1",
+    checked_session("1"),
+    (
+      #|mutation {
+      #|  insert_articles(objects: [{id: 70, title: "ok", author_id: 1}]) {
+      #|    affected_rows
+      #|  }
+      #|}
+    ),
+  )
+  inspect(
+    response,
+    content=(
+      #|{"data":{"insert_articles":{"affected_rows":1}}}
+    ),
+  )
+}
+
+///|
+async test "M6 CHECK E2E: check 違反の insert はエラーになり行は残らない" {
+  let responses = run_m6p_sequence("mc2", [
+    (
+      checked_session("1"),
+      (
+        #|mutation {
+        #|  insert_articles(objects: [{id: 71, title: "spoof", author_id: 2}]) {
+        #|    affected_rows
+        #|  }
+        #|}
+      ),
+    ),
+    (
+      @session.Session::admin(),
+      (
+        #|{ articles(where: {id: {_eq: 71}}) { id } }
+      ),
+    ),
+  ])
+  inspect(
+    responses[0],
+    content=(
+      #|{"errors":[{"message":"check constraint of an insert/update permission has failed"}]}
+    ),
+  )
+  // ロールバックされているため行は存在しない
+  inspect(
+    responses[1],
+    content=(
+      #|{"data":{"articles":[]}}
+    ),
+  )
+}
+
+///|
+async test "M6 CHECK E2E: filter を通過しても check 違反の update は巻き戻る" {
+  // id=1 は author_id=1 (filter は通る)。author_id を 2 に書き換えると
+  // 更新後の行が check を満たさなくなる → 拒否 + ロールバック
+  let responses = run_m6p_sequence("mc3", [
+    (
+      checked_session("1"),
+      (
+        #|mutation {
+        #|  update_articles_by_pk(id: 1, _set: {author_id: 2}) { id }
+        #|}
+      ),
+    ),
+    (
+      @session.Session::admin(),
+      (
+        #|{ articles(where: {id: {_eq: 1}}) { id author_id } }
+      ),
+    ),
+  ])
+  inspect(
+    responses[0],
+    content=(
+      #|{"errors":[{"message":"check constraint of an insert/update permission has failed"}]}
+    ),
+  )
+  inspect(
+    responses[1],
+    content=(
+      #|{"data":{"articles":[{"id":1,"author_id":1}]}}
+    ),
+  )
+}
+
+///|
+async test "M6 CHECK E2E: 複数 root フィールドは 1 トランザクション (後続の違反で先行も巻き戻る)" {
+  let responses = run_m6p_sequence("mc4", [
+    (
+      checked_session("1"),
+      (
+        #|mutation {
+        #|  a: insert_articles(objects: [{id: 72, title: "first", author_id: 1}]) { affected_rows }
+        #|  b: insert_articles(objects: [{id: 73, title: "second", author_id: 2}]) { affected_rows }
+        #|}
+      ),
+    ),
+    (
+      @session.Session::admin(),
+      (
+        #|{ articles(where: {_or: [{id: {_eq: 72}}, {id: {_eq: 73}}]}) { id } }
+      ),
+    ),
+  ])
+  inspect(
+    responses[0],
+    content=(
+      #|{"errors":[{"message":"check constraint of an insert/update permission has failed"}]}
+    ),
+  )
+  // a の insert (check 通過) もロールバックされている
+  inspect(
+    responses[1],
+    content=(
+      #|{"data":{"articles":[]}}
     ),
   )
 }
