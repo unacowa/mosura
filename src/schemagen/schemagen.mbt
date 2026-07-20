@@ -280,6 +280,38 @@ pub fn build_schema(meta : @metadata.Metadata) -> @schema.Schema raise {
         )
       }
     }
+    // オブジェクトリレーション越しのソート (対象モデルの order_by 型を参照。
+    // 可視性は対象モデルの select 権限に従う)
+    match meta.relationships.get(model.object_type) {
+      Some(rels) =>
+        for rel in rels {
+          match rel.kind {
+            RelObject => {
+              let target_model = meta.models.get(rel.target_model).unwrap()
+              let target_ot = meta.object_types
+                .get(target_model.object_type)
+                .unwrap()
+              let rel_roles = model_permission_roles(meta, rel.target_model)
+              let data : @schema.SInputField = {
+                name: name(rel.name),
+                description: None,
+                info: InputArg(OrderByRelationship(rel.name)),
+                field_type: named_type(
+                  "\{target_ot.graphql_type_name}_order_by",
+                  true,
+                ),
+                default_value: None,
+                deprecation_status: NotDeprecated,
+              }
+              order_fields[name(rel.name)] = @schema.conditional_namespaced(
+                data, rel_roles,
+              )
+            }
+            RelArray => ()
+          }
+        }
+      None => ()
+    }
     register(
       @schema.TypeInfo::InputObject({
         name: tname("\{gql_name}_order_by"),

@@ -676,22 +676,33 @@ fn translate_query(
         relationship,
       )
   }
-  // order by / limit (リレーションを跨ぐ order by は未対応)
+  // order by / limit: リレーションを跨がない場合はサブクエリに置く。
+  // 跨ぐ場合は JOIN が必要なため fields select 側でまとめて処理する
+  // (upstream root.rs::order_by_crosses_relationships)
+  let mut order_by_crosses_relationships = false
   match query.order_by {
-    Some(elements) => {
+    Some(elements) =>
       for e in elements {
         if !e.target_path.is_empty() {
-          raise NotImplemented("order by across relationships")
+          order_by_crosses_relationships = true
+          break
         }
       }
-      subquery_select.order_by = sorting_translate(
-        env, state, subquery_scope, elements,
-      )
-    }
     None => ()
   }
-  subquery_select.limit = query.limit
-  subquery_select.offset = query.offset
+  if !order_by_crosses_relationships {
+    match query.order_by {
+      Some(elements) => {
+        let (order_by, _joins) = sorting_translate(
+          env, state, subquery_scope, elements,
+        )
+        subquery_select.order_by = order_by
+      }
+      None => ()
+    }
+    subquery_select.limit = query.limit
+    subquery_select.offset = query.offset
+  }
 
   // rows select
   let alias_ = state.make_table_alias(current_table0.collection)
@@ -712,11 +723,20 @@ fn translate_query(
     env, state, current_table, join_relationship_fields,
   )
   fields_select.joins.append(relationship_joins)
-  // upstream は translate_rows でも sorting を適用する (エイリアスは rows テーブル基準)
+  // upstream は translate_rows でも sorting を適用する (エイリアスは rows テーブル基準)。
+  // リレーションを跨ぐ場合は JOIN と limit/offset もこのレベルに置く
   match query.order_by {
     Some(elements) => {
       let scope = TableScope::new(current_table)
-      fields_select.order_by = sorting_translate(env, state, scope, elements)
+      let (order_by, order_by_joins) = sorting_translate(
+        env, state, scope, elements,
+      )
+      fields_select.order_by = order_by
+      if order_by_crosses_relationships {
+        fields_select.joins.append(order_by_joins)
+        fields_select.limit = query.limit
+        fields_select.offset = query.offset
+      }
     }
     None => ()
   }
@@ -821,33 +841,285 @@ fn from_variables(alias_ : TableAlias) -> SqlFrom {
   )
 }
 
-// --- sorting (単純カラムのみ) ---
+// --- sorting (sorting.rs の移植: カラム対象のみ。集約対象は未対応) ---
 
 ///|
+priv struct OrderByGroupColumn {
+  index : Int
+  direction : OrderByDirection
+  name : String
+}
+
+///|
+/// 同じ path を持つ order by 要素のグループ (upstream OrderByElementGroup::Columns)
+priv struct OrderByGroup {
+  path : Array[NdcPathElement]
+  columns : Array[OrderByGroupColumn]
+}
+
+///|
+fn order_direction(s : String) -> OrderByDirection {
+  match s {
+    "asc" => Asc
+    _ => Desc
+  }
+}
+
+// path のグループ化キー (構造が同じ path だけが JOIN を共有できるよう、
+// リレーション名・引数・predicate まで含めて直列化する)
+
+///|
+fn ndc_argument_key(a : NdcArgument) -> String {
+  match a {
+    ALiteral(j) => "lit:\{j.stringify()}"
+    AVariable(v) => "var:\{v}"
+  }
+}
+
+///|
+fn ndc_arguments_key(args : Map[String, NdcArgument]) -> String {
+  let parts : Array[String] = []
+  for k, v in args {
+    parts.push("\{k}=\{ndc_argument_key(v)}")
+  }
+  parts.join(",")
+}
+
+///|
+fn ndc_target_key(t : NdcComparisonTarget) -> String {
+  "\{t.name}/\{t.path.map(p => ndc_path_element_key(p)).join(";")}"
+}
+
+///|
+fn ndc_value_key(v : NdcComparisonValue) -> String {
+  match v {
+    CVColumn(name~, path~, scope~) => {
+      let scope_key = match scope {
+        Some(n) => n.to_string()
+        None => ""
+      }
+      "col(\{name}/\{path.map(p => ndc_path_element_key(p)).join(";")}/\{scope_key})"
+    }
+    CVScalar(j) => "scalar(\{j.stringify()})"
+    CVVariable(name) => "variable(\{name})"
+  }
+}
+
+///|
+fn ndc_expression_key(e : NdcExpression) -> String {
+  match e {
+    EAnd(xs) => "and(\{xs.map(x => ndc_expression_key(x)).join(",")})"
+    EOr(xs) => "or(\{xs.map(x => ndc_expression_key(x)).join(",")})"
+    ENot(x) => "not(\{ndc_expression_key(x)})"
+    EBinary(column~, operator~, value~) =>
+      "bin(\{ndc_target_key(column)} \{operator} \{ndc_value_key(value)})"
+    EUnaryIsNull(column~) => "isnull(\{ndc_target_key(column)})"
+    EExistsRelated(relationship~, arguments~, predicate~) =>
+      "exists_rel(\{relationship},\{ndc_arguments_key(arguments)},\{ndc_predicate_key(predicate)})"
+    EExistsUnrelated(collection~, arguments~, predicate~) =>
+      "exists_unrel(\{collection},\{ndc_arguments_key(arguments)},\{ndc_predicate_key(predicate)})"
+  }
+}
+
+///|
+fn ndc_predicate_key(p : NdcExpression?) -> String {
+  match p {
+    None => ""
+    Some(e) => ndc_expression_key(e)
+  }
+}
+
+///|
+fn ndc_path_element_key(p : NdcPathElement) -> String {
+  "\{p.relationship}(\{ndc_arguments_key(p.arguments)})[\{ndc_predicate_key(p.predicate)}]"
+}
+
+///|
+/// path が同じ要素をグループ化する (出現順を保持。upstream group_elements)
+fn group_order_by_elements(
+  elements : Array[NdcOrderByElement],
+) -> Array[OrderByGroup] {
+  let groups : Map[String, OrderByGroup] = Map([])
+  for i, e in elements {
+    let key = e.target_path.map(p => ndc_path_element_key(p)).join("|")
+    let column : OrderByGroupColumn = {
+      index: i,
+      direction: order_direction(e.order_direction),
+      name: e.target_name,
+    }
+    match groups.get(key) {
+      Some(g) => g.columns.push(column)
+      None => groups[key] = { path: e.target_path, columns: [column] }
+    }
+  }
+  groups.values().collect()
+}
+
+///|
+/// order by 全体を (要素列, 追加 JOIN 列) へ変換する (upstream sorting::translate)。
+/// path 無しの要素は現在のテーブルのカラム参照、path 有りの要素は
+/// LEFT OUTER JOIN LATERAL 連鎖で対象テーブルのカラムを引き寄せて参照する
 fn sorting_translate(
   env : Env,
   state : State,
   scope : TableScope,
   elements : Array[NdcOrderByElement],
-) -> Array[OrderByElement] raise TranslateError {
-  ignore(state)
-  let out : Array[OrderByElement] = []
-  for e in elements {
-    let column_info = env.lookup_column(scope.current.collection, e.target_name)
-    out.push({
-      target: Expression::ColumnReference(
-        AliasedColumn(
-          table=scope.current.reference,
-          column=ColumnAlias(column_info.name),
-        ),
-      ),
-      direction: match e.order_direction {
-        "asc" => Asc
-        _ => Desc
-      },
-    })
+) -> (Array[OrderByElement], Array[Join]) raise TranslateError {
+  let joins : Array[Join] = []
+  let indexed : Array[(Int, OrderByElement)] = []
+  for g in group_order_by_elements(elements) {
+    if g.path.is_empty() {
+      for c in g.columns {
+        let column_info = env.lookup_column(scope.current.collection, c.name)
+        indexed.push(
+          (
+            c.index,
+            {
+              target: Expression::ColumnReference(
+                AliasedColumn(
+                  table=scope.current.reference,
+                  column=ColumnAlias(column_info.name),
+                ),
+              ),
+              direction: c.direction,
+            },
+          ),
+        )
+      }
+    } else {
+      translate_order_by_path_group(env, state, scope, g, indexed, joins)
+    }
   }
-  out
+  // グループ化で崩れた順序を order by リスト上の位置で並べ直す
+  indexed.sort_by((a, b) => a.0.compare(b.0))
+  (indexed.map(p => p.1), joins)
+}
+
+///|
+/// リレーション経路を辿る order by グループを変換する
+/// (upstream build_select_and_joins_for_order_by_group +
+///  process_path_element_for_order_by_targets)
+fn translate_order_by_path_group(
+  env : Env,
+  state : State,
+  scope : TableScope,
+  group : OrderByGroup,
+  indexed : Array[(Int, OrderByElement)],
+  joins : Array[Join],
+) -> Unit raise TranslateError {
+  // 経路の各要素を LEFT OUTER JOIN LATERAL にする。
+  // 中間テーブルは次の join に必要なキー列のみを、最後のテーブルは
+  // order by 対象カラムを選択する
+  let local_joins : Array[(Select, TableAlias)] = []
+  let mut last_table = scope.current
+  let final_exprs : Array[(Int, OrderByDirection, ColumnAlias)] = []
+  for pe_idx in 0..<group.path.length() {
+    let pe = group.path[pe_idx]
+    let relationship = env.lookup_relationship(pe.relationship)
+    let target_alias = state.make_table_alias(
+      "ORDER_PART_\{relationship.target_collection}",
+    )
+    let (table, from_clause) = make_reference_and_from_clause(
+      env,
+      state,
+      MakeFromCollection(relationship.target_collection),
+      Some(target_alias),
+    )
+    let select_list : Array[(ColumnAlias, Expression)] = []
+    if pe_idx + 1 < group.path.length() {
+      // 次の経路要素の join キー列 (実カラム名をそのままエイリアスに使う)
+      let next_rel = env.lookup_relationship(
+        group.path[pe_idx + 1].relationship,
+      )
+      for pair in next_rel.column_mapping {
+        let (source_col, _) = pair
+        let col = env.lookup_column(table.collection, source_col)
+        select_list.push(
+          (
+            ColumnAlias(col.name),
+            Expression::ColumnReference(
+              AliasedColumn(table=table.reference, column=ColumnAlias(col.name)),
+            ),
+          ),
+        )
+      }
+    } else {
+      // 配列リレーション越しのカラムソートは行数が定まらないため不可
+      // (upstream MissingAggregateForArrayRelationOrdering)
+      if relationship.relationship_type == "array" {
+        raise NotImplemented(
+          "order by column across an array relationship (requires an aggregate)",
+        )
+      }
+      for c in group.columns {
+        let col = env.lookup_column(relationship.target_collection, c.name)
+        select_list.push(
+          (
+            ColumnAlias(col.name),
+            Expression::ColumnReference(
+              AliasedColumn(table=table.reference, column=ColumnAlias(col.name)),
+            ),
+          ),
+        )
+        final_exprs.push((c.index, c.direction, ColumnAlias(col.name)))
+      }
+    }
+    // この経路要素の select: join 条件 (+ predicate) 付き
+    let select = simple_select(select_list)
+    select.from = Some(from_clause)
+    let join_condition = translate_column_mapping(
+      env,
+      last_table,
+      table.reference,
+      true_expr(),
+      relationship,
+    )
+    select.where_ = match pe.predicate {
+      None => join_condition
+      Some(p) =>
+        And(
+          left=join_condition,
+          right=filtering_translate(env, state, TableScope::new(table), p),
+        )
+    }
+    local_joins.push((select, target_alias))
+    last_table = table
+  }
+  // 経路全体を包む select: 最後のテーブルから対象カラムを選択し、
+  // 先頭の join を FROM に、残りを JOIN に並べる
+  let wrapping = simple_select(
+    final_exprs.map(e => {
+      (
+        e.2,
+        Expression::ColumnReference(
+          AliasedColumn(table=last_table.reference, column=e.2),
+        ),
+      )
+    }),
+  )
+  let (first_select, first_alias) = local_joins[0]
+  wrapping.from = Some(FromSelect(select=first_select, alias_=first_alias))
+  for i in 1..<local_joins.length() {
+    let (s, a) = local_joins[i]
+    wrapping.joins.push(LeftOuterJoinLateral(select=s, alias_=a))
+  }
+  let order_alias = state.make_table_alias(
+    "ORDER_FOR_\{scope.current.collection}",
+  )
+  joins.push(LeftOuterJoinLateral(select=wrapping, alias_=order_alias))
+  for e in final_exprs {
+    indexed.push(
+      (
+        e.0,
+        {
+          target: Expression::ColumnReference(
+            AliasedColumn(table=AliasedTable(order_alias), column=e.2),
+          ),
+          direction: e.1,
+        },
+      ),
+    )
+  }
 }
 
 // --- filtering ---
