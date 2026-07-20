@@ -87,7 +87,11 @@ pub fn load_v3_metadata(
   for obj in objects {
     let kind = v3_kind(obj)
     match kind {
-      "ObjectType" => docs.push(convert_object_type(obj))
+      "ObjectType" =>
+        match convert_object_type(obj) {
+          Some(doc) => docs.push(doc)
+          None => skipped["ObjectType(unsupported field type)"] = true
+        }
       "Model" => {
         let (doc, connector) = convert_model(obj, bool_exps)
         docs.push(doc)
@@ -126,21 +130,35 @@ pub fn load_v3_metadata(
       }
     }
   }
-  // 部分スーパーグラフ (別 subgraph に定義がある前提のメタデータ) を許容するため、
-  // 参照先が存在しない Relationship / ModelPermissions / TypePermissions を除外する
-  let model_names : Map[String, Bool] = Map([])
+  // 部分スーパーグラフ (別 subgraph に定義がある前提のメタデータ) と、
+  // 未対応フィールド型で読み飛ばした ObjectType を許容するため、参照先が
+  // 存在しない Model / Relationship / ModelPermissions / TypePermissions を除外する。
+  // type_names は生成された ObjectType (skip 済みは含まない) から作り、
+  // model_names は objectType が解決できる Model のみを含める
   let type_names : Map[String, Bool] = Map([])
   for doc in docs {
-    let kind = match jv3_get(doc, "kind") {
-      Some(Json::String(k)) => k
-      _ => ""
+    match jv3_get(doc, "kind") {
+      Some(Json::String("ObjectType")) => {
+        let def = jv3_get(doc, "definition").unwrap()
+        type_names[jv3_str(def, "name")] = true
+      }
+      _ => ()
     }
-    let def = jv3_get(doc, "definition").unwrap()
-    if kind == "Model" {
-      model_names[jv3_str(def, "name")] = true
-    }
-    if kind == "ObjectType" {
-      type_names[jv3_str(def, "name")] = true
+  }
+  let model_names : Map[String, Bool] = Map([])
+  for doc in docs {
+    match jv3_get(doc, "kind") {
+      Some(Json::String("Model")) => {
+        let def = jv3_get(doc, "definition").unwrap()
+        let ot_ok = match jv3_get(def, "objectType") {
+          Some(Json::String(ot)) => type_names.contains(ot)
+          _ => false
+        }
+        if ot_ok {
+          model_names[jv3_str(def, "name")] = true
+        }
+      }
+      _ => ()
     }
   }
   let filtered : Array[Json] = []
@@ -151,6 +169,11 @@ pub fn load_v3_metadata(
     }
     let def = jv3_get(doc, "definition").unwrap()
     let keep = match kind {
+      "Model" =>
+        match jv3_get(def, "name") {
+          Some(Json::String(m)) => model_names.contains(m)
+          _ => false
+        }
       "Relationship" => {
         let target_ok = match jv3_get(def, "targetModel") {
           Some(Json::String(t)) => model_names.contains(t)
@@ -254,8 +277,11 @@ fn mk_connector_doc(name : String) -> Json {
 }
 
 ///|
-/// ObjectType: graphql.typeName と dataConnectorTypeMapping の column を反映
-fn convert_object_type(obj : Json) -> Json raise MetadataError {
+/// ObjectType: graphql.typeName と dataConnectorTypeMapping の column を反映。
+/// フィールド型がスカラー文字列表記 ("Int!" 等) でない (オブジェクト表記の型)
+/// 場合は、その ObjectType だけを None として読み飛ばす (ロード全体は落とさない)。
+/// 参照する Model は後段の dangling-reference フィルタで除外される
+fn convert_object_type(obj : Json) -> Json? raise MetadataError {
   let def = v3_def(obj)
   let name = jv3_str(def, "name")
   // カラムマッピング (最初の dataConnectorTypeMapping を採用)
@@ -285,11 +311,9 @@ fn convert_object_type(obj : Json) -> Json raise MetadataError {
         let fname = jv3_str(item, "name")
         let ftype = match jv3_get(item, "type") {
           Some(Json::String(t)) => t
-          // v3 の型は文字列表記のみ対応 (オブジェクト表記の型は未対応)
-          _ =>
-            raise MetadataParse(
-              "unsupported field type format in v3 ObjectType '\{name}'",
-            )
+          // v3 の型は文字列表記のみ対応。オブジェクト表記の型が来たら
+          // この ObjectType 自体を読み飛ばす (ロード全体は失敗させない)
+          _ => return None
         }
         let f : Map[String, Json] = {
           "name": Json::string(fname),
@@ -315,7 +339,7 @@ fn convert_object_type(obj : Json) -> Json raise MetadataError {
       }
     None => ()
   }
-  mk_doc("ObjectType", Json::object(out))
+  Some(mk_doc("ObjectType", Json::object(out)))
 }
 
 ///|

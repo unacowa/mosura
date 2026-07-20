@@ -243,8 +243,11 @@ FEATURES = [
             "DataConnectorLink を変換。filter 解決は新形式 BooleanExpressionType (object operand の "
             "comparableFields) と旧 ObjectBooleanExpressionType の両対応で、解決できない "
             "filterExpressionType は fail-closed でロードエラー (サイレントにフィルタを落とさない)。"
-            "未定義 connector のスタブ生成",
+            "未定義 connector のスタブ生成。未対応要素 (object 表記のフィールド型を持つ "
+            "ObjectType 等) はロード全体を落とさず当該定義のみ skip し、参照する Model も "
+            "dangling として除外する",
             unsupported="BooleanExpressionType の comparableRelationships (リレーション述語 — #32/#38)。"
+            "object 表記のフィールド型・globalIdFields・field arguments (#40)、"
             "Command 系 Relationship、rules-based permissions、Model v2 / OrderByExpression / "
             "GraphqlConfig 等の kind は skip。resolved スナップショット完全一致 (pending 211)",
             patterns=[r"^metadata-resolve/"],
