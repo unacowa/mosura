@@ -74,6 +74,21 @@ let v3_failing_rejected : Array[String] = [
   "fixtures/metadata-resolve/failing/remote_relationships_permissions/across_subgraphs",
   "fixtures/metadata-resolve/failing/simple", "fixtures/metadata-resolve/failing/scalar_types/cannot_match_inbuilt_type_name",
   "fixtures/metadata-resolve/failing/scalar_types/multiple_errors", "fixtures/metadata-resolve/failing/boolean_expression/object_comparable_field_duplicated",
+  // aggregate expression の接続非依存検証で拒否できるようになったケース
+   "fixtures/metadata-resolve/failing/aggregate_expressions/aggregatable_field_not_found",
+  "fixtures/metadata-resolve/failing/aggregate_expressions/conflict_between_count_and_aggregatable_field",
+  "fixtures/metadata-resolve/failing/aggregate_expressions/conflict_between_count_and_aggregation_function",
+  "fixtures/metadata-resolve/failing/aggregate_expressions/conflict_between_count_distinct_and_aggregatable_field",
+  "fixtures/metadata-resolve/failing/aggregate_expressions/conflict_between_count_distinct_and_aggregation_function",
+  "fixtures/metadata-resolve/failing/aggregate_expressions/count_distinct_return_type_cannot_use_non_int_inbuilt",
+  "fixtures/metadata-resolve/failing/aggregate_expressions/count_return_type_cannot_use_non_int_inbuilt",
+  "fixtures/metadata-resolve/failing/aggregate_expressions/disallow_duplicate_name",
+  "fixtures/metadata-resolve/failing/aggregate_expressions/duplicated_aggregatable_fields",
+  "fixtures/metadata-resolve/failing/aggregate_expressions/duplicated_aggregation_functions",
+  "fixtures/metadata-resolve/failing/aggregate_expressions/missing_aggregate_exp_from_model",
+  "fixtures/metadata-resolve/failing/aggregate_expressions/missing_operand_object_field_agg_exp",
+  "fixtures/metadata-resolve/failing/aggregate_expressions/missing_operand_object_type",
+  "fixtures/metadata-resolve/failing/aggregate_expressions/model_aggregate_exp_type_mismatch",
 ]
 
 ///|
