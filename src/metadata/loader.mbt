@@ -543,4 +543,25 @@ fn resolve(meta : Metadata) -> Unit raise MetadataError {
       )
     }
   }
+  // GraphQL query root フィールド名の一意性 (V3: 2024-11-15 互換性チェック)。
+  // selectMany / 各 selectUnique / (selectUnique 未指定時の) <name>_by_pk が
+  // スーパーグラフ全体で衝突しないこと。schemagen は SortedMap で後勝ちに
+  // 黙って上書きしてしまうため、ここで fail-closed に拒否する。
+  let root_field_owner : Map[String, String] = Map([])
+  for _, model in meta.models {
+    let roots : Array[String] = [model.select_many_name]
+    if model.select_uniques.is_empty() {
+      roots.push("\{model.select_many_name}_by_pk")
+    } else {
+      for pair in model.select_uniques {
+        roots.push(pair.0)
+      }
+    }
+    for rf in roots {
+      if root_field_owner.contains(rf) {
+        raise DuplicateName(kind="GraphQL root field", name=rf)
+      }
+      root_field_owner[rf] = model.name
+    }
+  }
 }
