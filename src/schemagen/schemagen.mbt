@@ -257,6 +257,34 @@ pub fn build_schema(meta : @metadata.Metadata) -> @schema.Schema raise {
         )
       }
     }
+    // リレーションを跨ぐ filter (対象モデルの bool_exp を参照。exists に変換
+    // される。array は「条件を満たす関連行が存在するか」。
+    // 可視性は対象モデルの select 権限に従う)
+    match meta.relationships.get(model.object_type) {
+      Some(rels) =>
+        for rel in rels {
+          let target_model = meta.models.get(rel.target_model).unwrap()
+          let target_ot = meta.object_types
+            .get(target_model.object_type)
+            .unwrap()
+          let rel_roles = model_permission_roles(meta, rel.target_model)
+          let data : @schema.SInputField = {
+            name: name(rel.name),
+            description: None,
+            info: InputArg(BoolExpRelationship(rel.name)),
+            field_type: named_type(
+              "\{target_ot.graphql_type_name}_bool_exp",
+              true,
+            ),
+            default_value: None,
+            deprecation_status: NotDeprecated,
+          }
+          bool_fields[name(rel.name)] = @schema.conditional_namespaced(
+            data, rel_roles,
+          )
+        }
+      None => ()
+    }
     register(
       @schema.TypeInfo::InputObject({
         name: tname(bool_exp_name),
