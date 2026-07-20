@@ -128,7 +128,17 @@ pub fn standard_scalar_types() -> Map[String, @sqlgen.PgScalarType] {
     ops["_lte"] = mk("<=", "custom")
     ops["_in"] = mk("IN", "in")
     if pg_type == "text" {
+      // テキスト検索演算子 (すべて infix。PG のキーワード/演算子へマップ)
       ops["_like"] = mk("LIKE", "custom")
+      ops["_nlike"] = mk("NOT LIKE", "custom")
+      ops["_ilike"] = mk("ILIKE", "custom")
+      ops["_nilike"] = mk("NOT ILIKE", "custom")
+      ops["_similar"] = mk("SIMILAR TO", "custom")
+      ops["_nsimilar"] = mk("NOT SIMILAR TO", "custom")
+      ops["_regex"] = mk("~", "custom")
+      ops["_iregex"] = mk("~*", "custom")
+      ops["_nregex"] = mk("!~", "custom")
+      ops["_niregex"] = mk("!~*", "custom")
     }
     out[pg_type] = {
       type_name: pg_type,

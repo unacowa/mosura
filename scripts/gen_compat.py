@@ -63,14 +63,15 @@ FEATURES = [
         dict(
             feature="モデル select",
             level="partial",
-            supported="`where` (スカラー比較 `_eq` `_neq` `_gt` `_gte` `_lt` `_lte` `_in` `_like` "
-            "`_is_null` と `_and` / `_or` / `_not`)、`order_by` (V3 準拠: 方向は `Asc` / `Desc` の "
-            "2 値、null 配置固定、1 エントリ 1 キーで複数キーはエラー)、`limit` / `offset`、"
+            supported="`where` (スカラー比較 `_eq` `_neq` `_gt` `_gte` `_lt` `_lte` `_in` `_is_null`、"
+            "テキスト検索 `_like` / `_nlike` / `_ilike` / `_nilike` / `_similar` / `_nsimilar` / "
+            "`_regex` / `_iregex` / `_nregex` / `_niregex`、`_and` / `_or` / `_not`)、"
+            "`order_by` (V3 準拠: 方向は `Asc` / `Desc` の 2 値、null 配置固定、"
+            "1 エントリ 1 キーで複数キーはエラー)、`limit` / `offset`、"
             "エイリアス・複数ルートフィールド",
-            unsupported="テキスト検索演算子は `_like` のみ (`_ilike` `_regex` `_similar` 等は未実装)。"
-            "ネスト/composite/配列型カラム、model arguments、native query 前提のモデル",
+            unsupported="ネスト/composite/配列型カラム、model arguments、native query 前提のモデル",
             patterns=[r"^execute/models/", r"^ndc-postgres-translation/goldenfiles/select_"],
-            issues=['#34', '#36'],
+            issues=['#36'],
         ),
         dict(
             feature="by_pk 単一取得",

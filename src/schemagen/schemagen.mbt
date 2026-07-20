@@ -88,11 +88,18 @@ fn comparison_exp(scalar : String) -> @schema.TypeInfo {
     InputArg(BoolExpOperator("_is_null")),
   )
   if scalar == "String" {
-    fields[name("_like")] = mk_input_field(
-      "_like",
-      named_type("String", true),
-      InputArg(BoolExpOperator("_like")),
-    )
+    // テキスト検索演算子 (LIKE / ILIKE / SIMILAR TO / POSIX 正規表現の否定込み)
+    for
+      op in [
+        "_like", "_nlike", "_ilike", "_nilike", "_similar", "_nsimilar", "_regex",
+        "_iregex", "_nregex", "_niregex",
+      ] {
+      fields[name(op)] = mk_input_field(
+        op,
+        named_type("String", true),
+        InputArg(BoolExpOperator(op)),
+      )
+    }
   }
   @schema.TypeInfo::InputObject({
     name: tname("\{scalar}_comparison_exp"),
