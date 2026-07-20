@@ -44,3 +44,11 @@ pub impl @exec.SqlExecutor for NativeExecutor with fn execute_json(
   let j : Json = rows[0].get(0)
   j.stringify()
 }
+
+///|
+pub impl @exec.SqlExecutor for NativeExecutor with fn execute_command(
+  self,
+  command,
+) {
+  self.client.batch_execute(command)
+}

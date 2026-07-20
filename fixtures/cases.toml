@@ -2812,35 +2812,35 @@ milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/simple"]
 tag = "out-of-scope"
-reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK (RETURNING の %check__constraint + bool_and) とトランザクション分離 (BEGIN ISOLATION LEVEL) は未対応 — Issue #18 で追跡"
+reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK とトランザクション分離は Mosura 独自形状で実装済み (%check__violation フラグ + engine の ROLLBACK。#18)"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/v2_insert"]
 tag = "out-of-scope"
-reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK (RETURNING の %check__constraint + bool_and) とトランザクション分離 (BEGIN ISOLATION LEVEL) は未対応 — Issue #18 で追跡"
+reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK とトランザクション分離は Mosura 独自形状で実装済み (%check__violation フラグ + engine の ROLLBACK。#18)"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/v2_insert_empty_objects"]
 tag = "out-of-scope"
-reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK (RETURNING の %check__constraint + bool_and) とトランザクション分離 (BEGIN ISOLATION LEVEL) は未対応 — Issue #18 で追跡"
+reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK とトランザクション分離は Mosura 独自形状で実装済み (%check__violation フラグ + engine の ROLLBACK。#18)"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/v2_insert_return_object_relationship"]
 tag = "out-of-scope"
-reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK (RETURNING の %check__constraint + bool_and) とトランザクション分離 (BEGIN ISOLATION LEVEL) は未対応 — Issue #18 で追跡"
+reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK とトランザクション分離は Mosura 独自形状で実装済み (%check__violation フラグ + engine の ROLLBACK。#18)"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/v2_update_array_column_empty"]
 tag = "out-of-scope"
-reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK (RETURNING の %check__constraint + bool_and) とトランザクション分離 (BEGIN ISOLATION LEVEL) は未対応 — Issue #18 で追跡"
+reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK とトランザクション分離は Mosura 独自形状で実装済み (%check__violation フラグ + engine の ROLLBACK。#18)"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/v2_update_array_column_null"]
 tag = "out-of-scope"
-reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK (RETURNING の %check__constraint + bool_and) とトランザクション分離 (BEGIN ISOLATION LEVEL) は未対応 — Issue #18 で追跡"
+reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK とトランザクション分離は Mosura 独自形状で実装済み (%check__violation フラグ + engine の ROLLBACK。#18)"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/v2_update_array_column_with_values"]
 tag = "out-of-scope"
-reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK (RETURNING の %check__constraint + bool_and) とトランザクション分離 (BEGIN ISOLATION LEVEL) は未対応 — Issue #18 で追跡"
+reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK とトランザクション分離は Mosura 独自形状で実装済み (%check__violation フラグ + engine の ROLLBACK。#18)"
 
 [cases."ndc-postgres-translation/goldenfiles/mutations/v2_update_by_id"]
 tag = "out-of-scope"
-reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK (RETURNING の %check__constraint + bool_and) とトランザクション分離 (BEGIN ISOLATION LEVEL) は未対応 — Issue #18 で追跡"
+reason = "mutation/v2 の SQL 形状は採用しない (CTE+json_agg の独自 CRUD。回帰は fixtures/mosura/mutations で固定)。post-write 権限 CHECK とトランザクション分離は Mosura 独自形状で実装済み (%check__violation フラグ + engine の ROLLBACK。#18)"
 
 [cases."ndc-postgres-translation/goldenfiles/native_queries/select_artist"]
 tag = "out-of-scope"
@@ -3046,6 +3046,12 @@ milestone = "m6"
 tag = "in-scope"
 milestone = "m6"
 
+[cases."mosura/mutations/insert_with_check"]
+tag = "in-scope"
+
 [cases."mosura/mutations/update_by_pk"]
 tag = "in-scope"
 milestone = "m6"
+
+[cases."mosura/mutations/update_by_pk_with_check"]
+tag = "in-scope"

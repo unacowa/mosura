@@ -319,6 +319,10 @@ fn load_document(
                 Some(InsertPermission::{
                   columns: parse_permission_columns(sec),
                   presets: parse_permission_presets(sec, kind),
+                  check: match json_get(sec, "check") {
+                    Some(Json::Null) | None => None
+                    Some(c) => Some(c)
+                  },
                 })
             }
             let update = match json_get(item, "update") {
@@ -331,6 +335,10 @@ fn load_document(
                     Some(f) => Some(f)
                   },
                   presets: parse_permission_presets(sec, kind),
+                  check: match json_get(sec, "check") {
+                    Some(Json::Null) | None => None
+                    Some(c) => Some(c)
+                  },
                 })
             }
             let delete = match json_get(item, "delete") {

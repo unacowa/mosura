@@ -101,14 +101,30 @@ pub async fn execute_request(
       )
   }
 
-  // 5. 実行 + 整形
+  // 5. 実行 + 整形。ミューテーションを含むリクエストは 1 トランザクションで
+  // 実行し、エラー・post-write CHECK 違反時は全体を ROLLBACK する (#18)
+  let mut in_tx = false
+  for rf in plan {
+    match rf {
+      RFMutation(..) => in_tx = true
+      _ => ()
+    }
+  }
+  if in_tx {
+    executor.execute_command("BEGIN ISOLATION LEVEL READ COMMITTED") catch {
+      _ => return error_response("failed to begin transaction")
+    }
+  }
   let data : Map[String, Json] = Map([])
   for rf in plan {
     match rf {
       RFTypename(alias_~, type_name~) => data[alias_] = Json::string(type_name)
       RFSchema(alias_~, field~) => {
         let result = @schema.schema_type(ctx.schema, ns, field.selection_set) catch {
-          _ => return error_response("introspection failed")
+          _ => {
+            rollback_if(executor, in_tx)
+            return error_response("introspection failed")
+          }
         }
         data[alias_] = result
       }
@@ -124,44 +140,79 @@ pub async fn execute_request(
           tn,
           field.selection_set,
         ) catch {
-          _ => return error_response("introspection failed")
+          _ => {
+            rollback_if(executor, in_tx)
+            return error_response("introspection failed")
+          }
         }
         data[alias_] = result
       }
       RFMutation(alias_~, sql~, model~, kind~, selection~) => {
         let rows_text = executor.execute_json(sql.sql, sql.params) catch {
-          e =>
+          e => {
+            rollback_if(executor, in_tx)
             return error_response(
               match e {
                 @exec.ExecFailed(m) => "execution failed: \{m}"
                 _ => "execution failed: \{e}"
               },
             )
+          }
         }
         let rows_json = @json.parse(rows_text) catch {
-          _ => return error_response("invalid JSON from database")
+          _ => {
+            rollback_if(executor, in_tx)
+            return error_response("invalid JSON from database")
+          }
         }
         let rows = match rows_json {
           Json::Array(rs) => rs
           _ => []
         }
+        // post-write 権限 CHECK: 書き込み後の行に違反フラグが 1 つでもあれば
+        // リクエスト全体を拒否してロールバックする
+        let mut violated = false
+        for r in rows {
+          match r {
+            Json::Object(m) =>
+              match m.get(@sqlgen.check_violation_field) {
+                Some(Json::True) => violated = true
+                _ => ()
+              }
+            _ => ()
+          }
+        }
+        if violated {
+          rollback_if(executor, in_tx)
+          return error_response(
+            "check constraint of an insert/update permission has failed",
+          )
+        }
         data[alias_] = shape_mutation(ctx.meta, model, kind, selection, rows)
       }
       RFQuery(alias_~, request~, shape~, selection~) => {
         let sql = @sqlgen.translate_query_request(ctx.pg_meta, request) catch {
-          e => return error_response(e.display())
+          e => {
+            rollback_if(executor, in_tx)
+            return error_response(e.display())
+          }
         }
         let universe_text = executor.execute_json(sql.sql, sql.params) catch {
-          e =>
+          e => {
+            rollback_if(executor, in_tx)
             return error_response(
               match e {
                 @exec.ExecFailed(m) => "execution failed: \{m}"
                 _ => "execution failed: \{e}"
               },
             )
+          }
         }
         let universe = @json.parse(universe_text) catch {
-          _ => return error_response("invalid JSON from database")
+          _ => {
+            rollback_if(executor, in_tx)
+            return error_response("invalid JSON from database")
+          }
         }
         // universe = [ { "rows": [...] } ] (variables なしの場合)
         let rows = extract_rows(universe)
@@ -175,8 +226,27 @@ pub async fn execute_request(
       }
     }
   }
+  if in_tx {
+    executor.execute_command("COMMIT") catch {
+      _ => {
+        rollback_if(executor, true)
+        return error_response("failed to commit transaction")
+      }
+    }
+  }
   let response : Map[String, Json] = { "data": Json::object(data) }
   Json::object(response)
+}
+
+///|
+/// トランザクション中のエラー時に ROLLBACK する。ROLLBACK 自体の失敗は
+/// 握りつぶす (元のエラーを応答することを優先。接続破棄で整合は保たれる)
+async fn rollback_if(executor : &@exec.SqlExecutor, in_tx : Bool) -> Unit {
+  if in_tx {
+    executor.execute_command("ROLLBACK") catch {
+      _ => ()
+    }
+  }
 }
 
 ///|

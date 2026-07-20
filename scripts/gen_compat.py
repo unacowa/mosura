@@ -157,12 +157,17 @@ FEATURES = [
         ),
         dict(
             feature="post-write 権限 CHECK / トランザクション分離",
-            level="todo",
-            supported="なし",
-            unsupported="upstream mutation/v2 の RETURNING `%check__constraint` + bool_and と "
-            "`BEGIN ISOLATION LEVEL … COMMIT` に相当する機能",
-            patterns=[r"^ndc-postgres-translation/goldenfiles/mutations/"],
-            issues=["#18"],
+            level="own",
+            supported="insert / update 権限の `check` 述語 (filter と同じ JSON 形式) を"
+            "書き込み後の行に適用し、違反があればリクエスト全体をエラー + ROLLBACK。"
+            "ミューテーションを含むリクエストは単一トランザクション "
+            "(BEGIN ISOLATION LEVEL READ COMMITTED) で実行され、"
+            "複数 root フィールドの途中失敗で全体が巻き戻る",
+            unsupported="SQL 形状は upstream mutation/v2 (`%check__constraint` + bool_and) と"
+            "異なる独自実装 (`%check__violation` フラグ + engine 側 ROLLBACK)。"
+            "分離レベルのリクエスト毎指定は不可 (READ COMMITTED 固定)。"
+            "Workers の plan/shape 経路はトランザクション・違反判定を行わない (呼び出し側責務)",
+            patterns=[r"^mosura/mutations/"],
         ),
     ]),
     ("権限・認証", [
@@ -190,12 +195,12 @@ FEATURES = [
             feature="ミューテーション権限",
             level="own",
             supported="insert / update の columns 制限と presets (sessionVariable / literal)、"
-            "update / delete の行フィルタ、ロール別のルートフィールド・入力フィールド可視性、"
+            "update / delete の行フィルタ、insert / update の post-write `check` 述語 "
+            "(違反時は全体を ROLLBACK)、ロール別のルートフィールド・入力フィールド可視性、"
             "権限拒否・セッション変数不足の専用エラー (fail-closed)",
-            unsupported="post-write CHECK (#18)。V3 の command permissions / ArgumentPresets "
+            unsupported="V3 の command permissions / ArgumentPresets "
             "形式のメタデータ (対象が V2 風 CRUD なので構造が異なる)",
             extra="src/e2e/mutation_permissions_test.mbt",
-            issues=["#18"],
         ),
         dict(
             feature="認証: adminSecret (開発モード)",

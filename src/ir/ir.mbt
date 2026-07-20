@@ -233,8 +233,8 @@ pub fn plan_operation(
         if rows.is_empty() {
           raise IrBadRequest("insert requires at least one object")
         }
-        // ロールの許可カラム検査 + プリセット適用
-        match insert_perm {
+        // ロールの許可カラム検査 + プリセット適用 + post-write CHECK
+        let check = match insert_perm {
           Some(ins) => {
             for row in rows {
               check_allowed_columns(
@@ -244,11 +244,21 @@ pub fn plan_operation(
               )
             }
             apply_presets(rows, ins.presets, session)
+            match ins.check {
+              Some(check_json) => permission_filter_to_ndc(check_json, session)
+              None => None
+            }
           }
-          None => ()
+          None => None
         }
         let returning = returning_from_mutation_response(field.selection_set)
-        let sql = @sqlgen.build_insert_sql(pg_meta, model_name, rows, returning)
+        let sql = @sqlgen.build_insert_sql(
+          pg_meta,
+          model_name,
+          rows,
+          returning,
+          check~,
+        )
         out.push(
           RFMutation(
             alias_~,
@@ -286,8 +296,8 @@ pub fn plan_operation(
         if set_.is_empty() {
           raise IrBadRequest("_set must not be empty")
         }
-        // ロールの許可カラム検査 + プリセット適用 + 行フィルタ
-        let filter = match update_perm {
+        // ロールの許可カラム検査 + プリセット適用 + 行フィルタ + post-write CHECK
+        let (filter, check) = match update_perm {
           Some(upd) => {
             check_allowed_columns(
               col => upd.allows_column(col),
@@ -295,13 +305,18 @@ pub fn plan_operation(
               model_name,
             )
             apply_presets([set_], upd.presets, session)
-            match upd.filter {
+            let filter = match upd.filter {
               Some(filter_json) =>
                 permission_filter_to_ndc(filter_json, session)
               None => None
             }
+            let check = match upd.check {
+              Some(check_json) => permission_filter_to_ndc(check_json, session)
+              None => None
+            }
+            (filter, check)
           }
-          None => None
+          None => (None, None)
         }
         let returning = returning_from_selection(field.selection_set)
         let sql = @sqlgen.build_update_by_pk_sql(
@@ -311,6 +326,7 @@ pub fn plan_operation(
           set_,
           returning,
           filter~,
+          check~,
         )
         out.push(
           RFMutation(
