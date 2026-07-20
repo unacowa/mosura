@@ -7,13 +7,20 @@ pub(all) struct EngineContext {
   meta : @metadata.Metadata
   schema : @schema.Schema
   pg_meta : @sqlgen.PgMetadata
+  /// 内部エラーの詳細をクライアントに含めるか。既定は false (本番安全側)。
+  /// V3 は内部エラーを "internal error" のみで返すため既定で秘匿する。
+  /// 開発時のみ true にして原因究明を容易にする。
+  expose_internal_errors : Bool
 }
 
 ///|
-pub fn EngineContext::new(meta : @metadata.Metadata) -> EngineContext raise {
+pub fn EngineContext::new(
+  meta : @metadata.Metadata,
+  expose_internal_errors? : Bool = false,
+) -> EngineContext raise {
   let schema = @schemagen.build_schema(meta)
   let pg_meta = @ir.to_pg_metadata(meta)
-  { meta, schema, pg_meta }
+  { meta, schema, pg_meta, expose_internal_errors }
 }
 
 ///|
@@ -22,6 +29,25 @@ pub fn error_response(message : String) -> Json {
   let err : Map[String, Json] = { "message": Json::string(message) }
   let obj : Map[String, Json] = { "errors": Json::array([Json::object(err)]) }
   Json::object(obj)
+}
+
+///|
+/// 内部エラー応答を組み立てる。V3 準拠で本番 (expose=false) では詳細を秘匿し
+/// "internal error" のみ返す。expose=true (開発時) のときだけ detail を含める。
+/// detail は DB エラー文・スキーマ情報を含み得るため、本番では決して露出しない。
+/// 呼び出し側は expose の値に関わらず detail をログ/トレースへ残すこと。
+pub fn internal_error_json(expose : Bool, detail : String) -> Json {
+  if expose {
+    error_response("internal error: \{detail}")
+  } else {
+    error_response("internal error")
+  }
+}
+
+///|
+/// ctx の設定に従って内部エラー応答を返す
+fn EngineContext::internal_error(self : EngineContext, detail : String) -> Json {
+  internal_error_json(self.expose_internal_errors, detail)
 }
 
 ///|
@@ -90,15 +116,15 @@ pub async fn execute_request(
   // 4. 実行計画
   let plan = @ir.plan_operation(ctx.meta, ctx.pg_meta, session, op) catch {
     e =>
-      return error_response(
-        match e {
-          @ir.IrInternal(m) => "internal error: \{m}"
-          @ir.IrPermissionDenied(m) => m
-          @ir.IrBadRequest(m) => m
-          @ir.UnsupportedField(f) => "unsupported field: \{f}"
-          _ => "planning error"
-        },
-      )
+      // ユーザー起因 (権限・不正リクエスト・未対応フィールド) はメッセージを返し、
+      // 内部エラーは秘匿する (V3 準拠)
+      return match e {
+        @ir.IrPermissionDenied(m) => error_response(m)
+        @ir.IrBadRequest(m) => error_response(m)
+        @ir.UnsupportedField(f) => error_response("unsupported field: \{f}")
+        @ir.IrInternal(m) => ctx.internal_error("planning: \{m}")
+        _ => ctx.internal_error("planning error")
+      }
   }
 
   // 5. 実行 + 整形。ミューテーションを含むリクエストは 1 トランザクションで
@@ -112,7 +138,7 @@ pub async fn execute_request(
   }
   if in_tx {
     executor.execute_command("BEGIN ISOLATION LEVEL READ COMMITTED") catch {
-      _ => return error_response("failed to begin transaction")
+      _ => return ctx.internal_error("failed to begin transaction")
     }
   }
   let data : Map[String, Json] = Map([])
@@ -123,7 +149,7 @@ pub async fn execute_request(
         let result = @schema.schema_type(ctx.schema, ns, field.selection_set) catch {
           _ => {
             rollback_if(executor, in_tx)
-            return error_response("introspection failed")
+            return ctx.internal_error("introspection failed")
           }
         }
         data[alias_] = result
@@ -142,7 +168,7 @@ pub async fn execute_request(
         ) catch {
           _ => {
             rollback_if(executor, in_tx)
-            return error_response("introspection failed")
+            return ctx.internal_error("introspection failed")
           }
         }
         data[alias_] = result
@@ -151,7 +177,7 @@ pub async fn execute_request(
         let rows_text = executor.execute_json(sql.sql, sql.params) catch {
           e => {
             rollback_if(executor, in_tx)
-            return error_response(
+            return ctx.internal_error(
               match e {
                 @exec.ExecFailed(m) => "execution failed: \{m}"
                 _ => "execution failed: \{e}"
@@ -162,7 +188,7 @@ pub async fn execute_request(
         let rows_json = @json.parse(rows_text) catch {
           _ => {
             rollback_if(executor, in_tx)
-            return error_response("invalid JSON from database")
+            return ctx.internal_error("invalid JSON from database")
           }
         }
         let rows = match rows_json {
@@ -194,13 +220,13 @@ pub async fn execute_request(
         let sql = @sqlgen.translate_query_request(ctx.pg_meta, request) catch {
           e => {
             rollback_if(executor, in_tx)
-            return error_response(e.display())
+            return ctx.internal_error(e.display())
           }
         }
         let universe_text = executor.execute_json(sql.sql, sql.params) catch {
           e => {
             rollback_if(executor, in_tx)
-            return error_response(
+            return ctx.internal_error(
               match e {
                 @exec.ExecFailed(m) => "execution failed: \{m}"
                 _ => "execution failed: \{e}"
@@ -211,7 +237,7 @@ pub async fn execute_request(
         let universe = @json.parse(universe_text) catch {
           _ => {
             rollback_if(executor, in_tx)
-            return error_response("invalid JSON from database")
+            return ctx.internal_error("invalid JSON from database")
           }
         }
         // universe = [ { "rows": [...] } ] (variables なしの場合)
@@ -230,7 +256,7 @@ pub async fn execute_request(
     executor.execute_command("COMMIT") catch {
       _ => {
         rollback_if(executor, true)
-        return error_response("failed to commit transaction")
+        return ctx.internal_error("failed to commit transaction")
       }
     }
   }
@@ -466,15 +492,13 @@ pub fn plan_request(
   let plan = @ir.plan_operation(ctx.meta, ctx.pg_meta, session, op) catch {
     e =>
       return Err(
-        error_response(
-          match e {
-            @ir.IrInternal(m) => "internal error: \{m}"
-            @ir.IrPermissionDenied(m) => m
-            @ir.IrBadRequest(m) => m
-            @ir.UnsupportedField(f) => "unsupported field: \{f}"
-            _ => "planning error"
-          },
-        ),
+        match e {
+          @ir.IrPermissionDenied(m) => error_response(m)
+          @ir.IrBadRequest(m) => error_response(m)
+          @ir.UnsupportedField(f) => error_response("unsupported field: \{f}")
+          @ir.IrInternal(m) => ctx.internal_error("planning: \{m}")
+          _ => ctx.internal_error("planning error")
+        },
       )
   }
   let queries : Array[PlannedQuery] = []
@@ -488,7 +512,7 @@ pub fn plan_request(
       }
       RFSchema(alias_~, field~) => {
         let result = @schema.schema_type(ctx.schema, ns, field.selection_set) catch {
-          _ => return Err(error_response("introspection failed"))
+          _ => return Err(ctx.internal_error("introspection failed"))
         }
         resolved[alias_] = result
         order.push(alias_)
@@ -506,14 +530,14 @@ pub fn plan_request(
           tn,
           field.selection_set,
         ) catch {
-          _ => return Err(error_response("introspection failed"))
+          _ => return Err(ctx.internal_error("introspection failed"))
         }
         resolved[alias_] = result
         order.push(alias_)
       }
       RFQuery(alias_~, request~, ..) => {
         let sql = @sqlgen.translate_query_request(ctx.pg_meta, request) catch {
-          e => return Err(error_response(e.display()))
+          e => return Err(ctx.internal_error(e.display()))
         }
         queries.push({ alias_, sql: sql.sql, params: sql.params, root: rf })
         order.push(alias_)

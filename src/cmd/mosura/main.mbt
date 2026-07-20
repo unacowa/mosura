@@ -127,7 +127,13 @@ async fn main {
       }
     _ => meta
   }
-  let ctx = @engine.EngineContext::new(meta) catch {
+  // 内部エラー詳細の露出は既定で秘匿 (V3 準拠)。開発時のみ環境変数で有効化する。
+  let expose_internal_errors = match
+    @env.get_env_var("MOSURA_EXPOSE_INTERNAL_ERRORS") {
+    Some("1") | Some("true") => true
+    _ => false
+  }
+  let ctx = @engine.EngineContext::new(meta, expose_internal_errors~) catch {
     _ => {
       println("mosura: failed to build schema")
       return
