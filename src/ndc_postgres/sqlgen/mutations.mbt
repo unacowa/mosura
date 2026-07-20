@@ -155,6 +155,7 @@ pub fn build_update_by_pk_sql(
   pk : Array[(String, Json)],
   set_ : Array[(String, Json)],
   returning : Array[(String, String)],
+  filter? : NdcExpression? = None,
 ) -> SQL raise TranslateError {
   let table = match metadata.tables.get(collection) {
     Some(t) => t
@@ -181,6 +182,7 @@ pub fn build_update_by_pk_sql(
       }
     }
     pk_where_sql(sql, metadata, collection, pk)
+    permission_filter_sql(sql, metadata, collection, filter)
     returning_sql(sql, metadata, collection, returning)
   })
   sql
@@ -193,6 +195,7 @@ pub fn build_delete_by_pk_sql(
   collection : String,
   pk : Array[(String, Json)],
   returning : Array[(String, String)],
+  filter? : NdcExpression? = None,
 ) -> SQL raise TranslateError {
   let table = match metadata.tables.get(collection) {
     Some(t) => t
@@ -205,7 +208,42 @@ pub fn build_delete_by_pk_sql(
     sql.append_syntax(".")
     sql.append_identifier(table.table_name)
     pk_where_sql(sql, metadata, collection, pk)
+    permission_filter_sql(sql, metadata, collection, filter)
     returning_sql(sql, metadata, collection, returning)
   })
   sql
+}
+
+///|
+/// ロールの行フィルタを WHERE に AND する (M6)。
+/// UPDATE/DELETE の WHERE 内でテーブルを直接参照する
+fn permission_filter_sql(
+  sql : SQL,
+  metadata : PgMetadata,
+  collection : String,
+  filter : NdcExpression?,
+) -> Unit raise TranslateError {
+  match filter {
+    None => ()
+    Some(predicate) => {
+      let table = metadata.tables.get(collection).unwrap()
+      let env : Env = {
+        metadata,
+        relationships: Map([]),
+        variables_table: None,
+      }
+      let state : State = { global_table_index: 2000 }
+      let scope = TableScope::new({
+        collection,
+        reference: DBTable(
+          schema=SchemaName(table.schema_name),
+          table=TableName(table.table_name),
+        ),
+      })
+      let expr = filtering_translate(env, state, scope, predicate)
+      sql.append_syntax(" AND (")
+      normalize_expr(expr).to_sql(sql)
+      sql.append_syntax(")")
+    }
+  }
 }

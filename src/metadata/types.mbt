@@ -102,12 +102,49 @@ pub(all) struct Relationship {
 }
 
 ///|
-/// ロール別のモデル権限 (M5)
+/// カラムプリセット (insert/update 時に値を固定するカラム)。
+/// value は {sessionVariable: "x-hasura-*"} または {literal: ...}
+pub(all) struct FieldPreset {
+  field : String
+  value : Json
+}
+
+///|
+/// ロール別の insert 権限
+pub(all) struct InsertPermission {
+  /// 入力を許可するカラム (None = 全カラム)。presets のカラムは常に入力不可
+  columns : Array[String]?
+  presets : Array[FieldPreset]
+}
+
+///|
+/// ロール別の update 権限
+pub(all) struct UpdatePermission {
+  /// _set を許可するカラム (None = 全カラム)。presets のカラムは常に入力不可
+  columns : Array[String]?
+  /// 更新対象行の行フィルタ (WHERE に AND される。None なら全行可)
+  filter : Json?
+  presets : Array[FieldPreset]
+}
+
+///|
+/// ロール別の delete 権限
+pub(all) struct DeletePermission {
+  /// 削除対象行の行フィルタ (WHERE に AND される。None なら全行可)
+  filter : Json?
+}
+
+///|
+/// ロール別のモデル権限 (M5/M6)
 pub(all) struct ModelPermission {
   role : String
-  /// 行フィルタ (where 相当の JSON。null なら全行可)
+  /// select の行フィルタ (where 相当の JSON。null なら全行可)
   filter : Json?
   allow_subscriptions : Bool
+  /// M6: ミューテーション権限 (None = そのロールには生成しない)
+  insert : InsertPermission?
+  update : UpdatePermission?
+  delete : DeletePermission?
 }
 
 ///|

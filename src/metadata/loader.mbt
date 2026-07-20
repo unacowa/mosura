@@ -64,6 +64,46 @@ fn json_string_array_field(
 }
 
 ///|
+/// ミューテーション権限セクションの columns (省略時 None = 全カラム)
+fn parse_permission_columns(sec : Json) -> Array[String]? {
+  match json_get(sec, "columns") {
+    Some(Json::Array(items)) => {
+      let out : Array[String] = []
+      for item in items {
+        match item {
+          Json::String(s) => out.push(s)
+          _ => ()
+        }
+      }
+      Some(out)
+    }
+    _ => None
+  }
+}
+
+///|
+/// ミューテーション権限セクションの presets
+fn parse_permission_presets(
+  sec : Json,
+  kind : String,
+) -> Array[FieldPreset] raise MetadataError {
+  let out : Array[FieldPreset] = []
+  match json_get(sec, "presets") {
+    Some(Json::Array(items)) =>
+      for item in items {
+        let field = json_string_field(item, kind, "field")
+        let value = match json_get(item, "value") {
+          Some(v) => v
+          None => raise MissingField(kind~, field="presets[].value")
+        }
+        out.push({ field, value })
+      }
+    _ => ()
+  }
+  out
+}
+
+///|
 /// マージキー `<<` を展開する (マップ直下の << の中身を親へ取り込む。自身のキーが優先)
 pub fn expand_merge_keys(j : Json) -> Json {
   match j {
@@ -273,7 +313,44 @@ fn load_document(
                 }
               None => None
             }
-            permissions.push({ role, filter, allow_subscriptions: false })
+            let insert = match json_get(item, "insert") {
+              Some(Json::Null) | None => None
+              Some(sec) =>
+                Some(InsertPermission::{
+                  columns: parse_permission_columns(sec),
+                  presets: parse_permission_presets(sec, kind),
+                })
+            }
+            let update = match json_get(item, "update") {
+              Some(Json::Null) | None => None
+              Some(sec) =>
+                Some(UpdatePermission::{
+                  columns: parse_permission_columns(sec),
+                  filter: match json_get(sec, "filter") {
+                    Some(Json::Null) | None => None
+                    Some(f) => Some(f)
+                  },
+                  presets: parse_permission_presets(sec, kind),
+                })
+            }
+            let delete = match json_get(item, "delete") {
+              Some(Json::Null) | None => None
+              Some(sec) =>
+                Some(DeletePermission::{
+                  filter: match json_get(sec, "filter") {
+                    Some(Json::Null) | None => None
+                    Some(f) => Some(f)
+                  },
+                })
+            }
+            permissions.push({
+              role,
+              filter,
+              allow_subscriptions: false,
+              insert,
+              update,
+              delete,
+            })
           }
         _ => raise MissingField(kind~, field="permissions")
       }

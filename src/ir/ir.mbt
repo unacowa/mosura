@@ -200,9 +200,18 @@ pub fn plan_operation(
         )
       }
       ModelInsert(model_name) => {
-        let model = meta.models.get(model_name).unwrap()
-        // 変更系ルートの __typename は mutation_root
-        ignore(model)
+        let perm = mutation_permission(meta, session, model_name)
+        let insert_perm = match perm {
+          Some(p) =>
+            match p.insert {
+              Some(ins) => Some(ins)
+              None =>
+                raise IrInternal(
+                  "role \{session.role} has no insert permission on \{model_name}",
+                )
+            }
+          None => None
+        }
         let objects_arg = fc.expected_argument(
           @graphql.Name::new_unchecked("objects"),
         )
@@ -217,6 +226,16 @@ pub fn plan_operation(
         if rows.is_empty() {
           raise IrInternal("insert requires at least one object")
         }
+        // ロールの許可カラム検査 + プリセット適用
+        match insert_perm {
+          Some(ins) => {
+            for row in rows {
+              check_allowed_columns(ins.columns, ins.presets, row, model_name)
+            }
+            apply_presets(rows, ins.presets, session)
+          }
+          None => ()
+        }
         let returning = mutation_returning(field.selection_set)
         let sql = @sqlgen.build_insert_sql(pg_meta, model_name, rows, returning)
         out.push(
@@ -230,6 +249,18 @@ pub fn plan_operation(
         )
       }
       ModelUpdateByPk(model_name) => {
+        let perm = mutation_permission(meta, session, model_name)
+        let update_perm = match perm {
+          Some(p) =>
+            match p.update {
+              Some(upd) => Some(upd)
+              None =>
+                raise IrInternal(
+                  "role \{session.role} has no update permission on \{model_name}",
+                )
+            }
+          None => None
+        }
         let pk : Array[(String, Json)] = []
         let set_ : Array[(String, Json)] = []
         for arg_name, arg in fc.arguments {
@@ -244,9 +275,27 @@ pub fn plan_operation(
         if set_.is_empty() {
           raise IrInternal("_set must not be empty")
         }
+        // ロールの許可カラム検査 + プリセット適用 + 行フィルタ
+        let filter = match update_perm {
+          Some(upd) => {
+            check_allowed_columns(upd.columns, upd.presets, set_, model_name)
+            apply_presets([set_], upd.presets, session)
+            match upd.filter {
+              Some(filter_json) =>
+                permission_filter_to_ndc(filter_json, session)
+              None => None
+            }
+          }
+          None => None
+        }
         let returning = selection_returning(field.selection_set)
         let sql = @sqlgen.build_update_by_pk_sql(
-          pg_meta, model_name, pk, set_, returning,
+          pg_meta,
+          model_name,
+          pk,
+          set_,
+          returning,
+          filter~,
         )
         out.push(
           RFMutation(
@@ -259,13 +308,34 @@ pub fn plan_operation(
         )
       }
       ModelDeleteByPk(model_name) => {
+        let perm = mutation_permission(meta, session, model_name)
+        let filter = match perm {
+          Some(p) =>
+            match p.delete {
+              Some(del) =>
+                match del.filter {
+                  Some(filter_json) =>
+                    permission_filter_to_ndc(filter_json, session)
+                  None => None
+                }
+              None =>
+                raise IrInternal(
+                  "role \{session.role} has no delete permission on \{model_name}",
+                )
+            }
+          None => None
+        }
         let pk : Array[(String, Json)] = []
         for arg_name, arg in fc.arguments {
           pk.push((arg_name.as_str(), arg.value.as_json()))
         }
         let returning = selection_returning(field.selection_set)
         let sql = @sqlgen.build_delete_by_pk_sql(
-          pg_meta, model_name, pk, returning,
+          pg_meta,
+          model_name,
+          pk,
+          returning,
+          filter~,
         )
         out.push(
           RFMutation(
@@ -411,6 +481,93 @@ fn apply_permission_filter(
     (Some(p), None) => Some(p)
     (None, Some(f)) => Some(f)
     (Some(p), Some(f)) => Some(EAnd([f, p]))
+  }
+}
+
+///|
+/// ミューテーション用のロール権限を引く (admin は無制限なので None)
+fn mutation_permission(
+  meta : @metadata.Metadata,
+  session : @session.Session,
+  model_name : String,
+) -> @metadata.ModelPermission? raise {
+  if session.is_admin() {
+    return None
+  }
+  let mp = match meta.model_permissions.get(model_name) {
+    Some(mp) => mp
+    None => raise IrInternal("no permissions for model \{model_name}")
+  }
+  for p in mp.permissions {
+    if p.role == session.role {
+      return Some(p)
+    }
+  }
+  raise IrInternal("role \{session.role} has no permission on \{model_name}")
+}
+
+///|
+/// 入力カラムが許可集合に収まっているか検査する (スキーマ可視性で
+/// 弾かれているはずだが防御的に再検査する)
+fn check_allowed_columns(
+  columns : Array[String]?,
+  presets : Array[@metadata.FieldPreset],
+  row : Array[(String, Json)],
+  model_name : String,
+) -> Unit raise {
+  for pair in row {
+    let (field_name, _) = pair
+    for preset in presets {
+      if preset.field == field_name {
+        raise IrInternal(
+          "column \{field_name} of \{model_name} is preset and cannot be set",
+        )
+      }
+    }
+    match columns {
+      None => ()
+      Some(cols) =>
+        if !cols.contains(field_name) {
+          raise IrInternal(
+            "column \{field_name} of \{model_name} is not allowed for this role",
+          )
+        }
+    }
+  }
+}
+
+///|
+/// カラムプリセットを各行に適用する。
+/// value は {sessionVariable: "..."} または {literal: ...}
+fn apply_presets(
+  rows : Array[Array[(String, Json)]],
+  presets : Array[@metadata.FieldPreset],
+  session : @session.Session,
+) -> Unit raise {
+  for preset in presets {
+    let value : Json = match preset.value {
+      Json::Object(v) =>
+        match v.get("sessionVariable") {
+          Some(Json::String(var_name)) =>
+            match session.variables.get(var_name.to_lower()) {
+              Some(s) => Json::string(s)
+              None =>
+                raise IrInternal("session variable not provided: \{var_name}")
+            }
+          _ =>
+            match v.get("literal") {
+              Some(lit) => lit
+              None =>
+                raise IrInternal(
+                  "preset value must have sessionVariable or literal",
+                )
+            }
+        }
+      other => other
+    }
+    for row in rows {
+      row.push((preset.field, value))
+    }
   }
 }
 

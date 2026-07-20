@@ -2,11 +2,98 @@
 // - insert_<model>(objects: [<type>_insert_input!]!) : <type>_mutation_response!
 // - update_<model>_by_pk(pk_columns: ..., _set: <type>_set_input!) : <type>
 // - delete_<model>_by_pk(<pk args>) : <type>
-// MVP ではミューテーションは admin のみ (ロール別 insert/update/delete 権限は将来対応)
+// admin は常に全ミューテーション可。他ロールは ModelPermissions の
+// insert/update/delete セクションがある場合のみ生成される (M6)
 
 ///|
 fn nullable_variant(t : @graphql.GType) -> @graphql.GType {
   { base: t.base, nullable: true }
+}
+
+///|
+priv enum MutationPermKind {
+  PermInsert
+  PermUpdate
+  PermDelete
+}
+
+///|
+/// 指定ミューテーションを許可されたロールの一覧 (admin は AllowAll 側で処理)
+fn mutation_permission_roles(
+  meta : @metadata.Metadata,
+  model_name : String,
+  kind : MutationPermKind,
+) -> Map[String, @schema.NamespacedInfo] {
+  let map : Map[String, @schema.NamespacedInfo] = Map([])
+  match meta.model_permissions.get(model_name) {
+    Some(mp) =>
+      for p in mp.permissions {
+        let allowed = match kind {
+          PermInsert => p.insert is Some(_)
+          PermUpdate => p.update is Some(_)
+          PermDelete => p.delete is Some(_)
+        }
+        if allowed {
+          map[p.role] = ModelPermission(model_name)
+        }
+      }
+    None => ()
+  }
+  map
+}
+
+///|
+/// ロールが入力フィールドを設定できるか (columns 制限 + presets 除外)
+fn input_column_allowed(
+  columns : Array[String]?,
+  presets : Array[@metadata.FieldPreset],
+  field_name : String,
+) -> Bool {
+  for preset in presets {
+    if preset.field == field_name {
+      return false
+    }
+  }
+  match columns {
+    None => true
+    Some(cols) => cols.contains(field_name)
+  }
+}
+
+///|
+/// insert/update 入力フィールドのロール別可視性
+fn mutation_input_field_roles(
+  meta : @metadata.Metadata,
+  model_name : String,
+  kind : MutationPermKind,
+  field_name : String,
+) -> Map[String, @schema.NamespacedInfo] {
+  let map : Map[String, @schema.NamespacedInfo] = Map([])
+  match meta.model_permissions.get(model_name) {
+    Some(mp) =>
+      for p in mp.permissions {
+        let visible = match kind {
+          PermInsert =>
+            match p.insert {
+              Some(ins) =>
+                input_column_allowed(ins.columns, ins.presets, field_name)
+              None => false
+            }
+          PermUpdate =>
+            match p.update {
+              Some(upd) =>
+                input_column_allowed(upd.columns, upd.presets, field_name)
+              None => false
+            }
+          PermDelete => false
+        }
+        if visible {
+          map[p.role] = ModelPermission(model_name)
+        }
+      }
+    None => ()
+  }
+  map
 }
 
 ///|
@@ -28,16 +115,23 @@ pub fn build_mutation_root(
     let ot = meta.object_types.get(model.object_type).unwrap()
     let gql_name = ot.graphql_type_name
 
-    // <type>_insert_input
+    // <type>_insert_input (フィールド可視性はロールの insert.columns / presets に従う)
     let insert_input_fields : @sorted_map.SortedMap[
       @graphql.Name,
       @schema.Namespaced[@schema.SInputField],
     ] = @sorted_map.SortedMap([])
     for f in ot.fields {
-      insert_input_fields[name(f.name)] = mk_input_field(
-        f.name,
-        nullable_variant(f.field_type),
-        InputArg(MutationInputField(f.name)),
+      let data : @schema.SInputField = {
+        name: name(f.name),
+        description: None,
+        info: InputArg(MutationInputField(f.name)),
+        field_type: nullable_variant(f.field_type),
+        default_value: None,
+        deprecation_status: NotDeprecated,
+      }
+      insert_input_fields[name(f.name)] = @schema.conditional_namespaced(
+        data,
+        mutation_input_field_roles(meta, model_name, PermInsert, f.name),
       )
     }
     register(
@@ -49,12 +143,31 @@ pub fn build_mutation_root(
       }),
     )
 
-    // <type>_set_input (更新可能フィールド: 全フィールド nullable)
+    // <type>_set_input (更新可能フィールド: 全フィールド nullable。
+    // 可視性はロールの update.columns / presets に従う)
+    let set_input_fields : @sorted_map.SortedMap[
+      @graphql.Name,
+      @schema.Namespaced[@schema.SInputField],
+    ] = @sorted_map.SortedMap([])
+    for f in ot.fields {
+      let data : @schema.SInputField = {
+        name: name(f.name),
+        description: None,
+        info: InputArg(MutationInputField(f.name)),
+        field_type: nullable_variant(f.field_type),
+        default_value: None,
+        deprecation_status: NotDeprecated,
+      }
+      set_input_fields[name(f.name)] = @schema.conditional_namespaced(
+        data,
+        mutation_input_field_roles(meta, model_name, PermUpdate, f.name),
+      )
+    }
     register(
       @schema.TypeInfo::InputObject({
         name: tname("\{gql_name}_set_input"),
         description: None,
-        fields: insert_input_fields,
+        fields: set_input_fields,
         directives: [],
       }),
     )
@@ -98,7 +211,6 @@ pub fn build_mutation_root(
       list_of(named_type("\{gql_name}_insert_input", false), false),
       InputArg(MutationInputField("objects")),
     )
-    // admin のみ (空 conditional)
     let insert_data : @schema.SField = {
       name: name("insert_\{model_name}"),
       description: None,
@@ -109,7 +221,7 @@ pub fn build_mutation_root(
     }
     root_fields[name("insert_\{model_name}")] = @schema.conditional_namespaced(
       insert_data,
-      Map([]),
+      mutation_permission_roles(meta, model_name, PermInsert),
     )
     has_any = true
 
@@ -151,7 +263,7 @@ pub fn build_mutation_root(
       }
       root_fields[name("update_\{model_name}_by_pk")] = @schema.conditional_namespaced(
         update_data,
-        Map([]),
+        mutation_permission_roles(meta, model_name, PermUpdate),
       )
       let delete_data : @schema.SField = {
         name: name("delete_\{model_name}_by_pk"),
@@ -163,7 +275,7 @@ pub fn build_mutation_root(
       }
       root_fields[name("delete_\{model_name}_by_pk")] = @schema.conditional_namespaced(
         delete_data,
-        Map([]),
+        mutation_permission_roles(meta, model_name, PermDelete),
       )
     }
   }
