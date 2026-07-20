@@ -2127,11 +2127,11 @@ tag = "pending"
 milestone = "m4"
 
 [cases."execute/models/select_many/order_by/filter"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/models/select_many/order_by/multiple_columns"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/models/select_many/order_by/multiple_columns_validation_check"]
@@ -2519,7 +2519,7 @@ tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/relationships/array/arguments"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m4"
 
 [cases."execute/relationships/array/arguments/with_graphql_config"]

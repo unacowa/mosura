@@ -102,7 +102,7 @@ test "M3 E2E: GraphQL → SQL (filter + order + relationship)" {
   let results = graphql_to_sql(
     (
       #|{
-      #|  articles(where: {title: {_like: "%moon%"}}, order_by: [{id: desc}], limit: 3) {
+      #|  articles(where: {title: {_like: "%moon%"}}, order_by: [{id: Desc}], limit: 3) {
       #|    id
       #|    title
       #|    author { name }
