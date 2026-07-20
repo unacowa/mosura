@@ -109,10 +109,18 @@ pub fn build_insert_sql(
     Some(t) => t
     None => raise CollectionNotFound(collection)
   }
-  // カラム集合 = 最初の行のキー (全行同一キー前提。欠けは DEFAULT)
+  // カラム集合 = 全行のキーの和集合 (最初に出現した順を保持)。行ごとに
+  // 欠けているカラムは VALUES で DEFAULT を入れる。以前は rows[0] のキーのみを
+  // 使っており、後続行だけが持つカラムの値が黙って落ちていた (#20)。
   let columns : Array[String] = []
-  for pair in rows[0] {
-    columns.push(pair.0)
+  let seen : Map[String, Bool] = Map([])
+  for row in rows {
+    for pair in row {
+      if !seen.contains(pair.0) {
+        seen[pair.0] = true
+        columns.push(pair.0)
+      }
+    }
   }
   let sql = SQL::new()
   wrap_mutation_cte(sql, fn(sql) raise TranslateError {
