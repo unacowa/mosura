@@ -43,25 +43,44 @@ fn mutation_permission_roles(
 }
 
 ///|
-/// ロールが入力フィールドを設定できるか (columns 制限 + presets 除外)
-fn input_column_allowed(
-  columns : Array[String]?,
-  presets : Array[@metadata.FieldPreset],
-  field_name : String,
-) -> Bool {
-  for preset in presets {
-    if preset.field == field_name {
-      return false
+/// <type>_insert_input / <type>_set_input の入力オブジェクト型を作る
+/// (全フィールド nullable。可視性はロールの columns / presets に従う)
+fn mutation_input_object(
+  meta : @metadata.Metadata,
+  model_name : String,
+  ot : @metadata.ObjectTypeDef,
+  kind : MutationPermKind,
+  type_name : String,
+) -> @schema.TypeInfo {
+  let fields : @sorted_map.SortedMap[
+    @graphql.Name,
+    @schema.Namespaced[@schema.SInputField],
+  ] = @sorted_map.SortedMap([])
+  for f in ot.fields {
+    let data : @schema.SInputField = {
+      name: name(f.name),
+      description: None,
+      info: InputArg(MutationInputField(f.name)),
+      field_type: nullable_variant(f.field_type),
+      default_value: None,
+      deprecation_status: NotDeprecated,
     }
+    fields[name(f.name)] = @schema.conditional_namespaced(
+      data,
+      mutation_input_field_roles(meta, model_name, kind, f.name),
+    )
   }
-  match columns {
-    None => true
-    Some(cols) => cols.contains(field_name)
-  }
+  @schema.TypeInfo::InputObject({
+    name: tname(type_name),
+    description: None,
+    fields,
+    directives: [],
+  })
 }
 
 ///|
 /// insert/update 入力フィールドのロール別可視性
+/// (判定ルールの実体は @metadata の allows_column — ir の防御的検査と共有)
 fn mutation_input_field_roles(
   meta : @metadata.Metadata,
   model_name : String,
@@ -75,14 +94,12 @@ fn mutation_input_field_roles(
         let visible = match kind {
           PermInsert =>
             match p.insert {
-              Some(ins) =>
-                input_column_allowed(ins.columns, ins.presets, field_name)
+              Some(ins) => ins.allows_column(field_name)
               None => false
             }
           PermUpdate =>
             match p.update {
-              Some(upd) =>
-                input_column_allowed(upd.columns, upd.presets, field_name)
+              Some(upd) => upd.allows_column(field_name)
               None => false
             }
           PermDelete => false
@@ -115,61 +132,25 @@ pub fn build_mutation_root(
     let ot = meta.object_types.get(model.object_type).unwrap()
     let gql_name = ot.graphql_type_name
 
-    // <type>_insert_input (フィールド可視性はロールの insert.columns / presets に従う)
-    let insert_input_fields : @sorted_map.SortedMap[
-      @graphql.Name,
-      @schema.Namespaced[@schema.SInputField],
-    ] = @sorted_map.SortedMap([])
-    for f in ot.fields {
-      let data : @schema.SInputField = {
-        name: name(f.name),
-        description: None,
-        info: InputArg(MutationInputField(f.name)),
-        field_type: nullable_variant(f.field_type),
-        default_value: None,
-        deprecation_status: NotDeprecated,
-      }
-      insert_input_fields[name(f.name)] = @schema.conditional_namespaced(
-        data,
-        mutation_input_field_roles(meta, model_name, PermInsert, f.name),
-      )
-    }
+    // <type>_insert_input / <type>_set_input (全フィールド nullable。
+    // 可視性はロールの insert/update の columns / presets に従う)
     register(
-      @schema.TypeInfo::InputObject({
-        name: tname("\{gql_name}_insert_input"),
-        description: None,
-        fields: insert_input_fields,
-        directives: [],
-      }),
+      mutation_input_object(
+        meta,
+        model_name,
+        ot,
+        PermInsert,
+        "\{gql_name}_insert_input",
+      ),
     )
-
-    // <type>_set_input (更新可能フィールド: 全フィールド nullable。
-    // 可視性はロールの update.columns / presets に従う)
-    let set_input_fields : @sorted_map.SortedMap[
-      @graphql.Name,
-      @schema.Namespaced[@schema.SInputField],
-    ] = @sorted_map.SortedMap([])
-    for f in ot.fields {
-      let data : @schema.SInputField = {
-        name: name(f.name),
-        description: None,
-        info: InputArg(MutationInputField(f.name)),
-        field_type: nullable_variant(f.field_type),
-        default_value: None,
-        deprecation_status: NotDeprecated,
-      }
-      set_input_fields[name(f.name)] = @schema.conditional_namespaced(
-        data,
-        mutation_input_field_roles(meta, model_name, PermUpdate, f.name),
-      )
-    }
     register(
-      @schema.TypeInfo::InputObject({
-        name: tname("\{gql_name}_set_input"),
-        description: None,
-        fields: set_input_fields,
-        directives: [],
-      }),
+      mutation_input_object(
+        meta,
+        model_name,
+        ot,
+        PermUpdate,
+        "\{gql_name}_set_input",
+      ),
     )
 
     // <type>_mutation_response

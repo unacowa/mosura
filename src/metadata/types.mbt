@@ -118,6 +118,34 @@ pub(all) struct InsertPermission {
 }
 
 ///|
+/// 「presets のカラムは常に入力不可、columns 制限があれば membership を要求」
+/// の共通判定 (schemagen の入力型可視性と ir の防御的検査の単一の真実)
+fn permission_allows_column(
+  columns : Array[String]?,
+  presets : Array[FieldPreset],
+  field_name : String,
+) -> Bool {
+  for preset in presets {
+    if preset.field == field_name {
+      return false
+    }
+  }
+  match columns {
+    None => true
+    Some(cols) => cols.contains(field_name)
+  }
+}
+
+///|
+/// このロールが insert 入力でカラムを設定できるか
+pub fn InsertPermission::allows_column(
+  self : InsertPermission,
+  field_name : String,
+) -> Bool {
+  permission_allows_column(self.columns, self.presets, field_name)
+}
+
+///|
 /// ロール別の update 権限
 pub(all) struct UpdatePermission {
   /// _set を許可するカラム (None = 全カラム)。presets のカラムは常に入力不可
@@ -125,6 +153,15 @@ pub(all) struct UpdatePermission {
   /// 更新対象行の行フィルタ (WHERE に AND される。None なら全行可)
   filter : Json?
   presets : Array[FieldPreset]
+}
+
+///|
+/// このロールが _set 入力でカラムを設定できるか
+pub fn UpdatePermission::allows_column(
+  self : UpdatePermission,
+  field_name : String,
+) -> Bool {
+  permission_allows_column(self.columns, self.presets, field_name)
 }
 
 ///|

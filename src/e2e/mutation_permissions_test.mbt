@@ -41,6 +41,9 @@ fn m6p_metadata(sfx : String) -> @metadata.Metadata raise {
       #|definition:
       #|  modelName: articles
       #|  permissions:
+      #|    - role: writer
+      #|      insert:
+      #|        columns: [id, title, author_id]
       #|    - role: user
       #|      select:
       #|        filter:
@@ -241,6 +244,115 @@ async test "M6 権限 E2E: update で許可カラム外の _set は不可" {
     response,
     content=(
       #|{"errors":[{"message":"the field author_id on type article_set_input is not found"}]}
+    ),
+  )
+}
+
+///|
+fn writer_session() -> @session.Session {
+  { role: "writer", variables: Map([]) }
+}
+
+///|
+async test "M6 権限 E2E: 複数行 insert でプリセットが全行に適用される" {
+  let response = run_m6p_as(
+    "mp7",
+    user_session("7"),
+    (
+      #|mutation {
+      #|  insert_articles(objects: [{id: 60, title: "one"}, {id: 61, title: "two"}, {id: 62, title: "three"}]) {
+      #|    affected_rows
+      #|    returning { id title author_id }
+      #|  }
+      #|}
+    ),
+  )
+  inspect(
+    response,
+    content=(
+      #|{"data":{"insert_articles":{"affected_rows":3,"returning":[{"id":60,"title":"one","author_id":7},{"id":61,"title":"two","author_id":7},{"id":62,"title":"three","author_id":7}]}}}
+    ),
+  )
+}
+
+///|
+async test "M6 権限 E2E: 複数行 insert は1行でも違反があると全体エラー" {
+  // 2行目だけが不可視カラム author_id を指定 → validation で全体が拒否される
+  let response = run_m6p_as(
+    "mp8",
+    user_session("7"),
+    (
+      #|mutation {
+      #|  insert_articles(objects: [{id: 63, title: "ok"}, {id: 64, title: "bad", author_id: 9}]) {
+      #|    affected_rows
+      #|  }
+      #|}
+    ),
+  )
+  inspect(
+    response,
+    content=(
+      #|{"errors":[{"message":"the field author_id on type article_insert_input is not found"}]}
+    ),
+  )
+}
+
+///|
+async test "M6 権限 E2E: insert のみ許可のロールは update を試みても拒否される" {
+  let response = run_m6p_as(
+    "mp9",
+    writer_session(),
+    (
+      #|mutation {
+      #|  update_articles_by_pk(id: 1, _set: {title: "not yours"}) { id }
+      #|}
+    ),
+  )
+  inspect(
+    response,
+    content=(
+      #|{"errors":[{"message":"no such field on type mutation_root: update_articles_by_pk"}]}
+    ),
+  )
+}
+
+///|
+async test "M6 権限 E2E: プリセット参照のセッション変数が無いとリクエストエラー" {
+  // role は user だが x-hasura-user-id を持たないセッション
+  let no_vars : @session.Session = { role: "user", variables: Map([]) }
+  let response = run_m6p_as(
+    "mp10",
+    no_vars,
+    (
+      #|mutation {
+      #|  insert_articles(objects: [{id: 65, title: "orphan"}]) { affected_rows }
+      #|}
+    ),
+  )
+  // "internal error" ではなくリクエスト起因のエラーとして返る
+  inspect(
+    response,
+    content=(
+      #|{"errors":[{"message":"session variable not provided: x-hasura-user-id"}]}
+    ),
+  )
+}
+
+///|
+async test "M6 権限 E2E: 空の _set はリクエストエラー" {
+  let response = run_m6p_as(
+    "mp11",
+    user_session("1"),
+    (
+      #|mutation {
+      #|  update_articles_by_pk(id: 1, _set: {}) { id }
+      #|}
+    ),
+  )
+  inspect(
+    response,
+    content=(
+      #|{"errors":[{"message":"_set must not be empty"}]}
     ),
   )
 }
