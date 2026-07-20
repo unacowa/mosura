@@ -72,7 +72,8 @@ let v3_failing_rejected : Array[String] = [
   "fixtures/metadata-resolve/failing/order_by_expressions/model_type_mismatch", "fixtures/metadata-resolve/failing/order_by_expressions/unknown_field",
   "fixtures/metadata-resolve/failing/order_by_expressions/unknown_order_by_expression_in_model",
   "fixtures/metadata-resolve/failing/remote_relationships_permissions/across_subgraphs",
-  "fixtures/metadata-resolve/failing/simple",
+  "fixtures/metadata-resolve/failing/simple", "fixtures/metadata-resolve/failing/scalar_types/cannot_match_inbuilt_type_name",
+  "fixtures/metadata-resolve/failing/scalar_types/multiple_errors", "fixtures/metadata-resolve/failing/boolean_expression/object_comparable_field_duplicated",
 ]
 
 ///|
