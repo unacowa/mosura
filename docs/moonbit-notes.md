@@ -71,7 +71,23 @@
 
 - `@sha256.gen_hmac(body, key)` は **base64url (パディング付き)** の文字列を返す。
   JWT 署名と比較する時は両辺の `=` を除去してから比較
-- `@base64.url_decode2str(s, no_padding=true)` / `str2bytes` (UTF-8 変換) が使える
+- `@base64.url_decode2str(s, no_padding=true)` / `str2bytes` (UTF-8 変換) が使える。
+  バイト列が欲しい時は `url_decode2bytes(s, no_padding=true)`
+- **生の SHA-256 ダイジェスト**: `Digest::sum` は非公開。`HashFunc` trait 経由の
+  `check_sum()` (hex 文字列) は公開なので、`Digest::new()` → 各バイトを `write` →
+  `check_sum()` → hex を自前デコードして 32 バイトを得る (RS256 の PKCS#1 検証で使用)
+
+## RS256 (JWT 非対称鍵検証) — src/session/jwt.mbt
+
+- **bignum は書かない**: `moonbitlang/core/bigint` に `BigInt::pow(self, e, modulus~)`
+  (modpow) と `from_octets(BytesView)` / `to_octets(length~)` があり、これだけで
+  RSASSA-PKCS1-v1_5 検証が書ける。core なので js/wasm-gc でもビルド可
+- 検証は `s^e mod n` を復元して EMSA-PKCS1-v1_5 (`00 01 FF..FF 00 T`、
+  `T = DigestInfo(SHA-256) || SHA-256(input)`) とバイト比較するだけ。公開入力の
+  公開鍵演算なので乱数・定数時間は不要
+- alg は**鍵の種類で決める** (ヘッダ `alg` を信用しない)。詐称による格下げを防ぐ
+- テストベクタは openssl で生成 (`genrsa` → `dgst -sha256 -sign`)、modulus は
+  `openssl rsa -noout -modulus` の hex を base64url 化して JWK n にする
 
 ## シェル操作の注意 (このリポジトリでの作業全般)
 

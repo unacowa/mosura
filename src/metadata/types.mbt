@@ -215,9 +215,13 @@ pub(all) struct TypePermissions {
 pub(all) struct AuthConfig {
   /// 開発モード: x-hasura-admin-secret 一致で任意ロール
   admin_secret : String?
-  /// JWT HS256 シークレット (M5)
+  /// JWT HS256 共有シークレット (M5)
   jwt_hs256_secret : String?
   jwt_hs256_secret_from_env : String?
+  /// JWT RS256 公開鍵 (#41 段階1)。事前解決済みの JWK 形式 (base64url の n / e)。
+  /// JWKS URL からの取得はランタイム層が行い、ここに解決済みの値を注入する
+  jwt_rs256_modulus : String?
+  jwt_rs256_exponent : String?
 }
 
 ///|

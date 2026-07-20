@@ -382,12 +382,23 @@ fn load_document(
       meta.type_permissions[type_name] = { type_name, permissions }
     }
     "AuthConfig" => {
+      // jwtRs256: { modulus, exponent } (JWK n / e、base64url) を任意で読む
+      let (rs256_mod, rs256_exp) = match json_get(def, "jwtRs256") {
+        Some(rs) =>
+          (
+            json_opt_string_field(rs, kind, "modulus"),
+            json_opt_string_field(rs, kind, "exponent"),
+          )
+        None => (None, None)
+      }
       let auth : AuthConfig = {
         admin_secret: json_opt_string_field(def, kind, "adminSecret"),
         jwt_hs256_secret: json_opt_string_field(def, kind, "jwtHs256Secret"),
         jwt_hs256_secret_from_env: json_opt_string_field(
           def, kind, "jwtHs256SecretFromEnv",
         ),
+        jwt_rs256_modulus: rs256_mod,
+        jwt_rs256_exponent: rs256_exp,
       }
       meta.auth = Some(auth)
     }
