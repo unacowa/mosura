@@ -2455,7 +2455,7 @@ tag = "out-of-scope"
 reason = "remote relationships (複数コネクタ) は対象外"
 
 [cases."execute/models/select_many/where/remote_relationships/boolean_expression_type/object/simple_across_subgraphs"]
-tag = "in-scope"
+tag = "pending"
 reason = "remote relationships (複数コネクタ) は対象外"
 
 [cases."execute/models/select_many/where/shared_boolean_expression"]
