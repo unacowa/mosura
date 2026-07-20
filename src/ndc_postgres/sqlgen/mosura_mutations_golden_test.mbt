@@ -74,6 +74,22 @@ fn run_mosura_mutation_case(name : String) -> SQL raise {
         ],
         [("id", "id")],
       )
+    // 後続行だけが持つカラム (published) を先頭行が持たないケース。
+    // カラム集合が全行の和集合になり、先頭行では DEFAULT が入ることを固定する (#20)
+    "insert_multi_row_extra_column" =>
+      build_insert_sql(
+        meta,
+        "articles",
+        [
+          [("id", Json::number(10)), ("title", Json::string("first"))],
+          [
+            ("id", Json::number(11)),
+            ("title", Json::string("second")),
+            ("published", Json::boolean(true)),
+          ],
+        ],
+        [("id", "id")],
+      )
     "insert_empty_returning" =>
       build_insert_sql(
         meta,
@@ -151,5 +167,5 @@ test "mosura mutations goldens (fixtures/mosura/mutations)" {
   if failures.length() > 0 {
     fail("golden failures: \{failures.join(", ")}")
   }
-  assert_eq(checked, 7)
+  assert_eq(checked, 8)
 }
