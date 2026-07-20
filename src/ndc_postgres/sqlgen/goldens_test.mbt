@@ -145,31 +145,84 @@ fn run_translation_case(dir : String) -> Result[String, String] raise {
 }
 
 ///|
+/// goldenfiles 以下を再帰的に走査し、request.json を持つケースの相対パスを返す
+fn list_translation_cases(base : String) -> Array[String] raise {
+  let out : Array[String] = []
+  fn walk(rel : String) -> Unit raise {
+    let dir = if rel == "" {
+      "\{base}/goldenfiles"
+    } else {
+      "\{base}/goldenfiles/\{rel}"
+    }
+    if @fs.path_exists("\{dir}/request.json") {
+      out.push(rel)
+    }
+    let entries = @fs.read_dir(dir)
+    entries.sort()
+    for e in entries {
+      let child = if rel == "" { e } else { "\{rel}/\{e}" }
+      if @fs.is_dir("\{dir}/\{e}") {
+        walk(child)
+      }
+    }
+  }
+
+  walk("")
+  out
+}
+
+///|
+/// ケース (相対パス) に対応する期待スナップショットを解決する。
+/// スナップショット名は upstream の Rust テスト関数名由来で揺れがあり
+/// (tests__it_ / tests__ / tests__it_converts_ / tests__<module>__ 等)、
+/// また case ディレクトリに co-located の場合と snapshots/ に集約の場合がある。
+/// まず厳密候補を、無ければ末尾セグメント名で "..._<leaf>.expected" に
+/// 一意一致するファイルを case ディレクトリ → snapshots/ の順に探す。
+fn resolve_snapshot(base : String, rel : String) -> String? raise {
+  let segs = rel.split("/").collect()
+  let leaf = segs[segs.length() - 1].to_owned()
+  let case_dir = "\{base}/goldenfiles/\{rel}"
+  let snap_dir = "\{base}/snapshots"
+  for
+    c in [
+      "\{snap_dir}/tests__it_\{leaf}.expected",
+      "\{snap_dir}/tests__\{leaf}.expected",
+    ] {
+    if @fs.path_exists(c) {
+      return Some(c)
+    }
+  }
+  let suffix = "\{leaf}.expected"
+  for d in [case_dir, snap_dir] {
+    let mut found : String? = None
+    let mut count = 0
+    for f in @fs.read_dir(d) {
+      if f == suffix || f.has_suffix("_\{suffix}") {
+        found = Some("\{d}/\{f}")
+        count += 1
+      }
+    }
+    if count == 1 {
+      return found
+    }
+  }
+  None
+}
+
+///|
 test "ndc-postgres translation goldens" {
   let base = "fixtures/ndc-postgres-translation"
-  let dirs = @fs.read_dir("\{base}/goldenfiles")
-  dirs.sort()
+  let in_scope = in_scope_translation_cases()
   let mut passed = 0
   let passed_names : Array[String] = []
   let skipped : Array[String] = []
+  // in-scope の不一致のみ CI を落とす。in-scope 外の不一致 (Mosura が独自 SQL を
+  // 出す mutations 等、台帳で out-of-scope のもの) は情報として出すだけにする
   let failures : Array[String] = []
-  for case_name in dirs {
-    let dir = "\{base}/goldenfiles/\{case_name}"
-    if !@fs.path_exists("\{dir}/request.json") {
-      continue
-    }
-    // 期待スナップショットを探す
-    let candidates = [
-      "\{base}/snapshots/tests__it_\{case_name}.expected",
-      "\{base}/snapshots/tests__\{case_name}.expected",
-    ]
-    let mut expected_path : String? = None
-    for c in candidates {
-      if @fs.path_exists(c) {
-        expected_path = Some(c)
-      }
-    }
-    let expected_path = match expected_path {
+  let diffs_non_scope : Array[String] = []
+  for rel in list_translation_cases(base) {
+    let dir = "\{base}/goldenfiles/\{rel}"
+    let expected_path = match resolve_snapshot(base, rel) {
       Some(p) => p
       None => continue
     }
@@ -178,22 +231,29 @@ test "ndc-postgres translation goldens" {
         let expected = @fs.read_file_to_string(expected_path)
         if normalize_sql_text(actual_text) == normalize_sql_text(expected) {
           passed += 1
-          passed_names.push(case_name)
+          passed_names.push(rel)
+        } else if in_scope.contains(rel) {
+          failures.push(rel)
         } else {
-          failures.push(case_name)
+          diffs_non_scope.push(rel)
         }
       }
       // 未対応機能 (aggregates / nested / order-by-relation 等) はスキップとして数える
-      Err(msg) => skipped.push("\{case_name}: \{msg}")
+      Err(msg) => skipped.push("\{rel}: \{msg}")
     }
   }
-  println("translation goldens: passed=\{passed} skipped=\{skipped.length()}")
+  println(
+    "translation goldens: passed=\{passed} skipped=\{skipped.length()} diff(non-scope)=\{diffs_non_scope.length()}",
+  )
   for s in skipped {
     println("  skip \{s}")
   }
+  for d in diffs_non_scope {
+    println("  diff(non-scope) \{d}")
+  }
   if failures.length() > 0 {
     let joined = failures.join(", ")
-    fail("mismatch: \{joined}")
+    fail("in-scope mismatch: \{joined}")
   }
   // cases.toml との突き合わせ: in-scope タグのケースは必ずスナップショット照合を
   // 通過していること (raise → skip やスナップショット欠如で黙ってグリーンにしない)

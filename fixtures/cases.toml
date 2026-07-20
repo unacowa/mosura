@@ -2971,7 +2971,7 @@ tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/select_with_limit"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/simple_array_relationship"]
@@ -3019,12 +3019,13 @@ tag = "out-of-scope"
 reason = "リレーション跨ぎの order by は未対応 (将来対応)"
 
 [cases."ndc-postgres-translation/goldenfiles/values/select_types_on_comparisons"]
-tag = "pending"
+tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/values/select_types_on_native_queries"]
 tag = "pending"
 milestone = "m3"
+reason = "native query は未対応 (collection 'types' が native query 定義のため decode 不可)"
 
 [cases."ndc-postgres-translation/goldenfiles/very_nested_recursive_relationship"]
 tag = "in-scope"
