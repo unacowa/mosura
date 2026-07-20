@@ -52,6 +52,17 @@ moon run --target native src/cmd/mosura -- serve --metadata ./metadata.yaml --po
 curl -X POST localhost:8080/graphql -d '{"query":"{ articles { id } }"}'
 ```
 
+## ドキュメント
+
+| ドキュメント | 内容 |
+|---|---|
+| [docs/architecture.md](docs/architecture.md) | レイヤ構成・NDC 境界・Workers 対応の設計 |
+| [docs/implementation-plan.md](docs/implementation-plan.md) | M0–M7 のマイルストーン定義と TDD 戦略 |
+| [docs/development.md](docs/development.md) | 開発フロー (fixtures 台帳、ゴールデン更新、E2E、CI) |
+| [docs/moonbit-notes.md](docs/moonbit-notes.md) | MoonBit / 依存ライブラリのハマりどころ集 |
+| [docs/status.md](docs/status.md) | 開発状況スナップショット (引き継ぎ用) |
+| [CLAUDE.md](CLAUDE.md) | AI コーディングエージェント向けの規約とインデックス |
+
 ## 参照実装
 
 - [hasura/graphql-engine `/v3`](https://github.com/hasura/graphql-engine/tree/master/v3) — Rust 製 V3 エンジン（Apache 2.0）
