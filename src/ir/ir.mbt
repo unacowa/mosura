@@ -1001,14 +1001,21 @@ fn build_order_by_object(
   path : Array[@sqlgen.NdcPathElement],
   out : Array[@sqlgen.NdcOrderByElement],
 ) -> Unit raise {
+  // V3 準拠: 1 つの order_by 入力オブジェクトはちょうど 1 キー。
+  // 複数キーはマップの順序が保証されずソート順が非決定的になるため拒否する
+  // (V3 も 2024-12-10 以降エラーにする)。キーは配列側で並べる
+  if obj.length() != 1 {
+    raise IrBadRequest(
+      "each order_by entry must specify exactly one field or relationship",
+    )
+  }
   for _, f in obj {
     match f.info.generic {
       InputArg(OrderByField(field_name)) => {
-        let dir = match f.value {
-          SimpleValue(NEnum(name~, ..)) => name.as_str()
+        let direction = match f.value {
+          SimpleValue(NEnum(name~, ..)) => order_direction_of(name.as_str())
           _ => raise IrInternal("order_by value must be enum")
         }
-        let direction = if dir.has_prefix("asc") { "asc" } else { "desc" }
         out.push({
           order_direction: direction,
           target_name: field_name,
@@ -1016,34 +1023,10 @@ fn build_order_by_object(
         })
       }
       InputArg(OrderByRelationship(rel_name)) => {
-        let model = match meta.models.get(model_name) {
-          Some(m) => m
-          None => raise IrInternal("model not found: \{model_name}")
-        }
-        let rels = match meta.relationships.get(model.object_type) {
-          Some(r) => r
-          None => raise IrInternal("no relationships for \{model.object_type}")
-        }
-        let mut found : @metadata.Relationship? = None
-        for r in rels {
-          if r.name == rel_name {
-            found = Some(r)
-          }
-        }
-        let rel = match found {
-          Some(r) => r
-          None => raise IrInternal("relationship not found: \{rel_name}")
-        }
-        let ndc_rel_name = "\{model.object_type}__\{rel_name}"
-        relationships[ndc_rel_name] = @sqlgen.NdcRelationship::{
-          column_mapping: rel.mapping,
-          relationship_type: match rel.kind {
-            RelObject => "object"
-            RelArray => "array"
-          },
-          target_collection: rel.target_model,
-          arguments: Map([]),
-        }
+        let rel = lookup_relationship_def(meta, model_name, rel_name)
+        let ndc_rel_name = register_ndc_relationship(
+          meta, model_name, rel_name, rel, relationships,
+        )
         // 対象モデルの行フィルタを経路の predicate として適用する
         let predicate = apply_permission_filter(
           meta,
@@ -1070,5 +1053,15 @@ fn build_order_by_object(
       }
       _ => raise IrInternal("unexpected order_by field")
     }
+  }
+}
+
+///|
+/// V3 の方向 enum (Asc / Desc) を NDC の order_direction (asc / desc) に変換する
+fn order_direction_of(name : String) -> String raise {
+  match name {
+    "Asc" => "asc"
+    "Desc" => "desc"
+    other => raise IrBadRequest("invalid order_by direction: \{other}")
   }
 }

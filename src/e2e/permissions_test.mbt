@@ -107,7 +107,7 @@ async test "M5 E2E: user ロールは自分の行しか読めない" {
   let response = run_graphql_as(
     "p1",
     user_session("1"),
-    "{ articles(order_by: [{id: asc}]) { id title } }",
+    "{ articles(order_by: [{id: Asc}]) { id title } }",
   )
   // author_id = 1 の記事のみ (id 1, 3)
   inspect(
@@ -153,7 +153,7 @@ async test "M5 E2E: admin は全行・全カラムを読める" {
   let response = run_graphql_as(
     "p4",
     @session.Session::admin(),
-    "{ articles(order_by: [{id: asc}]) { id author_id } }",
+    "{ articles(order_by: [{id: Asc}]) { id author_id } }",
   )
   inspect(
     response,

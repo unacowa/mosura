@@ -109,10 +109,9 @@ fn order_by_enum() -> @schema.TypeInfo {
     @graphql.Name,
     @schema.Namespaced[@schema.SEnumValue],
   ] = @sorted_map.SortedMap([])
-  for
-    v in [
-      "asc", "asc_nulls_first", "asc_nulls_last", "desc", "desc_nulls_first", "desc_nulls_last",
-    ] {
+  // V3 準拠: 方向は Asc / Desc の 2 値のみ。null 配置は固定
+  // (Asc → nulls last, Desc → nulls first。Postgres の ASC/DESC 既定と一致)
+  for v in ["Asc", "Desc"] {
     values[name(v)] = @schema.allow_all_namespaced(@schema.SEnumValue::{
       value: name(v),
       description: None,

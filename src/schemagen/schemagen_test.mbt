@@ -98,7 +98,7 @@ test "M2: メタデータからスキーマ生成 + クエリ正規化" {
   let op = run_query(
     (
       #|{
-      #|  articles(where: {id: {_eq: 1}}, order_by: [{title: asc}], limit: 10) {
+      #|  articles(where: {id: {_eq: 1}}, order_by: [{title: Asc}], limit: 10) {
       #|    id
       #|    title
       #|    author { name }

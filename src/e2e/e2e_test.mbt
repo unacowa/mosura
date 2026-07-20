@@ -181,7 +181,7 @@ async test "M4 E2E: filter + order + object relationship" {
     "t1",
     (
       #|{
-      #|  articles(where: {author_id: {_eq: 1}}, order_by: [{id: asc}]) {
+      #|  articles(where: {author_id: {_eq: 1}}, order_by: [{id: Asc}]) {
       #|    id
       #|    title
       #|    author { name }
@@ -207,7 +207,7 @@ async test "M4 E2E: by_pk + __typename + array relationship" {
       #|  authors_by_pk(id: 1) {
       #|    __typename
       #|    name
-      #|    articles(order_by: [{id: desc}], limit: 1) { title }
+      #|    articles(order_by: [{id: Desc}], limit: 1) { title }
       #|  }
       #|}
     ),
@@ -263,7 +263,7 @@ async test "M4 E2E: リレーションを跨ぐ order_by (author.name 降順)" {
     "t7",
     (
       #|{
-      #|  articles(order_by: [{author: {name: desc}}, {id: asc}]) {
+      #|  articles(order_by: [{author: {name: Desc}}, {id: Asc}]) {
       #|    id
       #|    author { name }
       #|  }
@@ -343,6 +343,25 @@ async test "M4 E2E: where のリレーション条件と通常条件を _and で
     response,
     content=(
       #|{"data":{"articles":[{"id":3}]}}
+    ),
+  )
+}
+
+///|
+async test "M4 E2E: 1 つの order_by オブジェクトに複数キーはエラー (V3 準拠)" {
+  let response = run_graphql(
+    "t11",
+    (
+      #|{
+      #|  articles(order_by: [{id: Asc, title: Desc}]) { id }
+      #|}
+    ),
+    None,
+  )
+  inspect(
+    response,
+    content=(
+      #|{"errors":[{"message":"each order_by entry must specify exactly one field or relationship"}]}
     ),
   )
 }
