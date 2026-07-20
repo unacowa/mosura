@@ -365,3 +365,66 @@ async test "M4 E2E: 1 つの order_by オブジェクトに複数キーはエラ
     ),
   )
 }
+
+///|
+async test "M4 E2E: テキスト検索演算子 _ilike (大文字小文字無視)" {
+  // タイトルは 'Intro to MoonBit' / 'Hasura internals' / 'MoonBit and GraphQL'
+  // _ilike '%moonbit%' は 'Intro to MoonBit' と 'MoonBit and GraphQL' に一致
+  let response = run_graphql(
+    "t12",
+    (
+      #|{
+      #|  articles(where: {title: {_ilike: "%moonbit%"}}, order_by: [{id: Asc}]) {
+      #|    id
+      #|  }
+      #|}
+    ),
+    None,
+  )
+  inspect(
+    response,
+    content=(
+      #|{"data":{"articles":[{"id":1},{"id":3}]}}
+    ),
+  )
+}
+
+///|
+async test "M4 E2E: テキスト検索演算子 _nlike (否定) と _regex" {
+  let nlike = run_graphql(
+    "t13",
+    (
+      #|{
+      #|  articles(where: {title: {_nlike: "%MoonBit%"}}, order_by: [{id: Asc}]) {
+      #|    id
+      #|  }
+      #|}
+    ),
+    None,
+  )
+  // MoonBit を含まない → 'Hasura internals' (id=2)
+  inspect(
+    nlike,
+    content=(
+      #|{"data":{"articles":[{"id":2}]}}
+    ),
+  )
+  let regex = run_graphql(
+    "t14",
+    (
+      #|{
+      #|  articles(where: {title: {_regex: "^MoonBit"}}) {
+      #|    id
+      #|  }
+      #|}
+    ),
+    None,
+  )
+  // 先頭が MoonBit → 'MoonBit and GraphQL' (id=3)
+  inspect(
+    regex,
+    content=(
+      #|{"data":{"articles":[{"id":3}]}}
+    ),
+  )
+}
