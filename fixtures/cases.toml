@@ -2927,8 +2927,8 @@ tag = "out-of-scope"
 reason = "ネスト/composite 型は対象外"
 
 [cases."ndc-postgres-translation/goldenfiles/select_track_order_by_artist_id_and_album_title"]
-tag = "out-of-scope"
-reason = "リレーション跨ぎの order by は未対応 (将来対応)"
+tag = "in-scope"
+milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/select_where_album_id_equals_self_nested_object_relationship"]
 tag = "in-scope"
@@ -2983,12 +2983,12 @@ tag = "in-scope"
 milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/sorting_by_nested_relationship_column"]
-tag = "out-of-scope"
-reason = "リレーション跨ぎの order by は未対応 (将来対応)"
+tag = "in-scope"
+milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/sorting_by_nested_relationship_column_with_predicate"]
-tag = "out-of-scope"
-reason = "リレーション跨ぎの order by は未対応 (将来対応)"
+tag = "in-scope"
+milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/sorting_by_nested_relationship_count"]
 tag = "out-of-scope"
@@ -2999,16 +2999,16 @@ tag = "out-of-scope"
 reason = "リレーション跨ぎの order by は未対応 (将来対応)"
 
 [cases."ndc-postgres-translation/goldenfiles/sorting_by_recursive_relationship_column"]
-tag = "out-of-scope"
-reason = "リレーション跨ぎの order by は未対応 (将来対応)"
+tag = "in-scope"
+milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/sorting_by_relationship_column"]
-tag = "out-of-scope"
-reason = "リレーション跨ぎの order by は未対応 (将来対応)"
+tag = "in-scope"
+milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/sorting_by_relationship_column_with_true_predicate"]
-tag = "out-of-scope"
-reason = "リレーション跨ぎの order by は未対応 (将来対応)"
+tag = "in-scope"
+milestone = "m3"
 
 [cases."ndc-postgres-translation/goldenfiles/sorting_by_relationship_count"]
 tag = "out-of-scope"

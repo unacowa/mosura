@@ -45,6 +45,8 @@ pub(all) enum InputArgKind {
   BoolExpOperator(String)
   /// order_by 入力のカラム
   OrderByField(String)
+  /// order_by 入力のリレーションフィールド (Relationship 名。オブジェクトリレーションのみ)
+  OrderByRelationship(String)
   /// enum 値 (Asc / Desc 等)
   EnumValue(String)
   /// M6: insert/update 入力オブジェクトのフィールド

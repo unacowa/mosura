@@ -197,6 +197,21 @@ fn decode_query(j : Json) -> NdcQuery raise NdcDecodeError {
               Some(Json::String("column")) => ()
               _ => raise NdcDecode("unsupported order_by target type")
             }
+            // field_path (ネスト/JSON フィールドのソート) は未対応。
+            // 黙って落とすと最上位カラムでソートされてしまうため明示的に拒否する
+            match jget(target, "field_path") {
+              Some(Json::Null) | None => ()
+              Some(Json::Array(fp)) =>
+                if !fp.is_empty() {
+                  raise NdcDecode(
+                    "order_by target field_path (nested field ordering) not supported",
+                  )
+                }
+              Some(_) =>
+                raise NdcDecode(
+                  "order_by target field_path (nested field ordering) not supported",
+                )
+            }
             out.push(NdcOrderByElement::{
               order_direction: direction,
               target_name: jstr(target, "name"),

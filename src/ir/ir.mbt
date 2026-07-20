@@ -362,7 +362,10 @@ fn build_model_query(
     for arg_name, arg in fc.arguments {
       match arg_name.as_str() {
         "where" => predicate = build_bool_exp(arg.value)
-        "order_by" => order_by = Some(build_order_by(arg.value))
+        "order_by" =>
+          order_by = Some(
+            build_order_by(meta, session, model_name, relationships, arg.value),
+          )
         "limit" => limit = Some(arg.value.as_int_u32())
         "offset" => offset = Some(arg.value.as_int_u32())
         other => raise IrInternal("unknown argument: \{other}")
@@ -579,7 +582,16 @@ fn build_selection_fields(
         for arg_name, arg in fc.arguments {
           match arg_name.as_str() {
             "where" => predicate = build_bool_exp(arg.value)
-            "order_by" => order_by = Some(build_order_by(arg.value))
+            "order_by" =>
+              order_by = Some(
+                build_order_by(
+                  meta,
+                  session,
+                  rel.target_model,
+                  relationships,
+                  arg.value,
+                ),
+              )
             "limit" => limit = Some(arg.value.as_int_u32())
             "offset" => offset = Some(arg.value.as_int_u32())
             other => raise IrInternal("unknown argument: \{other}")
@@ -685,34 +697,114 @@ pub fn build_bool_exp(value : @schema.NValue) -> @sqlgen.NdcExpression? raise {
 }
 
 ///|
-/// order_by の正規化済み値 → NDC order by
+/// order_by の正規化済み値 → NDC order by。
+/// リレーションフィールドは path (NdcPathElement) に変換し、対象モデルの
+/// 行フィルタを path の predicate として注入する
 fn build_order_by(
+  meta : @metadata.Metadata,
+  session : @session.Session,
+  model_name : String,
+  relationships : Map[String, @sqlgen.NdcRelationship],
   value : @schema.NValue,
 ) -> Array[@sqlgen.NdcOrderByElement] raise {
   let out : Array[@sqlgen.NdcOrderByElement] = []
   match value {
     List(items) =>
       for item in items {
-        for _, f in item.as_object_value() {
-          match f.info.generic {
-            InputArg(OrderByField(field_name)) => {
-              let dir = match f.value {
-                SimpleValue(NEnum(name~, ..)) => name.as_str()
-                _ => raise IrInternal("order_by value must be enum")
-              }
-              let direction = if dir.has_prefix("asc") { "asc" } else { "desc" }
-              out.push({
-                order_direction: direction,
-                target_name: field_name,
-                target_path: [],
-              })
-            }
-            _ => raise IrInternal("unexpected order_by field")
-          }
-        }
+        build_order_by_object(
+          meta,
+          session,
+          model_name,
+          relationships,
+          item.as_object_value(),
+          [],
+          out,
+        )
       }
     SimpleValue(NNull) => ()
     _ => raise IrInternal("order_by must be a list")
   }
   out
+}
+
+///|
+fn build_order_by_object(
+  meta : @metadata.Metadata,
+  session : @session.Session,
+  model_name : String,
+  relationships : Map[String, @sqlgen.NdcRelationship],
+  obj : Map[@graphql.Name, @schema.NInputField],
+  path : Array[@sqlgen.NdcPathElement],
+  out : Array[@sqlgen.NdcOrderByElement],
+) -> Unit raise {
+  for _, f in obj {
+    match f.info.generic {
+      InputArg(OrderByField(field_name)) => {
+        let dir = match f.value {
+          SimpleValue(NEnum(name~, ..)) => name.as_str()
+          _ => raise IrInternal("order_by value must be enum")
+        }
+        let direction = if dir.has_prefix("asc") { "asc" } else { "desc" }
+        out.push({
+          order_direction: direction,
+          target_name: field_name,
+          target_path: path.copy(),
+        })
+      }
+      InputArg(OrderByRelationship(rel_name)) => {
+        let model = match meta.models.get(model_name) {
+          Some(m) => m
+          None => raise IrInternal("model not found: \{model_name}")
+        }
+        let rels = match meta.relationships.get(model.object_type) {
+          Some(r) => r
+          None => raise IrInternal("no relationships for \{model.object_type}")
+        }
+        let mut found : @metadata.Relationship? = None
+        for r in rels {
+          if r.name == rel_name {
+            found = Some(r)
+          }
+        }
+        let rel = match found {
+          Some(r) => r
+          None => raise IrInternal("relationship not found: \{rel_name}")
+        }
+        let ndc_rel_name = "\{model.object_type}__\{rel_name}"
+        relationships[ndc_rel_name] = @sqlgen.NdcRelationship::{
+          column_mapping: rel.mapping,
+          relationship_type: match rel.kind {
+            RelObject => "object"
+            RelArray => "array"
+          },
+          target_collection: rel.target_model,
+          arguments: Map([]),
+        }
+        // 対象モデルの行フィルタを経路の predicate として適用する
+        let predicate = apply_permission_filter(
+          meta,
+          session,
+          rel.target_model,
+          None,
+        )
+        let element : @sqlgen.NdcPathElement = {
+          relationship: ndc_rel_name,
+          arguments: Map([]),
+          predicate,
+        }
+        let new_path = path.copy()
+        new_path.push(element)
+        build_order_by_object(
+          meta,
+          session,
+          rel.target_model,
+          relationships,
+          f.value.as_object_value(),
+          new_path,
+          out,
+        )
+      }
+      _ => raise IrInternal("unexpected order_by field")
+    }
+  }
 }
