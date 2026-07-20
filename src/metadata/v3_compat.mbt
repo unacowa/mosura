@@ -3,7 +3,9 @@
 // (および素の objects 配列) を Mosura の Metadata に変換する。
 //
 // 対応 kind: ObjectType / Model / Relationship / ModelPermissions /
-//            TypePermissions / DataConnectorLink / ObjectBooleanExpressionType (間接)
+//            TypePermissions / DataConnectorLink /
+//            ObjectBooleanExpressionType・BooleanExpressionType (間接 —
+//            Model.filterExpressionType の解決に使う)
 // それ以外の kind は読み飛ばし、skipped として報告する。
 
 ///|
@@ -46,21 +48,34 @@ pub fn load_v3_metadata(
     _ => raise MetadataParse("v3 metadata must be an object or array")
   }
 
-  // 1 パス目: ObjectBooleanExpressionType (Model.filterExpressionType の解決に使う)
+  // 1 パス目: boolean expression 型 (Model.filterExpressionType の解決に使う)。
+  // 旧 ObjectBooleanExpressionType (2024-11-18 以降の V3 ではビルドエラー) と
+  // 新形式 BooleanExpressionType (operand.object) の両方を受ける
   let bool_exps : Map[String, Array[String]] = Map([])
   for obj in objects {
-    if v3_kind(obj) == "ObjectBooleanExpressionType" {
-      let def = v3_def(obj)
-      let name = jv3_str(def, "name")
-      let fields : Array[String] = []
-      match jv3_get(def, "comparableFields") {
-        Some(Json::Array(items)) =>
-          for item in items {
-            fields.push(jv3_str(item, "fieldName"))
-          }
-        _ => ()
+    match v3_kind(obj) {
+      "ObjectBooleanExpressionType" => {
+        let def = v3_def(obj)
+        bool_exps[jv3_str(def, "name")] = comparable_field_names(def)
       }
-      bool_exps[name] = fields
+      "BooleanExpressionType" => {
+        let def = v3_def(obj)
+        // object operand のみが Model.filterExpressionType の対象。
+        // scalar operand (フィールド単位の比較演算子定義) はここでは不要。
+        // comparableRelationships (リレーション述語) は未対応 (#32 / #38)
+        match jv3_get(def, "operand") {
+          Some(operand) =>
+            match jv3_get(operand, "object") {
+              Some(object_operand) =>
+                bool_exps[jv3_str(def, "name")] = comparable_field_names(
+                  object_operand,
+                )
+              None => ()
+            }
+          None => ()
+        }
+      }
+      _ => ()
     }
   }
 
@@ -99,7 +114,7 @@ pub fn load_v3_metadata(
         defined_connectors[name] = true
         docs.push(mk_connector_doc(name))
       }
-      "ObjectBooleanExpressionType" => ()
+      "ObjectBooleanExpressionType" | "BooleanExpressionType" => ()
       other => skipped[other] = true
     }
   }
@@ -167,6 +182,23 @@ pub fn load_v3_metadata(
   }
   let metadata = load_documents(filtered)
   { metadata, skipped_kinds: skipped.keys().collect() }
+}
+
+///|
+/// comparableFields 配列 (旧 kind の definition 直下 / 新 kind の object operand 下)
+/// から fieldName の一覧を取り出す
+fn comparable_field_names(
+  container : Json,
+) -> Array[String] raise MetadataError {
+  let fields : Array[String] = []
+  match jv3_get(container, "comparableFields") {
+    Some(Json::Array(items)) =>
+      for item in items {
+        fields.push(jv3_str(item, "fieldName"))
+      }
+    _ => ()
+  }
+  fields
 }
 
 ///|
@@ -307,7 +339,9 @@ fn convert_model(
       }
     _ => ()
   }
-  // filterExpressionType → ObjectBooleanExpressionType.comparableFields
+  // filterExpressionType → (Object)BooleanExpressionType の comparableFields。
+  // 解決できない参照はサイレントに「フィルタなし」へ落とさず fail-closed で拒否する
+  // (黙って落とすと where 可能フィールドが消え、権限 filter の前提も崩れる)
   let filterable : Array[Json] = []
   match jv3_get(def, "filterExpressionType") {
     Some(Json::String(bexp_name)) =>
@@ -316,8 +350,10 @@ fn convert_model(
           for f in fields {
             filterable.push(Json::string(f))
           }
-        // 新形式 BooleanExpressionType (kind 未対応) の場合はフィルタなしにフォールバック
-        None => ()
+        None =>
+          raise MetadataParse(
+            "v3 Model '\{name}': filterExpressionType '\{bexp_name}' does not resolve to a known ObjectBooleanExpressionType / BooleanExpressionType (refusing to silently drop filters)",
+          )
       }
     _ => ()
   }
