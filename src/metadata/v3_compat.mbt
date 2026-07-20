@@ -56,37 +56,20 @@ pub fn load_v3_metadata(
     match v3_kind(obj) {
       "ObjectBooleanExpressionType" => {
         let def = v3_def(obj)
-        let name = jv3_str(def, "name")
-        let fields : Array[String] = []
-        match jv3_get(def, "comparableFields") {
-          Some(Json::Array(items)) =>
-            for item in items {
-              fields.push(jv3_str(item, "fieldName"))
-            }
-          _ => ()
-        }
-        bool_exps[name] = fields
+        bool_exps[jv3_str(def, "name")] = comparable_field_names(def)
       }
       "BooleanExpressionType" => {
         let def = v3_def(obj)
-        let name = jv3_str(def, "name")
         // object operand のみが Model.filterExpressionType の対象。
         // scalar operand (フィールド単位の比較演算子定義) はここでは不要。
         // comparableRelationships (リレーション述語) は未対応 (#32 / #38)
         match jv3_get(def, "operand") {
           Some(operand) =>
             match jv3_get(operand, "object") {
-              Some(object_operand) => {
-                let fields : Array[String] = []
-                match jv3_get(object_operand, "comparableFields") {
-                  Some(Json::Array(items)) =>
-                    for item in items {
-                      fields.push(jv3_str(item, "fieldName"))
-                    }
-                  _ => ()
-                }
-                bool_exps[name] = fields
-              }
+              Some(object_operand) =>
+                bool_exps[jv3_str(def, "name")] = comparable_field_names(
+                  object_operand,
+                )
               None => ()
             }
           None => ()
@@ -199,6 +182,23 @@ pub fn load_v3_metadata(
   }
   let metadata = load_documents(filtered)
   { metadata, skipped_kinds: skipped.keys().collect() }
+}
+
+///|
+/// comparableFields 配列 (旧 kind の definition 直下 / 新 kind の object operand 下)
+/// から fieldName の一覧を取り出す
+fn comparable_field_names(
+  container : Json,
+) -> Array[String] raise MetadataError {
+  let fields : Array[String] = []
+  match jv3_get(container, "comparableFields") {
+    Some(Json::Array(items)) =>
+      for item in items {
+        fields.push(jv3_str(item, "fieldName"))
+      }
+    _ => ()
+  }
+  fields
 }
 
 ///|
